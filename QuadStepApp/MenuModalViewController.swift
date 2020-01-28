@@ -8,8 +8,14 @@
 
 import UIKit
 
-class MenuModalViewController: UIViewController {
+protocol MakeButtonActionDelegate {
+    func startMakeButton()
+}
 
+class MenuModalViewController: UIViewController {
+    
+    var delegate: MakeButtonActionDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -23,9 +29,10 @@ class MenuModalViewController: UIViewController {
     func setButton() {
         let decBtn = UIButton()
         decBtn.backgroundColor = .white
-        decBtn.frame = CGRect(x: view.frame.width - 80, y: 20, width: 60, height: 30)
-        decBtn.layer.cornerRadius = 10.0
-        decBtn.setTitle("Done", for: .normal)
+        //decBtn.frame = CGRect(x: view.frame.width - 40, y: 10, width: 30, height: 30)
+        decBtn.frame = CGRect(x: view.center.x - 30, y: view.center.y, width: 60, height: 30)
+        decBtn.layer.cornerRadius = 15.0
+        decBtn.setTitle("done", for: .normal)
         decBtn.setTitleColor(.blue, for: .normal)
         
         decBtn.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
@@ -34,7 +41,16 @@ class MenuModalViewController: UIViewController {
     }
     
     @objc func doneIcon() {
-        
+        //let preVC = self.presentingViewController as! HomeViewController
+        //preVC.addBtn = true
+        //let preVC = self.presentingViewController as? UITabBarController
+        self.dismiss(animated: true, completion: {
+            if let del = self.delegate {
+                del.startMakeButton()
+            } else {
+                print("unwrap error")
+            }
+        })
     }
     
 
@@ -49,3 +65,4 @@ class MenuModalViewController: UIViewController {
     */
 
 }
+

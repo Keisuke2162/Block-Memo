@@ -8,10 +8,87 @@
 
 import UIKit
 
-class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
+
+
+class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, MakeButtonActionDelegate {
+
+    func startMakeButton() {
+        print("start")
+        conHomeView.addBtn = true
+        conHomeView.makeButton()
+    }
+    
+    let conHomeView = HomeViewController()
+    
+    private lazy var firstViewController: HomeViewController = {
+        
+        conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
+        return conHomeView
+    }()
+
+    private lazy var secondVCButton: UIButton = {
+        let button = UIButton()
+        button.setBackgroundImage(UIImage(named: "apple"), for: .normal)
+        //button.sizeToFit()
+        button.center.y = self.tabBar.center.y
+        //button.translatesAutoresizingMaskIntoConstraints = true
+        button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
+        self.tabBar.addSubview(button)
+        //self.view.addSubview(button)
+        return button
+    }()
+
+    let conGeneralView = GeneralViewController()
+
+    private lazy var thirdViewController: GeneralViewController = {
+        
+        conGeneralView.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 1)
+        /*
+        conGeneralView.tabBarItem = UITabBarItem(
+            title: "",
+            image: UIImage(named: "mail")?.withRenderingMode(.alwaysOriginal),
+            selectedImage: UIImage(named: "text")?.withRenderingMode(.alwaysOriginal)
+        )
+        */
+        return conGeneralView
+    }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        let viewControllers: [UIViewController] = [firstViewController, thirdViewController]
+        
+        setViewControllers(viewControllers, animated: false)
+        
+        print("tabbar")
+
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("return tabbar")
+    }
+
+    // SecondVCを表示するボタンの設定
+    override func viewDidLayoutSubviews() {
+        //secondVCButton.frame = CGRect(origin: .zero, size: CGSize(width: 90, height: 75.375))
+        //secondVCButton.sizeToFit()
+        secondVCButton.frame.size = CGSize(width: tabBar.frame.width / 3, height: tabBar.frame.width / 3)
+        secondVCButton.center.x = self.tabBar.center.x
+        secondVCButton.center.y = tabBar.frame.height / 4
+            //tabBar.bounds.height - (secondVCButton.bounds.height / 2)
+        //secondVCButton.center = CGPoint(x: tabBar.bounds.width / 2, y: tabBar.bounds.height - (secondVCButton.bounds.height / 2))
+    }
+
+    // ボタンを押したときのアクション
+    @objc func didTapButton(_ button: UIButton) {
+        let con = MenuModalViewController()
+        con.delegate = self
+        present(con, animated: true, completion: nil)
+    }
     
     
-    
+    /*
     override func viewDidLoad() {
         super.viewDidLoad()
     
@@ -52,6 +129,5 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
         return true
     }
-    
-    
+ */
 }

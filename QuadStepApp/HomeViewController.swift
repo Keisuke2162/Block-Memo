@@ -10,10 +10,19 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
+    var addBtn: Bool = false
+    
+    let colorArray: [UIColor] = [.blue, .red, .yellow, .orange, .cyan, .magenta, .purple]
+    var btnArray: [UIButton] = []
+    
     var tabHeight: CGFloat = 0.0
     
     var animator: UIDynamicAnimator!
     var gravity: UIGravityBehavior!
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("return")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +35,31 @@ class HomeViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+    func makeButton() {
+        print("startmake")
+        
+        if addBtn {
+            
+            let random = CGFloat.random(in: 0 ..< 5)
+            print(random)
+            let colorRandom = Int(arc4random_uniform(7))
+            
+            let makeBtn = UIButton()
+            makeBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: 75, height: 75)
+            makeBtn.layer.cornerRadius = 10
+            makeBtn.backgroundColor = colorArray[colorRandom]
+            
+            view.addSubview(makeBtn)
+            
+            btnArray.append(makeBtn)
+            
+            makeGravity(sender: btnArray)
+            
+            addBtn = false
+        }
+    }
+    
     
     func setButton() {
         let testBtn = UIButton()
@@ -50,11 +84,21 @@ class HomeViewController: UIViewController {
         
         view.addSubview(thrBtn)
         
+        btnArray.append(testBtn)
+        btnArray.append(secBtn)
+        btnArray.append(thrBtn)
+        
+        makeGravity(sender: btnArray)
+        
+        
+    }
+    
+    func makeGravity(sender: [UIButton]) {
         animator = UIDynamicAnimator(referenceView: self.view)
         
-        gravity = UIGravityBehavior(items: [testBtn,secBtn,thrBtn])
+        gravity = UIGravityBehavior(items: sender)
         
-        let collision = UICollisionBehavior(items: [testBtn,secBtn,thrBtn])
+        let collision = UICollisionBehavior(items: sender)
         collision.translatesReferenceBoundsIntoBoundary = true
         
         
@@ -73,8 +117,9 @@ class HomeViewController: UIViewController {
     }
     
     @objc func ChangeSize(_ sender: UIButton) {
-        sender.frame.size = CGSize(width: 150, height: 150)
-        sender.layer.cornerRadius = 75
+        //sender.frame.size = CGSize(width: 150, height: 150)
+        //sender.layer.cornerRadius = 75
+        print(addBtn)
     }
 
     

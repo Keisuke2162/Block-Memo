@@ -13,7 +13,13 @@ class HomeViewController: UIViewController {
     var addBtn: Bool = false
     
     let colorArray: [UIColor] = [.blue, .red, .yellow, .orange, .cyan, .magenta, .purple]
+    let ChineseColor: [String] = ["e3d600","008dd6","eea800","9f0082","e94c46","d20446","008b42","253893"]
+    let NightViewColor: [String] = ["004f7a","7a8a92","fde5c5","dce5ec","9a7fb8","cd659f","829ac8","77c2b9"]
+    
+    
     var btnArray: [UIButton] = []
+    
+    var btnTag = 0
     
     var tabHeight: CGFloat = 0.0
     
@@ -29,7 +35,8 @@ class HomeViewController: UIViewController {
         
         tabHeight = (tabBarController?.tabBar.frame.height)!
         
-        view.backgroundColor = .white
+        //view.backgroundColor = UIColor(colorCode: "e13816")
+        view.backgroundColor = UIColor(colorCode: "423a57")
         
         setButton()
 
@@ -43,12 +50,17 @@ class HomeViewController: UIViewController {
             
             let random = CGFloat.random(in: 0 ..< 5)
             print(random)
-            let colorRandom = Int(arc4random_uniform(7))
+            let colorRandom = Int(arc4random_uniform(8))
             
             let makeBtn = UIButton()
             makeBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: 75, height: 75)
             makeBtn.layer.cornerRadius = 10
-            makeBtn.backgroundColor = colorArray[colorRandom]
+            makeBtn.backgroundColor = UIColor(colorCode: NightViewColor[colorRandom])
+            
+            makeBtn.tag = btnTag
+            btnTag += 1
+            
+            makeBtn.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
             
             view.addSubview(makeBtn)
             
@@ -60,8 +72,25 @@ class HomeViewController: UIViewController {
         }
     }
     
+    @objc func tapButton(sender: UIButton) {
+        //let tag = sender.tag
+        let num = btnArray.count
+        
+        for i in 0 ..< num {
+            if sender == btnArray[i]  {
+                btnArray.remove(at: i)
+                break
+            }
+        }
+        
+        sender.removeFromSuperview()
+        makeGravity(sender: btnArray)
+    }
+    
     
     func setButton() {
+        
+        /*
         let testBtn = UIButton()
         testBtn.frame = CGRect(x: view.center.x - 10, y: 0, width: 75, height: 75)
         testBtn.layer.cornerRadius = 10
@@ -87,8 +116,10 @@ class HomeViewController: UIViewController {
         btnArray.append(testBtn)
         btnArray.append(secBtn)
         btnArray.append(thrBtn)
+ 
         
         makeGravity(sender: btnArray)
+ */
         
         
     }

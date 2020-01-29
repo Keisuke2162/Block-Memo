@@ -19,7 +19,7 @@ class MenuModalViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .orange
+        view.backgroundColor = UIColor(colorCode: "829ac8")
         
         setButton()
 

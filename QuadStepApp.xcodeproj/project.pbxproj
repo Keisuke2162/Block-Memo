@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E72A91A123E1EDE000A6AB31 /* ColorCodeCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */; };
 		E780261723D9FF960071DC92 /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E780261623D9FF960071DC92 /* HomeTabBarController.swift */; };
 		E780261923DA003C0071DC92 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E780261823DA003C0071DC92 /* HomeViewController.swift */; };
 		E780261B23DA00540071DC92 /* GeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E780261A23DA00540071DC92 /* GeneralViewController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCodeCast.swift; sourceTree = "<group>"; };
 		E780261623D9FF960071DC92 /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		E780261823DA003C0071DC92 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E780261A23DA00540071DC92 /* GeneralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewController.swift; sourceTree = "<group>"; };
@@ -80,6 +82,7 @@
 				E78CF88423D8A8A7008A0A3C /* LaunchScreen.storyboard */,
 				E78CF88723D8A8A7008A0A3C /* Info.plist */,
 				E78CF87F23D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld */,
+				E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */,
 				E78CF87A23D8A8A7008A0A3C /* ViewController.swift */,
 			);
 			path = QuadStepApp;
@@ -165,6 +168,7 @@
 				E78CF87923D8A8A7008A0A3C /* SceneDelegate.swift in Sources */,
 				E780261723D9FF960071DC92 /* HomeTabBarController.swift in Sources */,
 				E780261923DA003C0071DC92 /* HomeViewController.swift in Sources */,
+				E72A91A123E1EDE000A6AB31 /* ColorCodeCast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

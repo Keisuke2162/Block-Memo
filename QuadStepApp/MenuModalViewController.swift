@@ -16,8 +16,14 @@ class MenuModalViewController: UIViewController {
     
     var delegate: MakeButtonActionDelegate?
     
+    var height: CGFloat = 0
+    var width: CGFloat = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        height = view.frame.height
+        width = view.frame.width
         
         view.backgroundColor = UIColor(colorCode: "829ac8")
         
@@ -27,17 +33,48 @@ class MenuModalViewController: UIViewController {
     }
     
     func setButton() {
-        let decBtn = UIButton()
-        decBtn.backgroundColor = .white
-        //decBtn.frame = CGRect(x: view.frame.width - 40, y: 10, width: 30, height: 30)
-        decBtn.frame = CGRect(x: view.center.x - 30, y: view.center.y, width: 60, height: 30)
-        decBtn.layer.cornerRadius = 15.0
-        decBtn.setTitle("done", for: .normal)
-        decBtn.setTitleColor(.blue, for: .normal)
+        //確定ボタン１
+        let decBtn1 = UIButton()
+        decBtn1.backgroundColor = .white
+        //decBtn1.frame = CGRect(x: view.center.x - 30, y: view.center.y - 15, width: 60, height: 30)
+        //decBtn1.frame = CGRect(x: view.center.x - 30, y: view.frame.maxY - 100, width: 60, height: 30)
+        decBtn1.frame.size = CGSize(width: 60, height: 30)
+        decBtn1.center = view.center
+        decBtn1.layer.cornerRadius = 15.0
+        decBtn1.setTitle("done", for: .normal)
+        decBtn1.setTitleColor(.blue, for: .normal)
         
-        decBtn.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
+        decBtn1.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
+        view.addSubview(decBtn1)
         
-        view.addSubview(decBtn)
+        //確定ボタン２
+        /*
+        let decBtn2 = UIButton()
+        decBtn2.backgroundColor = .white
+        decBtn2.frame = CGRect(x: width - 70, y: 10, width: 60, height: 30)
+        decBtn2.layer.cornerRadius = 15.0
+        decBtn2.setTitle("done", for: .normal)
+        decBtn2.setTitleColor(.blue, for: .normal)
+        
+        decBtn2.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
+        view.addSubview(decBtn2)
+        */
+        
+        
+        
+        let titleField = CustomTextField()
+        titleField.borderStyle = .none
+        titleField.frame.size = CGSize(width: width / 10 * 6, height: height / 10)
+        titleField.center = CGPoint(x: view.center.x, y: height / 10)
+        titleField.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 50.0)
+        
+        let border = CALayer()
+        border.borderColor = UIColor.black.cgColor
+        border.frame = CGRect(x: 0, y: titleField.frame.size.height - 2.0, width: titleField.frame.size.width, height: 1)
+        border.borderWidth = 2.0
+        
+        titleField.layer.addSublayer(border)
+        view.addSubview(titleField)
     }
     
     @objc func doneIcon() {

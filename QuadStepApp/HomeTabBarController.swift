@@ -8,17 +8,21 @@
 
 import UIKit
 
-
-
+//タブバーのクラス（SceneDelegateでrootViewに設定してる）
 class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, MakeButtonActionDelegate {
-
+    
+    //HomeViewControllerのインスタンス
+    let conHomeView = HomeViewController()
+    
+    //MenuModalViewで設定の入力完了ボタン押下で呼び出される
+    //HomeViewControllerのボタン作成フラグを立ててボタン作成処理を起動
     func startMakeButton() {
         print("start")
         conHomeView.addBtn = true
         conHomeView.makeButton()
     }
     
-    let conHomeView = HomeViewController()
+    
     
     private lazy var firstViewController: HomeViewController = {
         
@@ -73,7 +77,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     override func viewDidLayoutSubviews() {
         //secondVCButton.frame = CGRect(origin: .zero, size: CGSize(width: 90, height: 75.375))
         //secondVCButton.sizeToFit()
-        secondVCButton.frame.size = CGSize(width: tabBar.frame.width / 3, height: tabBar.frame.width / 3)
+        secondVCButton.frame.size = CGSize(width: tabBar.frame.width / 4, height: tabBar.frame.width / 4)
         secondVCButton.center.x = self.tabBar.center.x
         secondVCButton.center.y = tabBar.frame.height / 4
             //tabBar.bounds.height - (secondVCButton.bounds.height / 2)

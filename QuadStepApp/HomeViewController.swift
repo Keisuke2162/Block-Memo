@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
     //中世の街色　背景：d3d1bd
     let gamlaColor: [String] = ["f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630"]
     //夏祭り　背景：4e3d95
-    let summerColor: [String] = ["3389ca","eaf4f9","e8473e","8ebbb1","d62e8a","e73462","00b8ee","fdf262"]
+    let summerColor: [String] = ["3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262"]
     
     
     var btnArray: [UIButton] = []
@@ -45,6 +45,7 @@ class HomeViewController: UIViewController {
         
         //view.backgroundColor = UIColor(colorCode: "e13816")
         view.backgroundColor = UIColor(colorCode: "4e3d95")
+        let col = UIColor(colorCode: "4e3d95").rgb.hashValue
         
         setButton()
 
@@ -57,18 +58,23 @@ class HomeViewController: UIViewController {
         if addBtn {
             
             let random = CGFloat.random(in: 0 ..< 5)
-            print(random)
-            let colorRandom = Int(arc4random_uniform(8))
             
             let makeBtn = UIButton()
             makeBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: 75, height: 75)
             makeBtn.layer.cornerRadius = 10
+            
+            //アイコン色設定
+            let colorRandom = Int(arc4random_uniform(8))
             makeBtn.backgroundColor = UIColor(colorCode: summerColor[colorRandom])
             
-            //アイコン設定
+            //アイコン画像設定
             let iconRandom = Int(arc4random_uniform(10))
             makeBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-            makeBtn.setImage(UIImage(named: iconName[iconRandom]), for: .normal)
+            let iconImage = UIImage(named: iconName[iconRandom])?.withRenderingMode(.alwaysTemplate)
+            makeBtn.setImage(iconImage, for: .normal)
+            
+            let iconColor = DecitionImageColor(UIColor(colorCode: summerColor[colorRandom]))
+            makeBtn.tintColor = iconColor
             
             makeBtn.tag = btnTag
             btnTag += 1
@@ -83,6 +89,22 @@ class HomeViewController: UIViewController {
             
             addBtn = false
         }
+    }
+    
+    func DecitionImageColor(_ color: UIColor) -> (UIColor) {
+        let components = color.cgColor.components!
+        let red = components[0] * 255
+        let green = components[1] * 255
+        let blue = components[2] * 255
+        
+        print("red \(red) green \(green) blue\(blue)")
+        
+        var color: UIColor = .black
+        if ((red * 0.299 + green * 0.587 + blue * 0.114) < 128) {
+            color = .white
+        }
+        
+        return color
     }
     
     @objc func tapButton(sender: UIButton) {

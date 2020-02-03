@@ -19,6 +19,11 @@ class MenuModalViewController: UIViewController {
     var height: CGFloat = 0
     var width: CGFloat = 0
     
+    //メモの種類ボタン
+    let textBtn = UIButton()
+    let todoBtn = UIButton()
+    let listBtn = UIButton()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -61,7 +66,7 @@ class MenuModalViewController: UIViewController {
         */
         
         
-        
+        //タイトル入力フィールド（UITextFieldのカスタムクラス（Doneボタンの追加））
         let titleField = CustomTextField()
         titleField.borderStyle = .none
         titleField.frame.size = CGSize(width: width / 10 * 6, height: height / 10)
@@ -75,6 +80,24 @@ class MenuModalViewController: UIViewController {
         
         titleField.layer.addSublayer(border)
         view.addSubview(titleField)
+        
+        //
+        textBtn.frame = CGRect(x: width / 10 * 2, y: height / 10 * 2, width: width / 10, height: width / 10)
+        textBtn.setImage(UIImage(named: "text"), for: .normal)
+        
+        view.addSubview(textBtn)
+        
+        //
+        todoBtn.frame = CGRect(x: width / 10 * 4.5, y: height / 10 * 2, width: width / 10, height: width / 10)
+        todoBtn.setImage(UIImage(named: "todo"), for: .normal)
+        
+        view.addSubview(todoBtn)
+        
+        //
+        listBtn.frame = CGRect(x: width / 10 * 7, y: height / 10 * 2, width: width / 10, height: width / 10)
+        listBtn.setImage(UIImage(named: "list"), for: .normal)
+        
+        view.addSubview(listBtn)
     }
     
     @objc func doneIcon() {

@@ -101,9 +101,8 @@ class MenuModalViewController: UIViewController {
     }
     
     @objc func doneIcon() {
-        //let preVC = self.presentingViewController as! HomeViewController
-        //preVC.addBtn = true
-        //let preVC = self.presentingViewController as? UITabBarController
+        //let id: String = NSUUID().uuidString
+        
         self.dismiss(animated: true, completion: {
             if let del = self.delegate {
                 del.startMakeButton()

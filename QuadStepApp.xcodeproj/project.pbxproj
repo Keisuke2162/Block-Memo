@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		E72A91A123E1EDE000A6AB31 /* ColorCodeCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */; };
-		E72A91A323E73F0C00A6AB31 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72A91A223E73F0C00A6AB31 /* extension.swift */; };
 		E72A91A523E7422D00A6AB31 /* CustomClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72A91A423E7422D00A6AB31 /* CustomClass.swift */; };
+		E72A91A723E9CD8900A6AB31 /* MemoTextViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72A91A623E9CD8900A6AB31 /* MemoTextViewController.swift */; };
 		E780261723D9FF960071DC92 /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E780261623D9FF960071DC92 /* HomeTabBarController.swift */; };
 		E780261923DA003C0071DC92 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E780261823DA003C0071DC92 /* HomeViewController.swift */; };
 		E780261B23DA00540071DC92 /* GeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E780261A23DA00540071DC92 /* GeneralViewController.swift */; };
@@ -17,7 +17,6 @@
 		E780261F23DDEB950071DC92 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E780261E23DDEB950071DC92 /* CoreData.swift */; };
 		E78CF87723D8A8A7008A0A3C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78CF87623D8A8A7008A0A3C /* AppDelegate.swift */; };
 		E78CF87923D8A8A7008A0A3C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78CF87823D8A8A7008A0A3C /* SceneDelegate.swift */; };
-		E78CF87B23D8A8A7008A0A3C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78CF87A23D8A8A7008A0A3C /* ViewController.swift */; };
 		E78CF87E23D8A8A7008A0A3C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E78CF87C23D8A8A7008A0A3C /* Main.storyboard */; };
 		E78CF88123D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E78CF87F23D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld */; };
 		E78CF88323D8A8A7008A0A3C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E78CF88223D8A8A7008A0A3C /* Assets.xcassets */; };
@@ -26,8 +25,8 @@
 
 /* Begin PBXFileReference section */
 		E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCodeCast.swift; sourceTree = "<group>"; };
-		E72A91A223E73F0C00A6AB31 /* extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
 		E72A91A423E7422D00A6AB31 /* CustomClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomClass.swift; sourceTree = "<group>"; };
+		E72A91A623E9CD8900A6AB31 /* MemoTextViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoTextViewController.swift; sourceTree = "<group>"; };
 		E780261623D9FF960071DC92 /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
 		E780261823DA003C0071DC92 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		E780261A23DA00540071DC92 /* GeneralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralViewController.swift; sourceTree = "<group>"; };
@@ -36,7 +35,6 @@
 		E78CF87323D8A8A7008A0A3C /* QuadStepApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuadStepApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E78CF87623D8A8A7008A0A3C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E78CF87823D8A8A7008A0A3C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		E78CF87A23D8A8A7008A0A3C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E78CF87D23D8A8A7008A0A3C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E78CF88023D8A8A7008A0A3C /* QuadStepApp.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = QuadStepApp.xcdatamodel; sourceTree = "<group>"; };
 		E78CF88223D8A8A7008A0A3C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,6 +74,7 @@
 			children = (
 				E78CF87623D8A8A7008A0A3C /* AppDelegate.swift */,
 				E78CF87823D8A8A7008A0A3C /* SceneDelegate.swift */,
+				E72A91A623E9CD8900A6AB31 /* MemoTextViewController.swift */,
 				E780261823DA003C0071DC92 /* HomeViewController.swift */,
 				E780261A23DA00540071DC92 /* GeneralViewController.swift */,
 				E780261C23DDDE1A0071DC92 /* MenuModalViewController.swift */,
@@ -87,9 +86,7 @@
 				E78CF88723D8A8A7008A0A3C /* Info.plist */,
 				E78CF87F23D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld */,
 				E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */,
-				E72A91A223E73F0C00A6AB31 /* extension.swift */,
 				E72A91A423E7422D00A6AB31 /* CustomClass.swift */,
-				E78CF87A23D8A8A7008A0A3C /* ViewController.swift */,
 			);
 			path = QuadStepApp;
 			sourceTree = "<group>";
@@ -167,12 +164,11 @@
 			files = (
 				E78CF88123D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld in Sources */,
 				E780261D23DDDE1A0071DC92 /* MenuModalViewController.swift in Sources */,
+				E72A91A723E9CD8900A6AB31 /* MemoTextViewController.swift in Sources */,
 				E780261B23DA00540071DC92 /* GeneralViewController.swift in Sources */,
-				E78CF87B23D8A8A7008A0A3C /* ViewController.swift in Sources */,
 				E780261F23DDEB950071DC92 /* CoreData.swift in Sources */,
 				E78CF87723D8A8A7008A0A3C /* AppDelegate.swift in Sources */,
 				E78CF87923D8A8A7008A0A3C /* SceneDelegate.swift in Sources */,
-				E72A91A323E73F0C00A6AB31 /* extension.swift in Sources */,
 				E780261723D9FF960071DC92 /* HomeTabBarController.swift in Sources */,
 				E72A91A523E7422D00A6AB31 /* CustomClass.swift in Sources */,
 				E780261923DA003C0071DC92 /* HomeViewController.swift in Sources */,

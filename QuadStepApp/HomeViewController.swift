@@ -23,6 +23,8 @@ class HomeViewController: UIViewController {
     let gamlaColor: [String] = ["f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630"]
     //夏祭り　背景：4e3d95
     let summerColor: [String] = ["3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262"]
+    //虹の色　背景： 000000
+    let rainbowColor: [String] = ["e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
     
     
     var btnArray: [UIButton] = []
@@ -45,7 +47,6 @@ class HomeViewController: UIViewController {
         
         //view.backgroundColor = UIColor(colorCode: "e13816")
         view.backgroundColor = UIColor(colorCode: "4e3d95")
-        let col = UIColor(colorCode: "4e3d95").rgb.hashValue
         
         setButton()
 
@@ -79,7 +80,8 @@ class HomeViewController: UIViewController {
             makeBtn.tag = btnTag
             btnTag += 1
             
-            makeBtn.addTarget(self, action: #selector(tapButton), for: .touchUpInside)
+            makeBtn.addTarget(self, action: #selector(tapButton), for: .touchDragExit)
+            makeBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
             
             view.addSubview(makeBtn)
             
@@ -107,6 +109,14 @@ class HomeViewController: UIViewController {
         return color
     }
     
+    @objc func nextView(sender: UIButton) {
+        let vc = MemoTextViewController()
+        let color = sender.backgroundColor
+        vc.backColor = color!
+        
+        present(vc, animated: true, completion: nil)
+    }
+    
     @objc func tapButton(sender: UIButton) {
         //let tag = sender.tag
         let num = btnArray.count
@@ -125,36 +135,7 @@ class HomeViewController: UIViewController {
     
     func setButton() {
         
-        /*
-        let testBtn = UIButton()
-        testBtn.frame = CGRect(x: view.center.x - 10, y: 0, width: 75, height: 75)
-        testBtn.layer.cornerRadius = 10
-        testBtn.backgroundColor = .yellow
-        
-        view.addSubview(testBtn)
-        
-        let secBtn = UIButton()
-        secBtn.frame = CGRect(x: view.center.x - 75, y: 150, width: 75, height: 75)
-        secBtn.layer.cornerRadius = 10
-        secBtn.backgroundColor = .orange
-        secBtn.addTarget(self, action: #selector(ChangeSize), for: .touchUpInside)
-        
-        view.addSubview(secBtn)
-        
-        let thrBtn = UIButton()
-        thrBtn.frame = CGRect(x: view.center.x - 200, y: 150, width: 75, height: 75)
-        thrBtn.layer.cornerRadius = 10
-        thrBtn.backgroundColor = .blue
-        
-        view.addSubview(thrBtn)
-        
-        btnArray.append(testBtn)
-        btnArray.append(secBtn)
-        btnArray.append(thrBtn)
- 
-        
-        makeGravity(sender: btnArray)
- */
+
         
         
     }

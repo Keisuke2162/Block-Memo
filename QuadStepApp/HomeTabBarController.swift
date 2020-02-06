@@ -10,15 +10,15 @@ import UIKit
 
 //タブバーのクラス（SceneDelegateでrootViewに設定してる）
 class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, MakeButtonActionDelegate {
-    
     //HomeViewControllerのインスタンス
     let conHomeView = HomeViewController()
     
     //MenuModalViewで設定の入力完了ボタン押下で呼び出される
     //HomeViewControllerのボタン作成フラグを立ててボタン作成処理を起動
-    func startMakeButton() {
+    func startMakeButton(title: String) {
         print("start")
         conHomeView.addBtn = true
+        conHomeView.setTitle = title
         conHomeView.makeButton()
     }
     
@@ -29,10 +29,11 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
         conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
         return conHomeView
     }()
-
+    
+    //真ん中のボタン
     private lazy var secondVCButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(UIImage(named: "apple"), for: .normal)
+        button.setBackgroundImage(UIImage(named: "add_s"), for: .normal)
         //button.sizeToFit()
         button.center.y = self.tabBar.center.y
         //button.translatesAutoresizingMaskIntoConstraints = true
@@ -75,14 +76,12 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
 
     // SecondVCを表示するボタンの設定
     override func viewDidLayoutSubviews() {
-        //secondVCButton.frame = CGRect(origin: .zero, size: CGSize(width: 90, height: 75.375))
-        //secondVCButton.sizeToFit()
         secondVCButton.frame.size = CGSize(width: tabBar.frame.width / 4, height: tabBar.frame.width / 4)
         secondVCButton.center.x = self.tabBar.center.x
         secondVCButton.center.y = tabBar.frame.height / 4
-            //tabBar.bounds.height - (secondVCButton.bounds.height / 2)
-        //secondVCButton.center = CGPoint(x: tabBar.bounds.width / 2, y: tabBar.bounds.height - (secondVCButton.bounds.height / 2))
-    }
+        //secondVCButton.sizeToFit()
+        //secondVCButton.layer.cornerRadius = tabBar.frame.width / 15
+        }
 
     // ボタンを押したときのアクション
     @objc func didTapButton(_ button: UIButton) {

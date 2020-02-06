@@ -38,3 +38,8 @@ class CustomTextField: UITextField {
         self.resignFirstResponder()
     }
 }
+
+class CustomUIButton: UIButton {
+    var id: String?
+    var title: String?
+}

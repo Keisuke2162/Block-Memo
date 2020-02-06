@@ -11,6 +11,7 @@ import UIKit
 class HomeViewController: UIViewController {
     
     var addBtn: Bool = false
+    var setTitle: String = ""
     
     let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip"]
     
@@ -25,9 +26,10 @@ class HomeViewController: UIViewController {
     let summerColor: [String] = ["3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262"]
     //虹の色　背景： 000000
     let rainbowColor: [String] = ["e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
+    //月景色　背景：3f83a6
+    let moonNightColor: [String] = ["002b40","d9e9e5","6cb2d3","1d4b69","b1c7d4","f4f2db","94a1a9","424f56"]
     
-    
-    var btnArray: [UIButton] = []
+    var btnArray: [CustomUIButton] = []
     
     var btnTag = 0
     
@@ -46,7 +48,7 @@ class HomeViewController: UIViewController {
         tabHeight = (tabBarController?.tabBar.frame.height)!
         
         //view.backgroundColor = UIColor(colorCode: "e13816")
-        view.backgroundColor = UIColor(colorCode: "4e3d95")
+        view.backgroundColor = UIColor(colorCode: "3f83a6")
         
         setButton()
 
@@ -60,13 +62,18 @@ class HomeViewController: UIViewController {
             
             let random = CGFloat.random(in: 0 ..< 5)
             
-            let makeBtn = UIButton()
+            //ボタン作成
+            let makeBtn = CustomUIButton()
             makeBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: 75, height: 75)
             makeBtn.layer.cornerRadius = 10
             
+            let uuid: String = NSUUID().uuidString
+            makeBtn.id = uuid
+            makeBtn.title = setTitle
+            
             //アイコン色設定
             let colorRandom = Int(arc4random_uniform(8))
-            makeBtn.backgroundColor = UIColor(colorCode: summerColor[colorRandom])
+            makeBtn.backgroundColor = UIColor(colorCode: moonNightColor[colorRandom])
             
             //アイコン画像設定
             let iconRandom = Int(arc4random_uniform(10))
@@ -74,7 +81,8 @@ class HomeViewController: UIViewController {
             let iconImage = UIImage(named: iconName[iconRandom])?.withRenderingMode(.alwaysTemplate)
             makeBtn.setImage(iconImage, for: .normal)
             
-            let iconColor = DecitionImageColor(UIColor(colorCode: summerColor[colorRandom]))
+            //アイコンの線の色　白か黒か
+            let iconColor = DecitionImageColor(UIColor(colorCode: moonNightColor[colorRandom]))
             makeBtn.tintColor = iconColor
             
             makeBtn.tag = btnTag
@@ -93,6 +101,7 @@ class HomeViewController: UIViewController {
         }
     }
     
+    //アイコンの色を白か黒か決める
     func DecitionImageColor(_ color: UIColor) -> (UIColor) {
         let components = color.cgColor.components!
         let red = components[0] * 255
@@ -105,19 +114,24 @@ class HomeViewController: UIViewController {
         if ((red * 0.299 + green * 0.587 + blue * 0.114) < 128) {
             color = .white
         }
-        
         return color
     }
     
-    @objc func nextView(sender: UIButton) {
+    @objc func nextView(sender: CustomUIButton) {
         let vc = MemoTextViewController()
         let color = sender.backgroundColor
+        let tint = sender.tintColor
+        
+        print(sender.title!)
+        
+        vc.tintColor = tint!
         vc.backColor = color!
+        vc.titleText = sender.title!
         
         present(vc, animated: true, completion: nil)
     }
     
-    @objc func tapButton(sender: UIButton) {
+    @objc func tapButton(sender: CustomUIButton) {
         //let tag = sender.tag
         let num = btnArray.count
         
@@ -134,13 +148,9 @@ class HomeViewController: UIViewController {
     
     
     func setButton() {
-        
-
-        
-        
     }
     
-    func makeGravity(sender: [UIButton]) {
+    func makeGravity(sender: [CustomUIButton]) {
         animator = UIDynamicAnimator(referenceView: self.view)
         
         gravity = UIGravityBehavior(items: sender)
@@ -161,12 +171,6 @@ class HomeViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    @objc func ChangeSize(_ sender: UIButton) {
-        //sender.frame.size = CGSize(width: 150, height: 150)
-        //sender.layer.cornerRadius = 75
-        print(addBtn)
     }
 
     

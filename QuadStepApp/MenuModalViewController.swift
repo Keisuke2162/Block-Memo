@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MakeButtonActionDelegate {
-    func startMakeButton()
+    func startMakeButton(title: String)
 }
 
 class MenuModalViewController: UIViewController {
@@ -18,6 +18,8 @@ class MenuModalViewController: UIViewController {
     
     var height: CGFloat = 0
     var width: CGFloat = 0
+    
+    var titleField = CustomTextField()
     
     //メモの種類ボタン
     let textBtn = UIButton()
@@ -33,8 +35,11 @@ class MenuModalViewController: UIViewController {
         view.backgroundColor = UIColor(colorCode: "829ac8")
         
         setButton()
-
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        titleField.becomeFirstResponder()
     }
     
     func setButton() {
@@ -67,7 +72,7 @@ class MenuModalViewController: UIViewController {
         
         
         //タイトル入力フィールド（UITextFieldのカスタムクラス（Doneボタンの追加））
-        let titleField = CustomTextField()
+        
         titleField.borderStyle = .none
         titleField.frame.size = CGSize(width: width / 10 * 6, height: height / 10)
         titleField.center = CGPoint(x: view.center.x, y: height / 10)
@@ -101,11 +106,12 @@ class MenuModalViewController: UIViewController {
     }
     
     @objc func doneIcon() {
-        //let id: String = NSUUID().uuidString
+        var titleText: String = ""
         
         self.dismiss(animated: true, completion: {
             if let del = self.delegate {
-                del.startMakeButton()
+                titleText = self.titleField.text!
+                del.startMakeButton(title: titleText)
             } else {
                 print("unwrap error")
             }

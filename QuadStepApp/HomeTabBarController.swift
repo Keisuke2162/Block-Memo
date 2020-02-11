@@ -15,10 +15,12 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     
     //MenuModalViewで設定の入力完了ボタン押下で呼び出される
     //HomeViewControllerのボタン作成フラグを立ててボタン作成処理を起動
-    func startMakeButton(title: String) {
+    func startMakeButton(title: String, contentText: String, iconColor: UIColor) {
         print("start")
         conHomeView.addBtn = true
         conHomeView.setTitle = title
+        conHomeView.setContentText = contentText
+        conHomeView.setIconColor = iconColor
         conHomeView.makeButton()
     }
     
@@ -33,7 +35,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     //真ん中のボタン
     private lazy var secondVCButton: UIButton = {
         let button = UIButton()
-        button.setBackgroundImage(UIImage(named: "add_s"), for: .normal)
+        button.setBackgroundImage(UIImage(named: "add_50"), for: .normal)
         //button.sizeToFit()
         button.center.y = self.tabBar.center.y
         //button.translatesAutoresizingMaskIntoConstraints = true
@@ -76,9 +78,9 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
 
     // SecondVCを表示するボタンの設定
     override func viewDidLayoutSubviews() {
-        secondVCButton.frame.size = CGSize(width: tabBar.frame.width / 4, height: tabBar.frame.width / 4)
+        secondVCButton.frame.size = CGSize(width: tabBar.frame.width / 9, height: tabBar.frame.width / 9)
         secondVCButton.center.x = self.tabBar.center.x
-        secondVCButton.center.y = tabBar.frame.height / 4
+        secondVCButton.center.y = tabBar.frame.height / 2
         //secondVCButton.sizeToFit()
         //secondVCButton.layer.cornerRadius = tabBar.frame.width / 15
         }

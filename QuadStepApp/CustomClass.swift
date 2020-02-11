@@ -42,4 +42,6 @@ class CustomTextField: UITextField {
 class CustomUIButton: UIButton {
     var id: String?
     var title: String?
+    var text: String?
+    var list: [String]?
 }

@@ -21,7 +21,6 @@
 		E78CF88123D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E78CF87F23D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld */; };
 		E78CF88323D8A8A7008A0A3C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E78CF88223D8A8A7008A0A3C /* Assets.xcassets */; };
 		E78CF88623D8A8A7008A0A3C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E78CF88423D8A8A7008A0A3C /* LaunchScreen.storyboard */; };
-		E7EDB60E23EB24A200B8C81C /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EDB60D23EB24A200B8C81C /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,7 +40,6 @@
 		E78CF88223D8A8A7008A0A3C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E78CF88523D8A8A7008A0A3C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E78CF88723D8A8A7008A0A3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E7EDB60D23EB24A200B8C81C /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,7 +75,6 @@
 				E78CF87623D8A8A7008A0A3C /* AppDelegate.swift */,
 				E78CF87823D8A8A7008A0A3C /* SceneDelegate.swift */,
 				E72A91A623E9CD8900A6AB31 /* MemoTextViewController.swift */,
-				E7EDB60D23EB24A200B8C81C /* Extension.swift */,
 				E780261823DA003C0071DC92 /* HomeViewController.swift */,
 				E780261A23DA00540071DC92 /* GeneralViewController.swift */,
 				E780261C23DDDE1A0071DC92 /* MenuModalViewController.swift */,
@@ -168,7 +165,6 @@
 				E78CF88123D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld in Sources */,
 				E780261D23DDDE1A0071DC92 /* MenuModalViewController.swift in Sources */,
 				E72A91A723E9CD8900A6AB31 /* MemoTextViewController.swift in Sources */,
-				E7EDB60E23EB24A200B8C81C /* Extension.swift in Sources */,
 				E780261B23DA00540071DC92 /* GeneralViewController.swift in Sources */,
 				E780261F23DDEB950071DC92 /* CoreData.swift in Sources */,
 				E78CF87723D8A8A7008A0A3C /* AppDelegate.swift in Sources */,

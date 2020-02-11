@@ -7,12 +7,21 @@
 //
 
 import UIKit
+import CoreData
 
 class HomeViewController: UIViewController {
     
+    //CoreDataからのデータ
+    var homeDataArray: [HomeData] = []
+    var homeData = HomeData()
+    
+    //TabBarから受け取るデータ
     var addBtn: Bool = false
     var setTitle: String = ""
+    var setContentText: String = ""
+    var setIconColor: UIColor = .white
     
+
     let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip"]
     
     let colorArray: [UIColor] = [.blue, .red, .yellow, .orange, .cyan, .magenta, .purple]
@@ -31,8 +40,6 @@ class HomeViewController: UIViewController {
     
     var btnArray: [CustomUIButton] = []
     
-    var btnTag = 0
-    
     var tabHeight: CGFloat = 0.0
     
     var animator: UIDynamicAnimator!
@@ -49,6 +56,8 @@ class HomeViewController: UIViewController {
         
         //view.backgroundColor = UIColor(colorCode: "e13816")
         view.backgroundColor = UIColor(colorCode: "3f83a6")
+        
+        //getData()
         
         setButton()
 
@@ -70,10 +79,12 @@ class HomeViewController: UIViewController {
             let uuid: String = NSUUID().uuidString
             makeBtn.id = uuid
             makeBtn.title = setTitle
+            makeBtn.text = setContentText
             
             //アイコン色設定
-            let colorRandom = Int(arc4random_uniform(8))
-            makeBtn.backgroundColor = UIColor(colorCode: moonNightColor[colorRandom])
+            //let colorRandom = Int(arc4random_uniform(8))
+            //makeBtn.backgroundColor = UIColor(colorCode: moonNightColor[colorRandom])
+            makeBtn.backgroundColor = setIconColor
             
             //アイコン画像設定
             let iconRandom = Int(arc4random_uniform(10))
@@ -82,16 +93,16 @@ class HomeViewController: UIViewController {
             makeBtn.setImage(iconImage, for: .normal)
             
             //アイコンの線の色　白か黒か
-            let iconColor = DecitionImageColor(UIColor(colorCode: moonNightColor[colorRandom]))
+            let iconColor = DecitionImageColor(setIconColor)
             makeBtn.tintColor = iconColor
-            
-            makeBtn.tag = btnTag
-            btnTag += 1
             
             makeBtn.addTarget(self, action: #selector(tapButton), for: .touchDragExit)
             makeBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
             
+            //let data = Data(makeBtn)
+            
             view.addSubview(makeBtn)
+            //dataSave()
             
             btnArray.append(makeBtn)
             
@@ -100,6 +111,33 @@ class HomeViewController: UIViewController {
             addBtn = false
         }
     }
+    /*
+    //CoreDataからデータを取ってくる
+    func getData() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do {
+            let fetchequest: NSFetchRequest<HomeData> = HomeData.fetchRequest()
+            homeDataArray = try context.fetch(fetchequest)
+            
+        }catch {
+            print("error")
+        }
+        
+        print("\(homeDataArray.count)件のデータを取得しました")
+    }
+    
+    //データ保存
+    func dataSave() {
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        let data = HomeData(context: context)
+        
+        data.title = homeData.title
+        data.contentText = homeData.contentText
+        data.uuid = homeData.uuid
+        
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+    }
+ */
     
     //アイコンの色を白か黒か決める
     func DecitionImageColor(_ color: UIColor) -> (UIColor) {
@@ -127,6 +165,7 @@ class HomeViewController: UIViewController {
         vc.tintColor = tint!
         vc.backColor = color!
         vc.titleText = sender.title!
+        vc.contentText = sender.text!
         
         present(vc, animated: true, completion: nil)
     }

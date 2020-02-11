@@ -14,6 +14,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
     var tintColor: UIColor = .white
     
     var titleText: String = ""
+    var contentText: String = ""
     
     var scrollView = UIScrollView()
     var textView = UITextView()
@@ -85,6 +86,13 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
         textView.layer.cornerRadius = 10.0
         textView.textColor = tintColor
         textView.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 20)
+        textView.text = contentText
+        
+        textView.linkTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.blue
+        ]
+        textView.isSelectable = true
+        textView.dataDetectorTypes = .link
         
         scrollView.addSubview(textView)
     }

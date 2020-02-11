@@ -15,7 +15,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "42"
-            endingLineNumber = "42">
+            endingLineNumber = "42"
+            landmarkName = "CustomUIButton"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -28,9 +30,9 @@
             filePath = "QuadStepApp/HomeTabBarController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
-            landmarkName = "startMakeButton(title:)"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "startMakeButton(title:contentText:iconColor:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

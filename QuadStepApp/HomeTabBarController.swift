@@ -28,7 +28,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     
     private lazy var firstViewController: HomeViewController = {
         
-        conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
+        conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 1)
         return conHomeView
     }()
     
@@ -49,7 +49,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
 
     private lazy var thirdViewController: GeneralViewController = {
         
-        conGeneralView.tabBarItem = UITabBarItem(tabBarSystemItem: .contacts, tag: 1)
+        conGeneralView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostRecent, tag: 1)
         /*
         conGeneralView.tabBarItem = UITabBarItem(
             title: "",

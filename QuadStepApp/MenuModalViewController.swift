@@ -20,12 +20,18 @@ class MenuModalViewController: UIViewController {
     var width: CGFloat = 0
     
     let decBtn1 = UIButton()
-    let border = CALayer() //titleFieldの下線
+    
     let colorBarBtn = UIButton()
     var colorBarFlg: Bool = false
+    
     var titleField = CustomTextField()
+    let border = CALayer() //titleFieldの下線
     var contentView = UITextView()
+    
+    var iconView = UIView()
+    var noneIconImage = UIImage(named: "none_100")?.withRenderingMode(.alwaysTemplate)
     var iconButton = UIButton() //アイコン選択ボタン
+    var iconViewFlg: Bool = false
     
     //アイコン、文字の色
     var tintColor: UIColor = .white
@@ -37,6 +43,10 @@ class MenuModalViewController: UIViewController {
     
     //色選択ようのバー
     var colorBar = UIScrollView()
+    
+    //アイコン名
+    let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip",
+                                "play","system","admin","key","block"]
     
     //color
     let moonNightColor: [String] = ["002b40","d9e9e5","6cb2d3","1d4b69","b1c7d4","f4f2db","94a1a9","424f56","004f7a","7a8a92","fde5c5","dce5ec","9a7fb8","cd659f","829ac8","77c2b9","3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262","f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630","e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
@@ -69,7 +79,7 @@ class MenuModalViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        titleField.becomeFirstResponder()
+        contentView.becomeFirstResponder()
     }
     
     func setToolbarTextView() {
@@ -97,14 +107,6 @@ class MenuModalViewController: UIViewController {
     }
     
     func setButton() {
-        //アイコンボタン
-        let noneIconImage = UIImage(named: "none_100")?.withRenderingMode(.alwaysTemplate)
-        iconButton.frame = CGRect(x: width / 10 * 7, y: height / 10 * 0.5, width: height / 13, height: height / 13)
-        iconButton.setImage(noneIconImage, for: .normal)
-        iconButton.tintColor = tintColor
-        
-        view.addSubview(iconButton)
-    
         //確定ボタン
         let decIcon = UIImage(named: "OK_100")?.withRenderingMode(.alwaysTemplate)
         decBtn1.frame.size = CGSize(width: height / 15, height: height / 15)
@@ -126,6 +128,14 @@ class MenuModalViewController: UIViewController {
         
         view.addSubview(colorBarBtn)
         
+        //アイコンボタン
+        iconButton.frame = CGRect(x: width / 10 * 7, y: height / 10 * 0.5, width: height / 13, height: height / 13)
+        iconButton.setImage(noneIconImage, for: .normal)
+        iconButton.tintColor = tintColor
+        iconButton.addTarget(self, action: #selector(openIconView), for:.touchUpInside)
+        
+        view.addSubview(iconButton)
+        
         //タイトル入力フィールド（UITextFieldのカスタムクラス（Doneボタンの追加））
         titleField.borderStyle = .none
         titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 6, height: height / 10)
@@ -140,21 +150,16 @@ class MenuModalViewController: UIViewController {
         
         view.addSubview(titleField)
         
-        contentView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 2, width: width / 10 * 9.5, height: height / 10 * 6)
+        //メモ記入エリア
+        contentView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 6)
         contentView.layer.cornerRadius = 10.0
         contentView.backgroundColor = .clear
         contentView.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 20)
         contentView.textColor = tintColor
-        /*
-        contentView.linkTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.blue
-        ]
-        contentView.isSelectable = true
-        contentView.dataDetectorTypes = .link
-        */
         
         view.addSubview(contentView)
-
+        
+        //色選択ようバー
         colorBar.frame = CGRect(x: width / 10 * 9, y: 0, width: width / 10, height: height)
         colorBar.contentSize = CGSize(width: width / 10, height: CGFloat(manyColor.count + 1) * (height / 15))
         colorBar.showsVerticalScrollIndicator = false
@@ -162,6 +167,7 @@ class MenuModalViewController: UIViewController {
         
         view.addSubview(colorBar)
         
+        //カラーバーに色ボタンを装着
         for i in 0 ..< manyColor.count {
             let colorButton = UIButton()
             let btnHeight = height / 15 * CGFloat(i)
@@ -170,16 +176,54 @@ class MenuModalViewController: UIViewController {
             colorButton.addTarget(self, action: #selector(backColorChange), for: .touchUpInside)
             
             colorBar.addSubview(colorButton)
-            //view.addSubview(colorButton)
+        }
+        
+        //アイコン選択画面
+        iconView.frame = CGRect(x: 0, y: height, width: width, height: height / 2)
+        iconView.backgroundColor = .white
+        iconView.layer.cornerRadius = 10.0
+        
+        //アイコン一覧のスクロールView
+        let scrollIconView = UIScrollView()
+        scrollIconView.frame = CGRect(x: 0, y: 0, width: width, height: height / 2)
+        scrollIconView.contentSize = CGSize(width: width * 2, height: height / 2)
+        
+        for i in 0 ..< iconName.count {
+            let iconBtn = UIButton()
+            iconBtn.frame = CGRect(x: width / 10 * CGFloat(i), y: 0, width: width / 10, height: width / 10)
+            iconBtn.setImage(UIImage(named: iconName[i]), for: .normal)
+            iconBtn.tag = i
+            iconBtn.addTarget(self, action: #selector(chooseIcon), for:.touchUpInside)
+            iconBtn.addTarget(self, action: #selector(openIconView), for:.touchUpInside)
+            
+            scrollIconView.addSubview(iconBtn)
+        }
+        iconView.addSubview(scrollIconView)
+        view.addSubview(iconView)
+        
+    }
+    
+    @objc func chooseIcon(_ sender: UIButton) {
+        noneIconImage = UIImage(named: iconName[sender.tag])?.withRenderingMode(.alwaysTemplate)
+        iconButton.setImage(noneIconImage, for: .normal)
+        
+    }
+    
+    @objc func openIconView() {
+        if iconViewFlg {
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.iconView.center.y += self.height / 2
+            }, completion: nil)
+            iconViewFlg = false
+        }else {
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.iconView.center.y -= self.height / 2
+            }, completion: nil)
+            iconViewFlg = true
         }
     }
     
-    /*
-     UIView.animate(withDuration: 1.0, delay: 0.0, options: .autoreverse, animations: {
-         self.blueView.center.y += 100.0
-     }, completion: nil)
-    */
-    
+    //カラー選択ボタン押下時
     @objc func openColorBar() {
         if colorBarFlg {
             let colorIcon = UIImage(named: "palette_100")?.withRenderingMode(.alwaysTemplate)

@@ -9,62 +9,120 @@
 import UIKit
 
 class GeneralViewController: UIViewController {
-
-    var animator : UIDynamicAnimator!
+    
+    var backGroundBtn = UIButton()  //
+    var fontTypeBtn = UIButton()    //
+    var fontSizeBtn = UIButton()    //
+    var iconSizeBtn = UIButton()    //
+    
+    //
+    let smallBtn = UIButton()
+    let middleBtn = UIButton()
+    let leargeBtn = UIButton()
+    
+    //重力設定とコリジョン設定
+    var animator: UIDynamicAnimator!
+    var gravity: UIGravityBehavior!
+    
+    var testView = UIView()
+    var backColor: UIColor = .clear
+    
+    var height: CGFloat = 0
+    var width: CGFloat = 0
+    
+    override func viewDidLoad() {
+        height = view.frame.height
+        width = view.frame.width
+            
+        super.viewDidLoad()
         
-        var gravity : UIGravityBehavior!
-        
-        override func viewDidLoad() {
+        backColor = .cyan
+        self.view.backgroundColor = backColor
             
-            super.viewDidLoad()
+        setParts()
             
-            self.view.backgroundColor = UIColor.cyan
             
-            // Labelを作成.
-            let myLabel: UILabel = UILabel(frame: CGRect(x: 0,y: 0,width: 200,height: 40))
-            myLabel.backgroundColor = UIColor.orange
-            myLabel.layer.masksToBounds = true
-            myLabel.layer.cornerRadius = 20.0
-            myLabel.text = "Hello Swift!!"
-            myLabel.textColor = UIColor.white
-            myLabel.shadowColor = UIColor.gray
-            myLabel.textAlignment = NSTextAlignment.center
-            myLabel.layer.position = CGPoint(x: self.view.bounds.width/2,y: -200)
-            self.view.addSubview(myLabel)
-            
-            // Buttonを作成.
-            let myButton = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
-            myButton.layer.position = CGPoint(x: self.view.frame.midX, y: 500)
-            myButton.layer.masksToBounds = true
-            myButton.layer.cornerRadius = 20.0
-            myButton.backgroundColor = UIColor.red
-            myButton.addTarget(self, action: #selector(onClickMyButton), for: UIControl.Event.touchUpInside)
-            self.view.addSubview(myButton)
-            
-            // UIDynamiAnimatorの生成とインスタンスの保存.
-            animator = UIDynamicAnimator(referenceView: self.view)
-            
-            // 重量を作り、Viewに適用させる.
-            gravity = UIGravityBehavior(items: [myLabel])
-            
-            // Collisionを作成、Viewに適用させる.
-            let collision = UICollisionBehavior(items: [myLabel])
-            
-            // 透明な四角形の当たり判定を作る.
-            collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect:
-                CGRect(x: self.view.frame.midX, y: self.view.frame.midY, width: self.view.frame.maxX, height: 10))
-            )
-            
-            // Collisionのアニメーションを実行.
-            animator.addBehavior(collision)
-        }
-        
-        @objc func onClickMyButton(sender : UIButton){
-            
-            // Gravityのアニメーションを実行.
-            animator.addBehavior(gravity)
-        }
     }
+    
+    func setParts() {
+        //背景色設定
+        backGroundBtn.frame = CGRect(x: width / 5 * 2, y: height / 10 * 4, width: width / 5, height: width / 5)
+        //backGroundBtn.center = view.center
+        backGroundBtn.layer.cornerRadius = 10.0
+        backGroundBtn.backgroundColor = .blue
+        
+        view.addSubview(backGroundBtn)
+        
+        //アイコンサイズ設定
+        iconSizeBtn.frame = CGRect(x: width / 5, y: height / 10 * 4, width: width / 5, height: width / 5)
+        iconSizeBtn.layer.cornerRadius = 10.0
+        iconSizeBtn.backgroundColor = .red
+        iconSizeBtn.addTarget(self, action: #selector(setButtonSize), for: .touchUpInside)
+        
+        view.addSubview(iconSizeBtn)
+        
+        //プレビューエリア
+        testView.frame = CGRect(x: 0, y: 0, width: width, height: height / 3)
+        testView.backgroundColor = .black
+        
+        view.addSubview(testView)
+    }
+    
+    //ボタンサイズ設定を画面に表示
+    @objc func setButtonSize() {
+        var btnArray: [UIButton] = []
+        
+        
+        smallBtn.frame = CGRect(x: width / 5, y: testView.frame.height / 2, width: width / 7, height: width / 7)
+        smallBtn.backgroundColor = .orange
+        smallBtn.layer.cornerRadius = 10.0
+        btnArray.append(smallBtn)
+        
+        testView.addSubview(smallBtn)
+        
+        
+        middleBtn.frame = CGRect(x: width / 5 * 2, y: testView.frame.height / 2, width: width / 5, height: width / 5)
+        middleBtn.backgroundColor = .orange
+        middleBtn.layer.cornerRadius = 10.0
+        btnArray.append(middleBtn)
+        
+        testView.addSubview(middleBtn)
+        
+        
+        leargeBtn.frame = CGRect(x: width / 5 * 3.5, y: testView.frame.height / 2, width: width / 4, height: width / 4)
+        leargeBtn.backgroundColor = .orange
+        leargeBtn.layer.cornerRadius = 10.0
+        btnArray.append(leargeBtn)
+        
+        testView.addSubview(leargeBtn)
+        
+        makeGravity(sender: btnArray)
+    }
+    
+    
+    func makeGravity(sender: [UIButton]) {
+        animator = UIDynamicAnimator(referenceView: self.view)
+        
+        gravity = UIGravityBehavior(items: sender)
+        
+        let collision = UICollisionBehavior(items: sender)
+        collision.translatesReferenceBoundsIntoBoundary = true
+        
+        //barrierは何の意味がある？
+        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y: 0, width: view.frame.width, height: testView.frame.height )
+        ))
+        
+        animator.addBehavior(collision)
+        
+        animator.addBehavior(gravity)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+}
     
 
     /*

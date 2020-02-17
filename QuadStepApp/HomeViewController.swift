@@ -155,6 +155,7 @@ class HomeViewController: UIViewController {
         return color
     }
     
+    //表示画面への遷移
     @objc func nextView(sender: CustomUIButton) {
         let vc = MemoTextViewController()
         let color = sender.backgroundColor
@@ -197,8 +198,11 @@ class HomeViewController: UIViewController {
         let collision = UICollisionBehavior(items: sender)
         collision.translatesReferenceBoundsIntoBoundary = true
         
-        
+        /*
         collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:view.frame.height - tabHeight, width: view.frame.width, height: tabHeight )
+        ))
+        */
+        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:0, width: view.frame.width, height: view.frame.height - tabHeight)
         ))
         
         

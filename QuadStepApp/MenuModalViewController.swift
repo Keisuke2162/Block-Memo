@@ -42,7 +42,7 @@ class MenuModalViewController: UIViewController {
     let listBtn = UIButton()
     
     //色選択ようのバー
-    var colorBar = UIScrollView()
+    var colorListView = UIView()
     
     //アイコン名
     let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip",
@@ -79,7 +79,7 @@ class MenuModalViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        contentView.becomeFirstResponder()
+        //contentView.becomeFirstResponder()
     }
     
     func setToolbarTextView() {
@@ -129,8 +129,10 @@ class MenuModalViewController: UIViewController {
         view.addSubview(colorBarBtn)
         
         //アイコンボタン
-        iconButton.frame = CGRect(x: width / 10 * 7, y: height / 10 * 0.5, width: height / 13, height: height / 13)
+        //iconButton.frame = CGRect(x: width / 10 * 7, y: height / 10 * 0.5, width: height / 13, height: height / 13)
         iconButton.setImage(noneIconImage, for: .normal)
+        iconButton.frame.size = CGSize(width: height / 15, height: height / 15)
+        iconButton.center = CGPoint(x: width / 4, y: height / 10 * 9)
         iconButton.tintColor = tintColor
         iconButton.addTarget(self, action: #selector(openIconView), for:.touchUpInside)
         
@@ -159,14 +161,12 @@ class MenuModalViewController: UIViewController {
         
         view.addSubview(contentView)
         
+        /******************色選択バー***************/
+        colorListView.frame = CGRect(x: width, y: 0, width: width / 10, height: height)
         //色選択ようバー
-        colorBar.frame = CGRect(x: width / 10 * 9, y: 0, width: width / 10, height: height)
+        let colorBar = UIScrollView()
+        colorBar.frame = CGRect(x: 0, y: 0, width: width / 10, height: height)
         colorBar.contentSize = CGSize(width: width / 10, height: CGFloat(manyColor.count + 1) * (height / 15))
-        colorBar.showsVerticalScrollIndicator = false
-        colorBar.setContentOffset(CGPoint(x: -(width / 10), y: 0), animated: false)
-        
-        view.addSubview(colorBar)
-        
         //カラーバーに色ボタンを装着
         for i in 0 ..< manyColor.count {
             let colorButton = UIButton()
@@ -177,24 +177,23 @@ class MenuModalViewController: UIViewController {
             
             colorBar.addSubview(colorButton)
         }
+        colorListView.addSubview(colorBar)
+        view.addSubview(colorListView)
         
-        //アイコン選択画面
-        iconView.frame = CGRect(x: 0, y: height, width: width, height: height / 2)
-        iconView.backgroundColor = .white
-        iconView.layer.cornerRadius = 10.0
-        
+        /******************アイコン選択バー*******************/
+        iconView.frame = CGRect(x: width, y: 0, width: width / 10, height: height)
         //アイコン一覧のスクロールView
         let scrollIconView = UIScrollView()
-        scrollIconView.frame = CGRect(x: 0, y: 0, width: width, height: height / 2)
-        scrollIconView.contentSize = CGSize(width: width * 2, height: height / 2)
-        
+        scrollIconView.frame = CGRect(x: 0, y: 0, width: width / 10, height: height)
+        scrollIconView.contentSize = CGSize(width: width / 10, height: CGFloat(iconName.count + 1) * (height / 15))
+        //アイコンバーにアイコンを装着
         for i in 0 ..< iconName.count {
             let iconBtn = UIButton()
-            iconBtn.frame = CGRect(x: width / 10 * CGFloat(i), y: 0, width: width / 10, height: width / 10)
+            let btnHeight = height / 15 * CGFloat(i)
+            iconBtn.frame = CGRect(x: 0, y: btnHeight, width: scrollIconView.frame.width, height: scrollIconView.frame.width)
             iconBtn.setImage(UIImage(named: iconName[i]), for: .normal)
             iconBtn.tag = i
             iconBtn.addTarget(self, action: #selector(chooseIcon), for:.touchUpInside)
-            iconBtn.addTarget(self, action: #selector(openIconView), for:.touchUpInside)
             
             scrollIconView.addSubview(iconBtn)
         }
@@ -209,37 +208,62 @@ class MenuModalViewController: UIViewController {
         
     }
     
-    @objc func openIconView() {
-        if iconViewFlg {
-            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
-                self.iconView.center.y += self.height / 2
-            }, completion: nil)
-            iconViewFlg = false
-        }else {
-            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
-                self.iconView.center.y -= self.height / 2
-            }, completion: nil)
-            iconViewFlg = true
-        }
-    }
     
-    //カラー選択ボタン押下時
-    @objc func openColorBar() {
+    @objc func openIconView() {
         if colorBarFlg {
             let colorIcon = UIImage(named: "palette_100")?.withRenderingMode(.alwaysTemplate)
             colorBarBtn.setImage(colorIcon, for: .normal)
             colorBarBtn.tintColor = tintColor
             
-            colorBar.setContentOffset(CGPoint(x: -(width / 10), y: 0), animated: true)
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.colorListView.center.x += self.colorListView.frame.width
+            }, completion: nil)
             colorBarFlg = false
+        }
+        
+        if iconViewFlg {
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.iconView.center.x += self.iconView.frame.width
+            }, completion: nil)
+            iconViewFlg = false
+        }else {
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.iconView.center.x -= self.iconView.frame.width
+            }, completion: nil)
+            iconViewFlg = true
+        }
+        
+        
+    }
+    
+    //カラー選択ボタン押下時
+    @objc func openColorBar() {
+        if iconViewFlg {
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.iconView.center.x += self.iconView.frame.width
+            }, completion: nil)
+            iconViewFlg = false
+        }
+        if colorBarFlg {
+            let colorIcon = UIImage(named: "palette_100")?.withRenderingMode(.alwaysTemplate)
+            colorBarBtn.setImage(colorIcon, for: .normal)
+            colorBarBtn.tintColor = tintColor
+            
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.colorListView.center.x += self.colorListView.frame.width
+            }, completion: nil)
+            colorBarFlg = false
+            
         }else {
             let colorIcon = UIImage(named: "palette_color_96")
             colorBarBtn.tintColor = nil
             colorBarBtn.setImage(colorIcon, for: .normal)
             
-            
-            colorBar.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseInOut, animations: {
+                self.colorListView.center.x -= self.colorListView.frame.width
+            }, completion: nil)
             colorBarFlg = true
+            
         }
     }
     

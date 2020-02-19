@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 
 class HomeViewController: UIViewController {
+    var tabbarHeight: CGFloat = 0.0
     
     //CoreDataからのデータ
     var homeDataArray: [HomeData] = []
@@ -46,7 +47,6 @@ class HomeViewController: UIViewController {
     var gravity: UIGravityBehavior!
     
     override func viewWillAppear(_ animated: Bool) {
-        print("return")
     }
     
     override func viewDidLoad() {
@@ -202,7 +202,8 @@ class HomeViewController: UIViewController {
         collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:view.frame.height - tabHeight, width: view.frame.width, height: tabHeight )
         ))
         */
-        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:0, width: view.frame.width, height: view.frame.height - tabHeight)
+        print("tabbarheight\(tabbarHeight)")
+        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:0, width: view.frame.width, height: view.frame.height - tabbarHeight)
         ))
         
         

@@ -29,6 +29,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     private lazy var firstViewController: HomeViewController = {
         
         conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 1)
+        conHomeView.tabbarHeight = self.tabBar.frame.height
         return conHomeView
     }()
     
@@ -36,12 +37,10 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     private lazy var secondVCButton: UIButton = {
         let button = UIButton()
         button.setBackgroundImage(UIImage(named: "add_50"), for: .normal)
-        //button.sizeToFit()
         button.center.y = self.tabBar.center.y
         //button.translatesAutoresizingMaskIntoConstraints = true
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         self.tabBar.addSubview(button)
-        //self.view.addSubview(button)
         return button
     }()
 
@@ -68,6 +67,8 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
         setViewControllers(viewControllers, animated: false)
         
         print("tabbar")
+        
+        let height = self.tabBar.frame.height
 
         // Do any additional setup after loading the view.
     }
@@ -79,6 +80,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     // SecondVCを表示するボタンの設定
     override func viewDidLayoutSubviews() {
         secondVCButton.frame.size = CGSize(width: tabBar.frame.width / 9, height: tabBar.frame.width / 9)
+        //secondVCButton.frame.size = CGSize(width: self.tabBar.frame.height / 2, height: self.tabBar.frame.height / 2)
         secondVCButton.center.x = self.tabBar.center.x
         secondVCButton.center.y = tabBar.frame.height / 2
         //secondVCButton.sizeToFit()

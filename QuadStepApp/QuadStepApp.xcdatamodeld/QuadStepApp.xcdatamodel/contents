@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+    <entity name="GeneralData" representedClassName="GeneralData" syncable="YES" codeGenerationType="class">
+        <attribute name="font" optional="YES" attributeType="String"/>
+        <attribute name="size" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="HomeData" representedClassName="HomeData" syncable="YES" codeGenerationType="class">
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="contentText" optional="YES" attributeType="String"/>
@@ -9,5 +13,6 @@
     </entity>
     <elements>
         <element name="HomeData" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="GeneralData" positionX="-63" positionY="18" width="128" height="73"/>
     </elements>
 </model>

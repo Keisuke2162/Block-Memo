@@ -10,6 +10,11 @@ import UIKit
 import CoreData
 
 class HomeViewController: UIViewController {
+    
+    let dataClass = GeneralDataManagement()
+    var iconSize: CGFloat = 75.0
+    var fontType: String = ""
+    
     var tabbarHeight: CGFloat = 0.0
     
     //CoreDataからのデータ
@@ -46,7 +51,13 @@ class HomeViewController: UIViewController {
     var animator: UIDynamicAnimator!
     var gravity: UIGravityBehavior!
     
+    override func viewDidAppear(_ animated: Bool) {
+        let getData = dataClass.getData()
+        fontType = getData.0
+        iconSize = getData.1
+    }
     override func viewWillAppear(_ animated: Bool) {
+        
     }
     
     override func viewDidLoad() {
@@ -73,7 +84,7 @@ class HomeViewController: UIViewController {
             
             //ボタン作成
             let makeBtn = CustomUIButton()
-            makeBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: 75, height: 75)
+            makeBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: iconSize, height: iconSize)
             makeBtn.layer.cornerRadius = 10
             
             let uuid: String = NSUUID().uuidString
@@ -167,7 +178,7 @@ class HomeViewController: UIViewController {
         vc.backColor = color!
         vc.titleText = sender.title!
         vc.contentText = sender.text!
-        
+        vc.fontType = fontType
         present(vc, animated: true, completion: nil)
     }
     

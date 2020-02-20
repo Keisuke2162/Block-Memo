@@ -10,7 +10,6 @@ import UIKit
 
 class GeneralViewController: UIViewController {
     
-    let userDefault = UserDefaults.standard
     //User Defaultから取得　＆　UserDefaultに保存する値
     var strFont: String = ""
     var iconSize: CGFloat = 0.0
@@ -56,13 +55,12 @@ class GeneralViewController: UIViewController {
     
     //ボタンサイズ用スライダー
     let btnSizeSlider = UISlider()
+    let sliderValue = UILabel() //スライダーの値表示用ラベル
     
     
     override func viewDidLoad() {
         print("General_did")
-        
-        userDefault.register(defaults: ["FontSet": "default"])
-        userDefault.register(defaults: ["IconSize" : 0.0])
+
         
         height = view.frame.height
         width = view.frame.width
@@ -76,7 +74,7 @@ class GeneralViewController: UIViewController {
         backColor = .cyan
         self.view.backgroundColor = backColor
             
-        setParts()
+        
     }
     
     func setParts() {
@@ -122,7 +120,7 @@ class GeneralViewController: UIViewController {
         view.addSubview(generalScroll)
         
         //プレビューボタン
-        middleBtn.frame = CGRect(x: width / 5 * 2, y: 0, width: width / 5, height: width / 5)
+        middleBtn.frame = CGRect(x: width / 5 * 2, y: 0, width: iconSize, height: iconSize)
         middleBtn.backgroundColor = .orange
         middleBtn.layer.cornerRadius = 10.0
         btnArray.append(middleBtn)
@@ -149,8 +147,12 @@ class GeneralViewController: UIViewController {
         let maxSize = width / 4
         btnSizeSlider.minimumValue = Float(minSize)
         btnSizeSlider.maximumValue = Float(maxSize)
+        btnSizeSlider.value = Float(iconSize)
         
-        btnSizeSlider.value = Float(middleBtn.frame.width)
+        sliderValue.frame = CGRect(x: generalView.frame.width / 2 - 60, y: 20, width: 120, height: 20)
+        sliderValue.text = String(btnSizeSlider.value)
+        
+        generalView.addSubview(sliderValue)
         
         generalView.addSubview(btnSizeSlider)
     }
@@ -158,6 +160,7 @@ class GeneralViewController: UIViewController {
     @objc func moveSlider(_ sender: UISlider) {
         let size = CGFloat(sender.value)
         middleBtn.frame.size = CGSize(width: size, height: size)
+        sliderValue.text = String(btnSizeSlider.value)
     }
     
     @objc func decSize(_ sender: UISlider) {
@@ -236,41 +239,19 @@ class GeneralViewController: UIViewController {
             sub.removeFromSuperview()
         }
     }
-   /*
-     //セーブデータ格納用
-     var inputData: [SaveData] = []
-     var saveData = SaveData()
-     
-     
-     //CoreDataからデータを取ってくる
-     func getData() {
-         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-         do {
-             let fetchequest: NSFetchRequest<SaveData> = SaveData.fetchRequest()
-             inputData = try context.fetch(fetchequest)
-             
-         }catch {
-             print("error")
-         }
-         
-         print("\(inputData.count)件のデータを取得しました")
-     }
-     */
-     
-    
+
+    let dataClass = GeneralDataManagement()
     
     override func viewWillAppear(_ animated: Bool) {
-        strFont = userDefault.object(forKey: "FontSet") as! String
-        iconSize = userDefault.object(forKey: "IconSize") as! CGFloat
+        let getData = dataClass.getData()
+        strFont = getData.0
+        iconSize = getData.1
         
-        print("フォント→\(strFont),サイズ→\(iconSize)を読み込みました")
+        setParts()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        print("フォント→\(strFont),サイズ→\(iconSize)を保存します")
-        
-        userDefault.set(strFont, forKey: "FontSet")
-        userDefault.set(iconSize, forKey: "IconSize")
+        dataClass.putData(strFont: strFont, iconSize: iconSize)
     }
 
     
@@ -292,48 +273,3 @@ class GeneralViewController: UIViewController {
     }
     */
 
-
-   /*
-   //ボタンサイズ設定画面
-   @objc func setButtonSize() {
-       var btnArray: [UIButton] = []
-       
-       smallBtn.frame = CGRect(x: width / 5, y: testView.frame.height / 2, width: width / 7, height: width / 7)
-       smallBtn.backgroundColor = .orange
-       smallBtn.layer.cornerRadius = 10.0
-       //smallBtn.addTarget(self, action: #selector(chooseSize), for: .touchUpInside)
-       btnArray.append(smallBtn)
-       
-       testView.addSubview(smallBtn)
-       
-       
-       middleBtn.frame = CGRect(x: width / 5 * 2, y: testView.frame.height / 2, width: width / 5, height: width / 5)
-       middleBtn.backgroundColor = .orange
-       middleBtn.layer.cornerRadius = 10.0
-       //middleBtn.addTarget(self, action: #selector(chooseSize), for: .touchUpInside)
-       btnArray.append(middleBtn)
-       
-       testView.addSubview(middleBtn)
-       
-       leargeBtn.frame = CGRect(x: width / 5 * 3.25, y: testView.frame.height / 2, width: width / 4, height: width / 4)
-       leargeBtn.backgroundColor = .orange
-       leargeBtn.layer.cornerRadius = 10.0
-       //leargeBtn.addTarget(self, action: #selector(chooseSize), for: .touchUpInside)
-       btnArray.append(leargeBtn)
-       
-       testView.addSubview(leargeBtn)
-       
-       makeGravity(sender: btnArray)
-   }
-*/
-   /*
-   @objc func chooseSize(_ sender: UIButton) {
-       smallBtn.backgroundColor = .orange
-       middleBtn.backgroundColor = .orange
-       leargeBtn.backgroundColor = .orange
-       
-       sender.backgroundColor = .blue
-       
-       //let length = sender.frame.height
-   }
-*/

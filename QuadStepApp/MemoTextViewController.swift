@@ -10,6 +10,8 @@ import UIKit
 
 class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollViewDelegate {
     
+    var fontType: String = ""
+    
     var backColor: UIColor = .white
     var tintColor: UIColor = .white
     
@@ -72,7 +74,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
         */
         
         titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 6, height: height / 10)
-        titleField.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 50.0)
+        titleField.font = UIFont(name: fontType, size: 50.0)
         titleField.textColor = tintColor
         titleField.text = titleText
         
@@ -85,7 +87,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
         textView.backgroundColor = .clear
         textView.layer.cornerRadius = 10.0
         textView.textColor = tintColor
-        textView.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 20)
+        textView.font = UIFont(name: fontType, size: 20)
         textView.text = contentText
         
         textView.linkTextAttributes = [

@@ -30,8 +30,8 @@
             filePath = "QuadStepApp/HomeTabBarController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
             landmarkName = "startMakeButton(title:contentText:iconColor:)"
             landmarkType = "7">
          </BreakpointContent>

@@ -10,6 +10,9 @@ import UIKit
 
 //タブバーのクラス（SceneDelegateでrootViewに設定してる）
 class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, MakeButtonActionDelegate {
+    
+    let dataClass = GeneralDataManagement()
+    
     //HomeViewControllerのインスタンス
     let conHomeView = HomeViewController()
     
@@ -68,7 +71,12 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
         
         print("tabbar")
         
-        let height = self.tabBar.frame.height
+        let dataClass = GeneralDataManagement()
+        let getData = dataClass.getData()
+        conHomeView.fontType = getData.0
+        conHomeView.iconSize = getData.1
+        
+        //let height = self.tabBar.frame.height
 
         // Do any additional setup after loading the view.
     }
@@ -91,7 +99,12 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate, Make
     @objc func didTapButton(_ button: UIButton) {
         let con = MenuModalViewController()
         con.delegate = self
+        
+        let getData = dataClass.getData()
+        con.fontType = getData.0
+        
         present(con, animated: true, completion: nil)
+        
     }
     
     

@@ -14,6 +14,8 @@ protocol MakeButtonActionDelegate {
 
 class MenuModalViewController: UIViewController {
     
+    var fontType: String = ""
+    
     var delegate: MakeButtonActionDelegate?
     
     var height: CGFloat = 0
@@ -141,7 +143,7 @@ class MenuModalViewController: UIViewController {
         //タイトル入力フィールド（UITextFieldのカスタムクラス（Doneボタンの追加））
         titleField.borderStyle = .none
         titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 6, height: height / 10)
-        titleField.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 30.0)
+        titleField.font = UIFont(name: fontType, size: 30.0)
         titleField.textColor = tintColor
         
         //タイトルフィールドに下線をつける
@@ -156,7 +158,7 @@ class MenuModalViewController: UIViewController {
         contentView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 6)
         contentView.layer.cornerRadius = 10.0
         contentView.backgroundColor = .clear
-        contentView.font = UIFont(name: "AppleSDGothicNeo-Thin", size: 20)
+        contentView.font = UIFont(name: fontType, size: 20)
         contentView.textColor = tintColor
         
         view.addSubview(contentView)

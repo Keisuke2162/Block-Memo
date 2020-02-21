@@ -288,7 +288,6 @@ class MenuModalViewController: UIViewController {
         var contentText: String = ""
         var iconColor: UIColor = .white
         
-        //HomeTabBarController経由でHome画面にオブジェクトを追加
         self.dismiss(animated: true, completion: {
             if let del = self.delegate {
                 titleText = self.titleField.text!

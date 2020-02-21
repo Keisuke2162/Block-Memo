@@ -62,17 +62,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
         //textViewにDoneボタンを追加
         setToolbarTextView()
         
-        /*戻るボタン（閉じるボタン）
-        let returnBtn = UIButton()
-        returnBtn.frame.size = CGSize(width: 60, height: 30)
-        returnBtn.center = view.center
-        returnBtn.backgroundColor = .white
-        returnBtn.setTitle("return", for: .normal)
-        returnBtn.addTarget(self, action: #selector(tappedReturn), for: .touchUpInside)
-        
-        scrollView.addSubview(returnBtn)
-        */
-        
         titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 6, height: height / 10)
         titleField.font = UIFont(name: fontType, size: 50.0)
         titleField.textColor = tintColor

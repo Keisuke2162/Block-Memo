@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 class GeneralDataManagement {
     
@@ -39,6 +40,8 @@ class GeneralDataManagement {
         userDefault.set(strFont, forKey: "FontSet")
         userDefault.set(iconSize, forKey: "IconSize")
     }
-    
+}
+
+class CoreDataManagement {
     
 }

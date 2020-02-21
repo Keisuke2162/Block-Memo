@@ -9,7 +9,16 @@
 import UIKit
 import CoreData
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, MakeButtonActionDelegate {
+    
+    func startMakeButton(title: String, contentText: String, iconColor: UIColor) {
+        addBtn = true
+        setTitle = title
+        setContentText = contentText
+        setIconColor = iconColor
+        makeButton()
+    }
+    
     
     let dataClass = GeneralDataManagement()
     var iconSize: CGFloat = 75.0
@@ -56,12 +65,16 @@ class HomeViewController: UIViewController {
         fontType = getData.0
         iconSize = getData.1
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        
         
         tabHeight = (tabBarController?.tabBar.frame.height)!
         
@@ -122,34 +135,6 @@ class HomeViewController: UIViewController {
             addBtn = false
         }
     }
-    /*
-    //CoreDataからデータを取ってくる
-    func getData() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        do {
-            let fetchequest: NSFetchRequest<HomeData> = HomeData.fetchRequest()
-            homeDataArray = try context.fetch(fetchequest)
-            
-        }catch {
-            print("error")
-        }
-        
-        print("\(homeDataArray.count)件のデータを取得しました")
-    }
-    
-    //データ保存
-    func dataSave() {
-        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-        let data = HomeData(context: context)
-        
-        data.title = homeData.title
-        data.contentText = homeData.contentText
-        data.uuid = homeData.uuid
-        
-        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-    }
- */
-    
     //アイコンの色を白か黒か決める
     func DecitionImageColor(_ color: UIColor) -> (UIColor) {
         let components = color.cgColor.components!
@@ -171,7 +156,6 @@ class HomeViewController: UIViewController {
         let vc = MemoTextViewController()
         let color = sender.backgroundColor
         let tint = sender.tintColor
-        
         print(sender.title!)
         
         vc.tintColor = tint!
@@ -179,6 +163,7 @@ class HomeViewController: UIViewController {
         vc.titleText = sender.title!
         vc.contentText = sender.text!
         vc.fontType = fontType
+        
         present(vc, animated: true, completion: nil)
     }
     
@@ -199,6 +184,30 @@ class HomeViewController: UIViewController {
     
     
     func setButton() {
+        //btnArray初期化
+        //CoreDataから読み込み
+        //
+        
+        //追加ボタン
+        let setBtn = CustomUIButton()
+        setBtn.frame.size = CGSize(width: 75, height: 75)
+        setBtn.center = CGPoint(x: view.center.x, y: view.center.y)
+        setBtn.backgroundColor = .white
+        setBtn.setTitle("+", for: .normal)
+        setBtn.layer.cornerRadius = 10.0
+        setBtn.addTarget(self, action: #selector(openAddView), for: .touchUpInside)
+        btnArray.append(setBtn)
+        
+        view.addSubview(setBtn)
+        //必ずview.addSubviewが先
+        makeGravity(sender: btnArray)
+    }
+    
+    @objc func openAddView() {
+        let con = MenuModalViewController()
+        con.delegate = self
+        
+        present(con, animated: true, completion: nil)
     }
     
     func makeGravity(sender: [CustomUIButton]) {

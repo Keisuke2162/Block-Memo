@@ -120,12 +120,12 @@ class GeneralViewController: UIViewController {
         view.addSubview(generalScroll)
         
         //プレビューボタン
-        middleBtn.frame = CGRect(x: width / 5 * 2, y: 0, width: iconSize, height: iconSize)
+        middleBtn.frame.size = CGSize(width: iconSize, height: iconSize)
+        middleBtn.center = CGPoint(x: testView.center.x, y: testView.center.y)
         middleBtn.backgroundColor = .orange
         middleBtn.layer.cornerRadius = 10.0
         btnArray.append(middleBtn)
         testView.addSubview(middleBtn)
-        
         
         makeGravity(sender: btnArray)
     }
@@ -166,6 +166,7 @@ class GeneralViewController: UIViewController {
     @objc func decSize(_ sender: UISlider) {
         let size = CGFloat(sender.value)
         iconSize = size
+        middleBtn.center = CGPoint(x: testView.center.x, y: testView.center.y)
     }
     
     //font選択ボタン

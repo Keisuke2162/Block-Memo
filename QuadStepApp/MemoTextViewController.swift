@@ -8,7 +8,17 @@
 
 import UIKit
 
-class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollViewDelegate {
+//ホーム画面からボタン削除する用
+protocol RemoveButtonActionDelegate {
+    func removeIcon(removeID: String)
+}
+
+class MemoTextViewController: UIViewController, UITextViewDelegate {
+    
+    var delegate: RemoveButtonActionDelegate?
+    
+    //選んだボタンのインスタンス（削除するとき用）
+    var btnID = ""
     
     var fontType: String = ""
     
@@ -22,8 +32,14 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
     var textView = UITextView()
     var titleField = CustomTextField()
     
-    var height: CGFloat = 0
-    var width: CGFloat = 0
+    private var height: CGFloat = 0
+    private var width: CGFloat = 0
+    
+    //ページ作成用
+    private var pageScrollView = UIScrollView()
+    private var pageControll = UIPageControl()
+    private var pageNum: Int!
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -31,15 +47,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
         //キーボードに合わせてScrollViewずらす
         //configureObserver()
     }
-    /*
-    override func viewWillDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        super.viewWillDisappear(animated)
-    }
-    */
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -52,11 +59,107 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
         height = view.frame.height
         width = view.frame.width
         
-        setParts()
-        view.addSubview(scrollView)
+        
+        //おページ形式になるようセッティング
+        pageSetting()
+        //1ページ目のセッティング
+        setPartsFirst()
+        //2ページ目のセッティング
+        setPartsSecond()
+        pageScrollView.addSubview(scrollView)
+        view.addSubview(pageScrollView)
+        view.addSubview(pageControll)
+    }
+    var secondView = UIView()
+    func setPartsSecond() {
+        
+        secondView.frame = CGRect(x: width, y: 0, width: width, height: height / 10 * 8.5)
+        secondView.backgroundColor = .clear
+        
+        //削除ボタン
+        let deleteBtn = UIButton()
+        let deleteIcon = UIImage(named: "delete_100")?.withRenderingMode(.alwaysTemplate)
+        deleteBtn.frame = CGRect(x: width + (width / 5 * 4), y: height / 10 * 8.5, width: height / 15, height: height / 15)
+        deleteBtn.setImage(deleteIcon, for: .normal)
+        deleteBtn.tintColor = tintColor
+        deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
+        pageScrollView.addSubview(deleteBtn)
+        
+        //colorボタン
+        let colorBtn = UIButton()
+        colorBtn.frame = CGRect(x: width / 5 * 1, y: height / 10 * 4, width: height / 15, height: height / 15)
+        colorBtn.backgroundColor = .black
+        secondView.addSubview(colorBtn)
+        
+        //imageボタン
+        let imageBtn = UIButton()
+        imageBtn.frame = CGRect(x: width / 5 * 3 + height / 15, y: height / 10 * 4, width: height / 15, height: height / 15)
+        imageBtn.backgroundColor = .red
+        secondView.addSubview(imageBtn)
+        
+        
+        
+        
+        
+        pageScrollView.addSubview(secondView)
     }
     
-    func setParts() {
+    //UIView上のパーツを全て削除
+    func removeSubviews(parentView: UIView) {
+        let subviews = parentView.subviews
+        for sub in subviews {
+            sub.removeFromSuperview()
+        }
+    }
+    
+    @objc func tapImageBtn() {
+        
+    }
+    
+    @objc func tapDeleteBtn() {
+        Alert(title: "Delete?", message: "")
+    }
+    
+    
+    func Alert(title: String, message: String){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
+            print("yes")
+            self.dismiss(animated: true, completion: {
+                if let del = self.delegate {
+                    del.removeIcon(removeID: self.btnID)
+                } else {
+                    print("unwrap error")
+                }
+            })
+        })
+        let noAction = UIAlertAction(title: "No", style: .default, handler: { (UIAlertAction) in
+            print("no")
+        })
+        alertController.addAction(okAction)
+        alertController.addAction(noAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    func pageSetting() {
+        pageScrollView.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        pageScrollView.contentSize = CGSize(width: width * 2, height: height)
+        pageScrollView.delegate = self
+        pageScrollView.isPagingEnabled = true
+        pageScrollView.showsHorizontalScrollIndicator = false
+        
+        //view.addSubview(pageScrollView)
+        pageControll.frame = CGRect(x: 0, y: height / 10 * 9, width: width, height: 20)
+        pageControll.numberOfPages = 2
+        pageControll.pageIndicatorTintColor = .lightGray
+        pageControll.currentPageIndicatorTintColor = .black
+        
+    }
+    
+    
+    
+    func setPartsFirst() {
         scrollView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
         
         //textViewにDoneボタンを追加
@@ -171,4 +274,11 @@ class MemoTextViewController: UIViewController, UITextViewDelegate, UIScrollView
     }
     */
 
+
+}
+
+extension MemoTextViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pageControll.currentPage = Int(pageScrollView.contentOffset.x / pageScrollView.frame.width)
+    }
 }

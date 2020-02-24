@@ -9,21 +9,46 @@
 import UIKit
 import CoreData
 
-class HomeViewController: UIViewController, MakeButtonActionDelegate {
+class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButtonActionDelegate {
     
-    func startMakeButton(title: String, contentText: String, iconColor: UIColor) {
+    //アイコンの削除
+    func removeIcon(removeID: String) {
+        for v in view.subviews {
+            if let v = v as? CustomUIButton, v.id == removeID {
+                v.removeFromSuperview()
+            }
+        }
+        
+        let num = btnArray.count
+        
+        for i in 0 ..< num {
+            if removeID == btnArray[i].id  {
+                btnArray.remove(at: i)
+                break
+            }
+        }
+        makeGravity(sender: btnArray)
+    }
+    
+    //アイコンの作成処理
+    func startMakeButton(title: String, contentText: String, iconColor: UIColor, iconName: String) {
         addBtn = true
         setTitle = title
         setContentText = contentText
         setIconColor = iconColor
+        iconString = iconName
         makeButton()
     }
+
     
     
+
+    //設定データ読み込み用の変数
     let dataClass = GeneralDataManagement()
     var iconSize: CGFloat = 75.0
     var fontType: String = ""
     
+    //画面下部のタブの高さ
     var tabbarHeight: CGFloat = 0.0
     
     //CoreDataからのデータ
@@ -36,22 +61,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate {
     var setContentText: String = ""
     var setIconColor: UIColor = .white
     
-
-    let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip"]
     
-    let colorArray: [UIColor] = [.blue, .red, .yellow, .orange, .cyan, .magenta, .purple]
-    //中国色
-    let ChineseColor: [String] = ["e3d600","008dd6","eea800","9f0082","e94c46","d20446","008b42","253893"]
-    //夜景色 背景：423a57
-    let NightViewColor: [String] = ["004f7a","7a8a92","fde5c5","dce5ec","9a7fb8","cd659f","829ac8","77c2b9"]
-    //中世の街色　背景：d3d1bd
-    let gamlaColor: [String] = ["f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630"]
-    //夏祭り　背景：4e3d95
-    let summerColor: [String] = ["3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262"]
-    //虹の色　背景： 000000
-    let rainbowColor: [String] = ["e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
-    //月景色　背景：3f83a6
-    let moonNightColor: [String] = ["002b40","d9e9e5","6cb2d3","1d4b69","b1c7d4","f4f2db","94a1a9","424f56"]
+    var iconString = "none_100"
     
     var btnArray: [CustomUIButton] = []
     
@@ -60,26 +71,35 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate {
     var animator: UIDynamicAnimator!
     var gravity: UIGravityBehavior!
     
+    //let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip"]
+    
+    //let colorArray: [UIColor] = [.blue, .red, .yellow, .orange, .cyan, .magenta, .purple]
+    //中国色
+    //let ChineseColor: [String] = ["e3d600","008dd6","eea800","9f0082","e94c46","d20446","008b42","253893"]
+    //夜景色 背景：423a57
+    //let NightViewColor: [String] = ["004f7a","7a8a92","fde5c5","dce5ec","9a7fb8","cd659f","829ac8","77c2b9"]
+    //中世の街色　背景：d3d1bd
+    //let gamlaColor: [String] = ["f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630"]
+    //夏祭り　背景：4e3d95
+    //let summerColor: [String] = ["3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262"]
+    //虹の色　背景： 000000
+    //let rainbowColor: [String] = ["e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
+    //月景色　背景：3f83a6
+    //let moonNightColor: [String] = ["002b40","d9e9e5","6cb2d3","1d4b69","b1c7d4","f4f2db","94a1a9","424f56"]
+    
     override func viewDidAppear(_ animated: Bool) {
         let getData = dataClass.getData()
         fontType = getData.0
         iconSize = getData.1
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
         
         tabHeight = (tabBarController?.tabBar.frame.height)!
         
         //view.backgroundColor = UIColor(colorCode: "e13816")
-        view.backgroundColor = UIColor(colorCode: "3f83a6")
+        view.backgroundColor = .white
         
         //getData()
         
@@ -106,28 +126,21 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate {
             makeBtn.text = setContentText
             
             //アイコン色設定
-            //let colorRandom = Int(arc4random_uniform(8))
-            //makeBtn.backgroundColor = UIColor(colorCode: moonNightColor[colorRandom])
             makeBtn.backgroundColor = setIconColor
             
             //アイコン画像設定
-            let iconRandom = Int(arc4random_uniform(10))
+            //let iconRandom = Int(arc4random_uniform(10))
             makeBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-            let iconImage = UIImage(named: iconName[iconRandom])?.withRenderingMode(.alwaysTemplate)
+            let iconImage = UIImage(named: iconString)?.withRenderingMode(.alwaysTemplate)
             makeBtn.setImage(iconImage, for: .normal)
             
             //アイコンの線の色　白か黒か
             let iconColor = DecitionImageColor(setIconColor)
             makeBtn.tintColor = iconColor
             
-            makeBtn.addTarget(self, action: #selector(tapButton), for: .touchDragExit)
             makeBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
             
-            //let data = Data(makeBtn)
-            
             view.addSubview(makeBtn)
-            //dataSave()
-            
             btnArray.append(makeBtn)
             
             makeGravity(sender: btnArray)
@@ -163,24 +176,12 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate {
         vc.titleText = sender.title!
         vc.contentText = sender.text!
         vc.fontType = fontType
+        vc.delegate = self
+        vc.btnID = sender.id!
         
         present(vc, animated: true, completion: nil)
     }
-    
-    @objc func tapButton(sender: CustomUIButton) {
-        //let tag = sender.tag
-        let num = btnArray.count
-        
-        for i in 0 ..< num {
-            if sender == btnArray[i]  {
-                btnArray.remove(at: i)
-                break
-            }
-        }
-        
-        sender.removeFromSuperview()
-        makeGravity(sender: btnArray)
-    }
+
     
     
     func setButton() {
@@ -192,9 +193,12 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate {
         let setBtn = CustomUIButton()
         setBtn.frame.size = CGSize(width: 75, height: 75)
         setBtn.center = CGPoint(x: view.center.x, y: view.center.y)
-        setBtn.backgroundColor = .white
-        setBtn.setTitle("+", for: .normal)
+        setBtn.backgroundColor = view.backgroundColor
+        setBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        setBtn.setImage(UIImage(named: "plus_100"), for: .normal)
         setBtn.layer.cornerRadius = 10.0
+        setBtn.layer.borderWidth = 1.0
+        setBtn.layer.borderColor = UIColor.black.cgColor
         setBtn.addTarget(self, action: #selector(openAddView), for: .touchUpInside)
         btnArray.append(setBtn)
         

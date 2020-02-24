@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MakeButtonActionDelegate {
-    func startMakeButton(title: String, contentText: String, iconColor: UIColor)
+    func startMakeButton(title: String, contentText: String, iconColor: UIColor, iconName: String)
 }
 
 class MenuModalViewController: UIViewController {
@@ -203,12 +203,14 @@ class MenuModalViewController: UIViewController {
         view.addSubview(iconView)
         
     }
-    
+    var iconStr: String = "none_100"
     @objc func chooseIcon(_ sender: UIButton) {
         noneIconImage = UIImage(named: iconName[sender.tag])?.withRenderingMode(.alwaysTemplate)
         iconButton.setImage(noneIconImage, for: .normal)
-        
+        iconStr = iconName[sender.tag]
     }
+    
+    
     
     
     @objc func openIconView() {
@@ -293,7 +295,8 @@ class MenuModalViewController: UIViewController {
                 titleText = self.titleField.text!
                 contentText = self.contentView.text!
                 iconColor = self.view.backgroundColor!
-                del.startMakeButton(title: titleText, contentText: contentText, iconColor: iconColor)
+                
+                del.startMakeButton(title: titleText, contentText: contentText, iconColor: iconColor, iconName: self.iconStr)
             } else {
                 print("unwrap error")
             }

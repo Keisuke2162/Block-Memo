@@ -78,15 +78,16 @@ class CoreDataManagement {
     }
     
     //データ追加
-    func DataAdd(saveData: HomeData) {
+    //func DataAdd(saveData: HomeData) {
+    func DataAdd(id: String, title: String, img: String, color: String, content: String) {
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let data = HomeData(context: context)
         
-        data.uuid = saveData.uuid
-        data.title = saveData.title
-        data.img = saveData.img
-        data.color = saveData.color
-        data.contentText = saveData.contentText
+        data.uuid = id
+        data.title = title
+        data.img = img
+        data.color = color
+        data.contentText = content
         
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
     }

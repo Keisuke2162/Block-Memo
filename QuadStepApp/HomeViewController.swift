@@ -28,6 +28,9 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             }
         }
         makeGravity(sender: btnArray)
+        
+        //Coredataからデータを削除
+        coreData.DataDelete(deleteID: removeID)
     }
     
     //アイコンの作成処理
@@ -71,6 +74,10 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     var animator: UIDynamicAnimator!
     var gravity: UIGravityBehavior!
     
+    
+    let coreData = CoreDataManagement()
+    var inputData: [HomeData] = []
+    
     //let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip"]
     
     //let colorArray: [UIColor] = [.blue, .red, .yellow, .orange, .cyan, .magenta, .purple]
@@ -96,6 +103,11 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //
+        let getData = dataClass.getData()
+        fontType = getData.0
+        iconSize = getData.1
+        
         tabHeight = (tabBarController?.tabBar.frame.height)!
         
         //view.backgroundColor = UIColor(colorCode: "e13816")
@@ -107,6 +119,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
 
         // Do any additional setup after loading the view.
     }
+    
+    var saveData = HomeData()
     
     func makeButton() {
         print("startmake")
@@ -146,6 +160,12 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             makeGravity(sender: btnArray)
             
             addBtn = false
+            
+            print("これから")
+            
+            //CoreDataに新規追加
+            coreData.DataAdd(id: uuid, title: setTitle, img: iconString, color: setIconColor.rgbString, content: setContentText)
+
         }
     }
     //アイコンの色を白か黒か決める
@@ -183,11 +203,10 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     }
 
     
-    
     func setButton() {
         //btnArray初期化
-        //CoreDataから読み込み
-        //
+        btnArray.removeAll()
+
         
         //追加ボタン
         let setBtn = CustomUIButton()
@@ -203,6 +222,32 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         btnArray.append(setBtn)
         
         view.addSubview(setBtn)
+        
+        //CoreDataから読み込み
+        inputData = coreData.DataGet()
+        
+        for i in 0 ..< inputData.count {
+            let dataBtn = CustomUIButton()
+            dataBtn.id = inputData[i].uuid
+            dataBtn.title = inputData[i].title
+            dataBtn.text = inputData[i].contentText
+            dataBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+            let iconImage = UIImage(named: inputData[i].img!)?.withRenderingMode(.alwaysTemplate)
+            dataBtn.setImage(iconImage, for: .normal)
+            dataBtn.backgroundColor = UIColor(colorCode: inputData[i].color!)
+            
+            let random = CGFloat.random(in: 0 ..< 5)
+            dataBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: iconSize, height: iconSize)
+            dataBtn.layer.cornerRadius = 10
+            let iconColor = DecitionImageColor(dataBtn.backgroundColor!)
+            dataBtn.tintColor = iconColor
+            
+            dataBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
+            
+            view.addSubview(dataBtn)
+            btnArray.append(dataBtn)
+        }
+        
         //必ずview.addSubviewが先
         makeGravity(sender: btnArray)
     }
@@ -222,11 +267,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         let collision = UICollisionBehavior(items: sender)
         collision.translatesReferenceBoundsIntoBoundary = true
         
-        /*
-        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:view.frame.height - tabHeight, width: view.frame.width, height: tabHeight )
-        ))
-        */
-        print("tabbarheight\(tabbarHeight)")
         collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:0, width: view.frame.width, height: view.frame.height - tabbarHeight)
         ))
         

@@ -7,20 +7,34 @@
 //
 
 import UIKit
-import CoreData
 
 class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButtonActionDelegate {
     
+    //既存アイコンの内容を更新　→ CoreDataのデータを更新
+    func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String) {
+        //view上のsubViewの中からボタンかつ設定IDでが一致したものをターゲット
+        for v in view.subviews {
+            if let v = v as? CustomUIButton, v.id == updateId {
+                v.title = updateTitle
+                v.text = updateText
+                v.color = updateColor
+                v.backgroundColor = UIColor(colorCode: updateColor)
+                v.tintColor = DecitionImageColor(UIColor(colorCode: updateColor))
+            }
+        }
+        coreData.DataUpdate(updateId: updateId, updateTitle: updateTitle, updateText: updateText, updateColor: updateColor)
+    }
+    
     //アイコンの削除
     func removeIcon(removeID: String) {
+        //view上のsubViewの中からボタンかつ設定IDでが一致したものをターゲット
         for v in view.subviews {
             if let v = v as? CustomUIButton, v.id == removeID {
                 v.removeFromSuperview()
             }
         }
-        
+        //配列からも削除(重力設定の為に配列からも削除が必要)
         let num = btnArray.count
-        
         for i in 0 ..< num {
             if removeID == btnArray[i].id  {
                 btnArray.remove(at: i)
@@ -28,105 +42,79 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             }
         }
         makeGravity(sender: btnArray)
-        
         //Coredataからデータを削除
         coreData.DataDelete(deleteID: removeID)
     }
     
-    //アイコンの作成処理
-    func startMakeButton(title: String, contentText: String, iconColor: UIColor, iconName: String) {
-        addBtn = true
+    //アイコンの新規作成処理
+    func startMakeButton(title: String, contentText: String, iconColor: String, iconName: String) {
+        addBtn = true //多分いらない
         setTitle = title
         setContentText = contentText
         setIconColor = iconColor
         iconString = iconName
         makeButton()
     }
-
     
-    
-
     //設定データ読み込み用の変数
     let dataClass = GeneralDataManagement()
     var iconSize: CGFloat = 75.0
     var fontType: String = ""
+    //var backColor: UIColor = .white
+    var backColor: String = "ffffff"
     
     //画面下部のタブの高さ
     var tabbarHeight: CGFloat = 0.0
     
-    //CoreDataからのデータ
-    var homeDataArray: [HomeData] = []
-    var homeData = HomeData()
+    //CoreData関連データ
+    let coreData = CoreDataManagement()
+    var inputData: [HomeData] = []
     
     //TabBarから受け取るデータ
     var addBtn: Bool = false
     var setTitle: String = ""
     var setContentText: String = ""
-    var setIconColor: UIColor = .white
+    var setIconColor: String = "000000"
     
     
     var iconString = "none_100"
     
+    //重力設定をまとめてするための配列
     var btnArray: [CustomUIButton] = []
-    
-    var tabHeight: CGFloat = 0.0
     
     var animator: UIDynamicAnimator!
     var gravity: UIGravityBehavior!
     
-    
-    let coreData = CoreDataManagement()
-    var inputData: [HomeData] = []
-    
-    //let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip"]
-    
-    //let colorArray: [UIColor] = [.blue, .red, .yellow, .orange, .cyan, .magenta, .purple]
-    //中国色
-    //let ChineseColor: [String] = ["e3d600","008dd6","eea800","9f0082","e94c46","d20446","008b42","253893"]
-    //夜景色 背景：423a57
-    //let NightViewColor: [String] = ["004f7a","7a8a92","fde5c5","dce5ec","9a7fb8","cd659f","829ac8","77c2b9"]
-    //中世の街色　背景：d3d1bd
-    //let gamlaColor: [String] = ["f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630"]
-    //夏祭り　背景：4e3d95
-    //let summerColor: [String] = ["3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262"]
-    //虹の色　背景： 000000
-    //let rainbowColor: [String] = ["e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
-    //月景色　背景：3f83a6
-    //let moonNightColor: [String] = ["002b40","d9e9e5","6cb2d3","1d4b69","b1c7d4","f4f2db","94a1a9","424f56"]
-    
     override func viewDidAppear(_ animated: Bool) {
+        //userDefaultから設定とってくる（設定画面から返ってきた時に通る）
         let getData = dataClass.getData()
         fontType = getData.0
         iconSize = getData.1
+        backColor = getData.2
+        
+        view.backgroundColor = UIColor(colorCode: backColor)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //
+        //userDefaultから設定とってくる
         let getData = dataClass.getData()
         fontType = getData.0
         iconSize = getData.1
+        backColor = getData.2
         
-        tabHeight = (tabBarController?.tabBar.frame.height)!
+        view.backgroundColor = UIColor(colorCode: backColor)
         
-        //view.backgroundColor = UIColor(colorCode: "e13816")
-        view.backgroundColor = .white
-        
-        //getData()
-        
+        //ボタンの初期配置を設定
         setButton()
 
         // Do any additional setup after loading the view.
     }
     
-    var saveData = HomeData()
-    
+    //ボタンの新規作成
     func makeButton() {
-        print("startmake")
-        
         if addBtn {
-            
             let random = CGFloat.random(in: 0 ..< 5)
             
             //ボタン作成
@@ -134,22 +122,25 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             makeBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: iconSize, height: iconSize)
             makeBtn.layer.cornerRadius = 10
             
+            //固有IDを割り振る
             let uuid: String = NSUUID().uuidString
+            
+            //ボタンのパラメータを設定（UIButtonの拡張部分）
             makeBtn.id = uuid
             makeBtn.title = setTitle
             makeBtn.text = setContentText
+            makeBtn.color = setIconColor
             
             //アイコン色設定
-            makeBtn.backgroundColor = setIconColor
+            makeBtn.backgroundColor = UIColor(colorCode: setIconColor)
             
             //アイコン画像設定
-            //let iconRandom = Int(arc4random_uniform(10))
             makeBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
             let iconImage = UIImage(named: iconString)?.withRenderingMode(.alwaysTemplate)
             makeBtn.setImage(iconImage, for: .normal)
             
             //アイコンの線の色　白か黒か
-            let iconColor = DecitionImageColor(setIconColor)
+            let iconColor = DecitionImageColor(UIColor(colorCode: setIconColor))
             makeBtn.tintColor = iconColor
             
             makeBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
@@ -160,14 +151,11 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             makeGravity(sender: btnArray)
             
             addBtn = false
-            
-            print("これから")
-            
             //CoreDataに新規追加
-            coreData.DataAdd(id: uuid, title: setTitle, img: iconString, color: setIconColor.rgbString, content: setContentText)
-
+            coreData.DataAdd(id: uuid, title: setTitle, img: iconString, color: setIconColor, content: setContentText)
         }
     }
+    
     //アイコンの色を白か黒か決める
     func DecitionImageColor(_ color: UIColor) -> (UIColor) {
         let components = color.cgColor.components!
@@ -187,12 +175,12 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     //表示画面への遷移
     @objc func nextView(sender: CustomUIButton) {
         let vc = MemoTextViewController()
-        let color = sender.backgroundColor
+        //let color = sender.backgroundColor
         let tint = sender.tintColor
         print(sender.title!)
         
         vc.tintColor = tint!
-        vc.backColor = color!
+        vc.backColor = sender.color!
         vc.titleText = sender.title!
         vc.contentText = sender.text!
         vc.fontType = fontType
@@ -202,22 +190,21 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         present(vc, animated: true, completion: nil)
     }
 
-    
+    //ボタンの初期配置
     func setButton() {
         //btnArray初期化
         btnArray.removeAll()
-
         
         //追加ボタン
         let setBtn = CustomUIButton()
         setBtn.frame.size = CGSize(width: 75, height: 75)
         setBtn.center = CGPoint(x: view.center.x, y: view.center.y)
-        setBtn.backgroundColor = view.backgroundColor
+        setBtn.backgroundColor = .white
         setBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         setBtn.setImage(UIImage(named: "plus_100"), for: .normal)
         setBtn.layer.cornerRadius = 10.0
-        setBtn.layer.borderWidth = 1.0
-        setBtn.layer.borderColor = UIColor.black.cgColor
+        //setBtn.layer.borderWidth = 1.0
+        //setBtn.layer.borderColor = UIColor.black.cgColor
         setBtn.addTarget(self, action: #selector(openAddView), for: .touchUpInside)
         btnArray.append(setBtn)
         
@@ -231,6 +218,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             dataBtn.id = inputData[i].uuid
             dataBtn.title = inputData[i].title
             dataBtn.text = inputData[i].contentText
+            dataBtn.color = inputData[i].color!
             dataBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
             let iconImage = UIImage(named: inputData[i].img!)?.withRenderingMode(.alwaysTemplate)
             dataBtn.setImage(iconImage, for: .normal)
@@ -247,7 +235,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             view.addSubview(dataBtn)
             btnArray.append(dataBtn)
         }
-        
         //必ずview.addSubviewが先
         makeGravity(sender: btnArray)
     }
@@ -269,10 +256,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:0, width: view.frame.width, height: view.frame.height - tabbarHeight)
         ))
-        
-        
         animator.addBehavior(collision)
-        
         animator.addBehavior(gravity)
     }
     

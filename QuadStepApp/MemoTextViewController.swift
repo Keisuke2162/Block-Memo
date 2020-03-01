@@ -11,6 +11,7 @@ import UIKit
 //ホーム画面からボタン削除する用
 protocol RemoveButtonActionDelegate {
     func removeIcon(removeID: String)
+    func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String)
 }
 
 class MemoTextViewController: UIViewController, UITextViewDelegate {
@@ -22,7 +23,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     
     var fontType: String = ""
     
-    var backColor: UIColor = .white
+    var backColor: String = "000000"
     var tintColor: UIColor = .white
     
     var titleText: String = ""
@@ -41,17 +42,51 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     private var pageNum: Int!
     
     
+    let red: [String] = ["d7003a","e95464","b7282d","e94709","c82b55","e83f5f","932e44","ea5548","e9474d"]
+    let orange: [String] = ["f08300","ed6d3d","ee7948","f6ad48","f7b977","efa718","f39800","fbd8b5","df6c31"]
+    let yellow: [String] = ["ffd900","fcc800","f5e56b","d2b74e","f8b500","fff33f","fff2b8","ffdc00","fff262"]
+    let yellowGreen: [String] = ["c8d921","c4c46a","afd147","d7cf3a","9d973b","c5de93","9dc04c","a7d28d","d9e367"]
+    let green: [String] = ["007c45","4f8a5d","005842","67be8d","009854","00aa6e","98ce97","3ab483","258c6d"]
+    let blueGreen: [String] = ["68b7a1","7ebeab","005243","7faba9","259f94","008969","005c4c","00a496","009aa3"]
+    let aquaSky: [String] = ["bce2e8","a0d8ef","a2d7dd","89c3eb","83ccd2","64bcc7","00afcc","a0d8ea","6c9bd2"]
+    let blue: [String] = ["239dda","2980af","1d50a2","007d8e","0068b7","008db7","00a0e9","3a8daa","26499d"]
+    let indigo: [String] = ["0f5779","213a70","18448e","55576c","082752","1f2e55","006788","154577","001d42"]
+    let violet: [String] = ["4e67b0","5654a2","706caa","bbbcde","51318f","4052a2","714f9d","c5b3d3","8e8bc2"]
+    let magenta: [String] = ["895687","cc7db1","e95295","460d43","e55a9b","d1bada","d9aacd","e4007f","eb6e9f"]
+    let pink: [String] = ["f09199","e7acb9","fef4f4","e94e66","f29c9f","f4ada3","fdeadf","da8d93","f5b090"]
+    let brown: [String] = ["bf7834","814336","762e05","6f4d3e","965036","6f4e27","916f24","8e5e4a","612c16"]
+    let blackWhite: [String] = ["2f2725","27120a","4b2d16","24130d","4e4449","fbfaf3","f8f5e3","fffffc","fbfdff"]
+    let gold: [String] = ["e48e00","fabf13","f7dc8d","f8b856","fdd000","a36b21","d98032","c4972f","fdd75d"]
+    let silver: [String] = ["949495","767676","7b8174","7a7c7d","afafb0","a99e93","ced1d3","c9c9c4","615f62"]
+    var colorArray: [[String]] = []
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         //キーボードに合わせてScrollViewずらす
         //configureObserver()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        titleText = titleField.text!
+        contentText = textView.text
+        print("update color-> \(backColor)")
+        if let del = self.delegate {
+            del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor)
+        } else {
+            print("unwrap error")
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        view.backgroundColor = backColor
+        colorArray = [red, orange, yellow, yellowGreen, green, blueGreen, aquaSky, blue, indigo, violet,
+                      magenta, pink, brown, blackWhite, gold, silver]
+        
+        view.backgroundColor = UIColor(colorCode: backColor)
         
         textView.delegate = self
         scrollView.delegate = self
@@ -73,13 +108,13 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     var secondView = UIView()
     func setPartsSecond() {
         
-        secondView.frame = CGRect(x: width, y: 0, width: width, height: height / 10 * 8.5)
+        secondView.frame = CGRect(x: width, y: 0, width: width, height: height / 10 * 8)
         secondView.backgroundColor = .clear
         
         //削除ボタン
         let deleteBtn = UIButton()
         let deleteIcon = UIImage(named: "delete_100")?.withRenderingMode(.alwaysTemplate)
-        deleteBtn.frame = CGRect(x: width + (width / 5 * 4), y: height / 10 * 8.5, width: height / 15, height: height / 15)
+        deleteBtn.frame = CGRect(x: width + (width / 5 * 4), y: height / 10 * 8, width: height / 15, height: height / 15)
         deleteBtn.setImage(deleteIcon, for: .normal)
         deleteBtn.tintColor = tintColor
         deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
@@ -87,19 +122,20 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
         //colorボタン
         let colorBtn = UIButton()
-        colorBtn.frame = CGRect(x: width / 5 * 1, y: height / 10 * 4, width: height / 15, height: height / 15)
+        //colorBtn.frame = CGRect(x: width / 5 * 1, y: height / 10 * 4, width: height / 15, height: height / 15)
+        colorBtn.frame = CGRect(x: width + (width / 5 * 1), y: height / 10 * 8, width: height / 15, height: height / 15)
         colorBtn.backgroundColor = .black
-        secondView.addSubview(colorBtn)
+        colorBtn.addTarget(self, action: #selector(colorSet), for: .touchUpInside)
+        //secondView.addSubview(colorBtn)
+        pageScrollView.addSubview(colorBtn)
         
         //imageボタン
         let imageBtn = UIButton()
-        imageBtn.frame = CGRect(x: width / 5 * 3 + height / 15, y: height / 10 * 4, width: height / 15, height: height / 15)
+        //imageBtn.frame = CGRect(x: width / 5 * 3 + height / 15, y: height / 10 * 4, width: height / 15, height: height / 15)
+        imageBtn.frame = CGRect(x: width + (width / 5 * 2), y: height / 10 * 8, width: height / 15, height: height / 15)
         imageBtn.backgroundColor = .red
-        secondView.addSubview(imageBtn)
-        
-        
-        
-        
+        //secondView.addSubview(imageBtn)
+        pageScrollView.addSubview(imageBtn)
         
         pageScrollView.addSubview(secondView)
     }
@@ -111,6 +147,41 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             sub.removeFromSuperview()
         }
     }
+
+    
+    
+    @objc func colorSet() {
+        //let colorArray: [[String]] = [NightViewColor, gamlaColor, summerColor, rainbowColor, moonNightColor]
+        removeSubviews(parentView: secondView)
+        
+        let btnWidth = secondView.frame.width / 9
+        let btnHeight = secondView.frame.height / 10
+        
+        let colorScroll = UIScrollView()
+        colorScroll.frame = CGRect(x: 0, y: 0, width: secondView.frame.width, height: secondView.frame.height)
+        
+        for i in 0 ..< colorArray.count {
+            for j in 0 ..< 9 {
+                let colorBtn = CustomUIButton()
+                colorBtn.frame = CGRect(x: btnWidth * CGFloat(j), y: btnHeight * CGFloat(i), width: btnWidth, height: btnWidth)
+                colorBtn.layer.cornerRadius = 1.0
+                colorBtn.backgroundColor = UIColor(colorCode: colorArray[i][j])
+                colorBtn.colorCode = colorArray[i][j]
+                colorBtn.addTarget(self, action: #selector(tapColorButton), for: .touchUpInside)
+                colorScroll.addSubview(colorBtn)
+            }
+        }
+        colorScroll.contentSize = CGSize(width: secondView.frame.width, height: btnHeight * CGFloat(colorArray.count + 1))
+        
+        secondView.addSubview(colorScroll)
+    }
+    
+    @objc func tapColorButton(_ sender: CustomUIButton) {
+        print("change backColor")
+        backColor = sender.colorCode!
+        view.backgroundColor = UIColor(colorCode: backColor)
+    }
+
     
     @objc func tapImageBtn() {
         
@@ -157,8 +228,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
     }
     
-    
-    
     func setPartsFirst() {
         scrollView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
         
@@ -195,7 +264,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     @objc func tappedReturn() {
         dismiss(animated: true, completion: nil)
     }
-    
     
     func setToolbarTextView() {
         // ツールバー生成 サイズはsizeToFitメソッドで自動で調整される。

@@ -18,27 +18,33 @@ class GeneralDataManagement {
     //var iconSize: CGFloat = 0.0
     
     
-    func getData() -> (String, CGFloat){
+    func getData() -> (String, CGFloat, String){
         
-        var strFont: String = ""
-        var iconSize: CGFloat = 0.0
+        
+        
+        //var strFont: String = ""
+        //var iconSize: CGFloat = 0.0
+        //var backGround: UIColor
         
         userDefault.register(defaults: ["FontSet": "AppleSDGothicNeo-Thin"])
-        userDefault.register(defaults: ["IconSize" : 0.0])
+        userDefault.register(defaults: ["IconSize" : 75.0])
+        userDefault.register(defaults: ["BackColor" : "000000"])
         
-        strFont = userDefault.object(forKey: "FontSet") as! String
-        iconSize = userDefault.object(forKey: "IconSize") as! CGFloat
+        let strFont = userDefault.object(forKey: "FontSet") as! String
+        let iconSize = userDefault.object(forKey: "IconSize") as! CGFloat
+        let backGround = userDefault.object(forKey: "BackColor") as! String
         
-        print("フォント→\(strFont),サイズ→\(iconSize)を読み込みました")
+        print("フォント→\(strFont),サイズ→\(iconSize),カラー→\(backGround)を読み込みました")
         
-        return (strFont, iconSize)
+        return (strFont, iconSize, backGround)
     }
     
-    func putData(strFont: String, iconSize: CGFloat) {
-        print("フォント→\(strFont),サイズ→\(iconSize)を保存します")
+    func putData(strFont: String, iconSize: CGFloat, backColor: String) {
+        print("フォント→\(strFont),サイズ→\(iconSize),カラー→\(backColor)を保存します")
         
         userDefault.set(strFont, forKey: "FontSet")
         userDefault.set(iconSize, forKey: "IconSize")
+        userDefault.set(backColor, forKey: "BackColor")
     }
 }
 
@@ -93,7 +99,7 @@ class CoreDataManagement {
     }
     
     //指定データ更新
-    func DataUpdate(saveData: HomeData){
+    func DataUpdate(updateId: String, updateTitle: String, updateText: String, updateColor: String){
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<HomeData> = HomeData.fetchRequest()
         
@@ -101,11 +107,11 @@ class CoreDataManagement {
             let result = try context.fetch(fetchRequest)
             
             for num in 0 ..< result.count {
-                if result[num].uuid == saveData.uuid {
-                    result[num].title = saveData.title
-                    result[num].img = saveData.img
-                    result[num].color = saveData.color
-                    result[num].contentText = saveData.contentText
+                if result[num].uuid == updateId {
+                    result[num].title = updateTitle
+                    //result[num].img = saveData.img
+                    result[num].color = updateColor
+                    result[num].contentText = updateText
                     
                     break
                 }

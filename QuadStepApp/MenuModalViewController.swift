@@ -9,7 +9,7 @@
 import UIKit
 
 protocol MakeButtonActionDelegate {
-    func startMakeButton(title: String, contentText: String, iconColor: UIColor, iconName: String)
+    func startMakeButton(title: String, contentText: String, iconColor: String, iconName: String)
 }
 
 class MenuModalViewController: UIViewController {
@@ -34,6 +34,7 @@ class MenuModalViewController: UIViewController {
     var noneIconImage = UIImage(named: "none_100")?.withRenderingMode(.alwaysTemplate)
     var iconButton = UIButton() //アイコン選択ボタン
     var iconViewFlg: Bool = false
+    var backColor: String = "000000"
     
     //アイコン、文字の色
     var tintColor: UIColor = .white
@@ -48,7 +49,7 @@ class MenuModalViewController: UIViewController {
     
     //アイコン名
     let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip",
-                                "play","system","admin","key","block"]
+                                "play","system","admin","key","block", "euro"]
     
     //color
     let moonNightColor: [String] = ["002b40","d9e9e5","6cb2d3","1d4b69","b1c7d4","f4f2db","94a1a9","424f56","004f7a","7a8a92","fde5c5","dce5ec","9a7fb8","cd659f","829ac8","77c2b9","3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262","f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630","e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
@@ -171,10 +172,11 @@ class MenuModalViewController: UIViewController {
         colorBar.contentSize = CGSize(width: width / 10, height: CGFloat(manyColor.count + 1) * (height / 15))
         //カラーバーに色ボタンを装着
         for i in 0 ..< manyColor.count {
-            let colorButton = UIButton()
+            let colorButton = CustomUIButton()
             let btnHeight = height / 15 * CGFloat(i)
             colorButton.frame = CGRect(x: 0, y: btnHeight, width: colorBar.frame.width, height: height / 15)
             colorButton.backgroundColor = UIColor(colorCode: manyColor[i])
+            colorButton.color = manyColor[i]
             colorButton.addTarget(self, action: #selector(backColorChange), for: .touchUpInside)
             
             colorBar.addSubview(colorButton)
@@ -271,11 +273,12 @@ class MenuModalViewController: UIViewController {
         }
     }
     
-    @objc func backColorChange(_ sender: UIButton) {
-        let backGroundColor = sender.backgroundColor
-        view.backgroundColor = backGroundColor
+    @objc func backColorChange(_ sender: CustomUIButton) {
         
-        let wordColor: UIColor = DecitionImageColor(backGroundColor!)
+        backColor = sender.color!
+        view.backgroundColor = UIColor(colorCode: backColor)
+        
+        let wordColor: UIColor = DecitionImageColor(UIColor(colorCode: backColor))
         tintColor = wordColor
         decBtn1.tintColor = tintColor
         titleField.textColor = tintColor
@@ -288,15 +291,13 @@ class MenuModalViewController: UIViewController {
     @objc func doneIcon() {
         var titleText: String = ""
         var contentText: String = ""
-        var iconColor: UIColor = .white
         
         self.dismiss(animated: true, completion: {
             if let del = self.delegate {
                 titleText = self.titleField.text!
                 contentText = self.contentView.text!
-                iconColor = self.view.backgroundColor!
                 
-                del.startMakeButton(title: titleText, contentText: contentText, iconColor: iconColor, iconName: self.iconStr)
+                del.startMakeButton(title: titleText, contentText: contentText, iconColor: self.backColor, iconName: self.iconStr)
             } else {
                 print("unwrap error")
             }

@@ -45,6 +45,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
         let getData = dataClass.getData()
         conHomeView.fontType = getData.0
         conHomeView.iconSize = getData.1
+        conHomeView.backColor = getData.2
         
         //let height = self.tabBar.frame.height
 

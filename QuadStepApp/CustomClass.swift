@@ -40,8 +40,13 @@ class CustomTextField: UITextField {
 }
 
 class CustomUIButton: UIButton {
+    //通常アイコン用
     var id: String?
     var title: String?
     var text: String?
     var list: [String]?
+    var color: String?
+    
+    //背景色設定ボタン用
+    var colorCode: String?
 }

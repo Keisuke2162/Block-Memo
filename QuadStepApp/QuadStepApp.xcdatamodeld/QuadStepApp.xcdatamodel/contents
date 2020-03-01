@@ -7,12 +7,13 @@
     <entity name="HomeData" representedClassName="HomeData" syncable="YES" codeGenerationType="class">
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="contentText" optional="YES" attributeType="String"/>
+        <attribute name="iconWidth" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="img" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="HomeData" positionX="-63" positionY="-18" width="128" height="118"/>
         <element name="GeneralData" positionX="-63" positionY="18" width="128" height="73"/>
+        <element name="HomeData" positionX="-63" positionY="-18" width="128" height="133"/>
     </elements>
 </model>

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButtonActionDelegate {
+class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButtonActionDelegate, UISearchBarDelegate {
     
     //既存アイコンの内容を更新　→ CoreDataのデータを更新
     func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String) {
@@ -76,6 +76,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     var setContentText: String = ""
     var setIconColor: String = "000000"
     
+    let memoSearch = UISearchBar()
+    
     
     var iconString = "none_100"
     
@@ -98,6 +100,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setToolbarSearchBar()
+        
         //userDefaultから設定とってくる
         let getData = dataClass.getData()
         fontType = getData.0
@@ -110,10 +114,18 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         setButton()
 
         // Do any additional setup after loading the view.
+        memoSearch.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 10)
+        //memoSearch.showsScopeBar = true
+        memoSearch.layer.position = CGPoint(x: view.frame.width / 2, y: view.frame.height / 10)
+        memoSearch.backgroundColor = .white
+        memoSearch.placeholder = "検索ワード"
+        memoSearch.delegate = self
+        view.addSubview(memoSearch)
     }
     
     //ボタンの新規作成
     func makeButton() {
+        
         if addBtn {
             let random = CGFloat.random(in: 0 ..< 5)
             
@@ -154,6 +166,44 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             //CoreDataに新規追加
             coreData.DataAdd(id: uuid, title: setTitle, img: iconString, color: setIconColor, content: setContentText)
         }
+        //検索バーを再描画(アイコンボタンを検索バーの裏を通すため)
+        view.addSubview(memoSearch)
+    }
+    
+    //検索バーで入力してキーボードのSearchを押したら処理
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        //まずキーボードを閉じる
+        searchBar.resignFirstResponder()
+        self.view.endEditing(true)
+        
+        //各メモ内のテキストに検索ワードが入ってたらフレームを縁取り
+        let searchStr = searchBar.text!
+        for v in view.subviews {
+            if let v = v as? CustomUIButton {
+                v.layer.borderWidth = 0.0
+                if let str = v.text {
+                    if str.caseInsensitiveCompare(searchStr) == .orderedSame {
+                        v.layer.borderColor = UIColor.black.cgColor
+                        v.layer.borderWidth = 3.0
+                    }
+                }
+            }
+        }
+    }
+    
+    //サーチバーのキーボードにDoneボタン（詳細はMemoTextView・・・内で解説）
+    func setToolbarSearchBar() {
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+        toolBar.sizeToFit()
+        let spacer = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: self, action: nil)
+        let commitButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(commitButtonTapped))
+        toolBar.items = [spacer, commitButton]
+        memoSearch.inputAccessoryView = toolBar
+    }
+    //キーボードのDoneボタンを押したらキーボード閉じる
+    @objc func commitButtonTapped() {
+        memoSearch.resignFirstResponder()
+        self.view.endEditing(true)
     }
     
     //アイコンの色を白か黒か決める
@@ -194,6 +244,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     func setButton() {
         //btnArray初期化
         btnArray.removeAll()
+        
+
         
         //追加ボタン
         let setBtn = CustomUIButton()

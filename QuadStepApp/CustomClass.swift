@@ -49,4 +49,6 @@ class CustomUIButton: UIButton {
     
     //背景色設定ボタン用
     var colorCode: String?
+    //アイコン名
+    var iconCode: String?
 }

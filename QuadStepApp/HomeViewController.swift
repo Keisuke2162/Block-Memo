@@ -10,6 +10,8 @@ import UIKit
 
 class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButtonActionDelegate, UISearchBarDelegate {
     
+    
+    
     //既存アイコンの内容を更新　→ CoreDataのデータを更新
     func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String) {
         //view上のsubViewの中からボタンかつ設定IDでが一致したものをターゲット
@@ -178,11 +180,14 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         //各メモ内のテキストに検索ワードが入ってたらフレームを縁取り
         let searchStr = searchBar.text!
+        
+        print(searchStr)
         for v in view.subviews {
             if let v = v as? CustomUIButton {
                 v.layer.borderWidth = 0.0
                 if let str = v.text {
                     if str.caseInsensitiveCompare(searchStr) == .orderedSame {
+                        print("Hit!")
                         v.layer.borderColor = UIColor.black.cgColor
                         v.layer.borderWidth = 3.0
                     }

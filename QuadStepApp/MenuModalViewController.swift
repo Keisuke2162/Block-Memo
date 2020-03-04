@@ -51,6 +51,16 @@ class MenuModalViewController: UIViewController {
     let iconName: [String] = ["account","add-reminder","chat","doughnut","happy","man-money","pdf","sent","post","zip",
                                 "play","system","admin","key","block", "euro"]
     
+    let iconNameList: [String] = ["icons8-agreement-100", "icons8-kicking-100", "icons8-airport-100", "icons8-leo-100", "icons8-answers-100", "icons8-libra-100",
+    "icons8-aquarius-100", "icons8-lock-100","icons8-aries-100", "icons8-meal-100","icons8-attack-100", "icons8-music-100","icons8-bad-idea-100", "icons8-news-100",
+    "icons8-bonds-100", "icons8-opened-folder-100","icons8-bookmark-100", "icons8-pisces-100","icons8-cafe-100", "icons8-planet-100","icons8-cancer-100", "icons8-punching-100",
+    "icons8-capricorn-100", "icons8-questionnaire-100","icons8-cinema-100", "icons8-reserve-100","icons8-city-100", "icons8-restaurant-100",
+    "icons8-clock-100", "icons8-roller-coaster-100","icons8-comet-100", "icons8-sagittarius-100","icons8-confetti-100", "icons8-scorpio-100",
+    "icons8-document-100", "icons8-search-100","icons8-doughnut-chart-100", "icons8-shooting-stars-100","icons8-edit-100", "icons8-speech-bubble-100",
+    "icons8-facebook-old-100", "icons8-support-100","icons8-ferris-wheel-100", "icons8-taurus-100","icons8-galaxy-100", "icons8-terms-and-conditions-100",
+    "icons8-gemini-100", "icons8-tire-swing-100","icons8-idea-bank-100", "icons8-to-do-100","icons8-inspection-100", "icons8-twitter-100",
+    "icons8-instagram-100", "icons8-virgo-100","icons8-internet-100"]
+    
     //color
     let moonNightColor: [String] = ["002b40","d9e9e5","6cb2d3","1d4b69","b1c7d4","f4f2db","94a1a9","424f56","004f7a","7a8a92","fde5c5","dce5ec","9a7fb8","cd659f","829ac8","77c2b9","3389ca","eaf4f9","E8473E","8ebbb1","d62e8a","e73462","00b8ee","fdf262","f5e49e","ca9170","dec39c","d56950","4b4846","89a3d3","e0e565","d82630","e50011","ee7700","fff000","00a73b","0064b3","5f1885","2a2489","fefefe"]
     

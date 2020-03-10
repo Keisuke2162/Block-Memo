@@ -62,7 +62,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     let dataClass = GeneralDataManagement()
     var iconSize: CGFloat = 75.0
     var fontType: String = ""
-    //var backColor: UIColor = .white
     var backColor: String = "ffffff"
     
     //画面下部のタブの高さ
@@ -218,8 +217,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         let green = components[1] * 255
         let blue = components[2] * 255
         
-        print("red \(red) green \(green) blue\(blue)")
-        
         var color: UIColor = .black
         if ((red * 0.299 + green * 0.587 + blue * 0.114) < 128) {
             color = .white
@@ -232,15 +229,35 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         let vc = MemoTextViewController()
         //let color = sender.backgroundColor
         let tint = sender.tintColor
-        print(sender.title!)
         
         vc.tintColor = tint!
         vc.backColor = sender.color!
         vc.titleText = sender.title!
         vc.contentText = sender.text!
         vc.fontType = fontType
-        vc.delegate = self
+        vc.removeIconDelegate = self
         vc.btnID = sender.id!
+        vc.modalPresentationStyle = .formSheet
+        vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
+        
+        present(vc, animated: true, completion: nil)
+    }
+    
+    @objc func gotoMakeVie(sender: CustomUIButton) {
+        let vc = MemoTextViewController()
+        //let color = sender.backgroundColor
+        let tint = sender.tintColor
+        
+        vc.makeIconDelegate = self
+        
+        vc.tintColor = tint!
+        vc.backColor = "ffffff"
+        vc.titleText = ""
+        vc.contentText = ""
+        vc.fontType = fontType
+        vc.makeFlag = true
+        vc.modalPresentationStyle = .formSheet
+        vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
         
         present(vc, animated: true, completion: nil)
     }
@@ -250,8 +267,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         //btnArray初期化
         btnArray.removeAll()
         
-
-        
         //追加ボタン
         let setBtn = CustomUIButton()
         setBtn.frame.size = CGSize(width: 75, height: 75)
@@ -260,9 +275,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         setBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         setBtn.setImage(UIImage(named: "plus_100"), for: .normal)
         setBtn.layer.cornerRadius = 10.0
-        //setBtn.layer.borderWidth = 1.0
-        //setBtn.layer.borderColor = UIColor.black.cgColor
-        setBtn.addTarget(self, action: #selector(openAddView), for: .touchUpInside)
+        setBtn.addTarget(self, action: #selector(gotoMakeVie), for: .touchUpInside)
         btnArray.append(setBtn)
         
         view.addSubview(setBtn)
@@ -293,14 +306,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             btnArray.append(dataBtn)
         }
         //必ずview.addSubviewが先
-        makeGravity(sender: btnArray)
-    }
-    
-    @objc func openAddView() {
-        let con = MenuModalViewController()
-        con.delegate = self
-        
-        present(con, animated: true, completion: nil)
+        //makeGravity(sender: btnArray)
     }
     
     func makeGravity(sender: [CustomUIButton]) {
@@ -310,7 +316,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         let collision = UICollisionBehavior(items: sender)
         collision.translatesReferenceBoundsIntoBoundary = true
-        
         collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:0, width: view.frame.width, height: view.frame.height - tabbarHeight)
         ))
         animator.addBehavior(collision)

@@ -5,8 +5,9 @@
 //  Created by 植田圭祐 on 2020/01/26.
 //  Copyright © 2020 Keisuke Ueda. All rights reserved.
 //
-
+/*
 import UIKit
+
 
 protocol MakeButtonActionDelegate {
     func startMakeButton(title: String, contentText: String, iconColor: String, iconName: String)
@@ -343,3 +344,4 @@ class MenuModalViewController: UIViewController {
 
 }
 
+*/

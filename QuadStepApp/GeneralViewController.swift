@@ -98,7 +98,7 @@ class GeneralViewController: UIViewController {
         generalScroll.frame = CGRect(x: 0, y: height / 10 * 8, width: width, height: height / 10)
         
         //背景色設定
-        backGroundBtn.frame = CGRect(x: 0, y: 0, width: height / 10, height: height / 10)
+        backGroundBtn.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
         backGroundBtn.layer.cornerRadius = 10.0
         backGroundBtn.addTarget(self, action: #selector(setColor), for: .touchUpInside)
         backGroundBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
@@ -107,7 +107,7 @@ class GeneralViewController: UIViewController {
         generalScroll.addSubview(backGroundBtn)
         
         //アイコンサイズ設定
-        iconSizeBtn.frame = CGRect(x: width / 5, y: 0, width: height / 10, height: height / 10)
+        iconSizeBtn.frame = CGRect(x: width / 5, y: 0, width: 70, height: 70)
         iconSizeBtn.layer.cornerRadius = 10.0
         iconSizeBtn.addTarget(self, action: #selector(setBtnSize), for: .touchUpInside)
         iconSizeBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
@@ -116,7 +116,7 @@ class GeneralViewController: UIViewController {
         generalScroll.addSubview(iconSizeBtn)
         
         //フォント
-        fontTypeBtn.frame = CGRect(x: width / 5 * 2, y: 0, width: height / 10, height: height / 10)
+        fontTypeBtn.frame = CGRect(x: width / 5 * 2, y: 0, width: 70, height: 70)
         fontTypeBtn.layer.cornerRadius = 10.0
         //fontTypeBtn.backgroundColor = .yellow
         fontTypeBtn.addTarget(self, action: #selector(setFontType), for: .touchUpInside)

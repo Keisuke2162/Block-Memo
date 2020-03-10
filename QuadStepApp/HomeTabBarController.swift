@@ -19,7 +19,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
     private lazy var firstViewController: HomeViewController = {
         
         conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 1)
-        conHomeView.tabbarHeight = self.tabBar.frame.height
+        conHomeView.tabbarHeight = height
         return conHomeView
     }()
     
@@ -31,7 +31,9 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         return conGeneralView
     }()
-
+    
+    var height: CGFloat = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,20 +41,23 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         setViewControllers(viewControllers, animated: false)
         
-        print("tabbar")
-        
         let dataClass = GeneralDataManagement()
         let getData = dataClass.getData()
         conHomeView.fontType = getData.0
         conHomeView.iconSize = getData.1
         conHomeView.backColor = getData.2
         
-        //let height = self.tabBar.frame.height
-
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("return tabbar")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+                
+        let tabBarHeight = self.tabBar.frame.height
+        conHomeView.tabbarHeight = tabBarHeight
+        let subBtnArray = conHomeView.btnArray
+        conHomeView.makeGravity(sender: subBtnArray)
     }
 }

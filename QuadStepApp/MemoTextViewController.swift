@@ -14,9 +14,16 @@ protocol RemoveButtonActionDelegate {
     func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String)
 }
 
+protocol MakeButtonActionDelegate {
+    func startMakeButton(title: String, contentText: String, iconColor: String, iconName: String)
+}
+
 class MemoTextViewController: UIViewController, UITextViewDelegate {
     
-    var delegate: RemoveButtonActionDelegate?
+    var removeIconDelegate: RemoveButtonActionDelegate?
+    var makeIconDelegate: MakeButtonActionDelegate?
+    
+    var makeFlag: Bool = false
     
     //選んだボタンのインスタンス（削除するとき用）
     var btnID = ""
@@ -28,6 +35,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     
     var titleText: String = ""
     var contentText: String = ""
+    var iconCode: String = "none_100"
+
     
     var scrollView = UIScrollView()
     var textView = UITextView()
@@ -82,12 +91,12 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         titleText = titleField.text!
         contentText = textView.text
         print("update color-> \(backColor)")
-        if let del = self.delegate {
+        
+        if let del  = self.removeIconDelegate {
             del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor)
         } else {
             print("unwrap error")
         }
-        
     }
     
     override func viewDidLoad() {
@@ -115,27 +124,48 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         pageScrollView.addSubview(scrollView)
         view.addSubview(pageScrollView)
         view.addSubview(pageControll)
+        
+        
+        if makeFlag {
+            //確定ボタン
+            let decIcon = UIImage(named: "OK_100")?.withRenderingMode(.alwaysTemplate)
+            decBtn1.frame = CGRect(x: width - 80, y: height - 120, width: 120, height: 120)
+            decBtn1.imageEdgeInsets = UIEdgeInsets(top: 30, left: 30, bottom: 60, right: 60)
+            decBtn1.layer.cornerRadius = 60
+            decBtn1.setImage(decIcon, for: .normal)
+            decBtn1.tintColor = .white
+            decBtn1.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
+            decBtn1.backgroundColor = .black
+            view.addSubview(decBtn1)
+        }
     }
     var secondView = UIView()
+    
     func setPartsSecond() {
         
         secondView.frame = CGRect(x: width, y: 0, width: width, height: height / 10 * 8)
         secondView.backgroundColor = .clear
         
-        //削除ボタン
-        let deleteBtn = UIButton()
-        let deleteIcon = UIImage(named: "delete_100")?.withRenderingMode(.alwaysTemplate)
-        deleteBtn.frame = CGRect(x: width + (width / 5 * 4), y: height / 10 * 8, width: height / 15, height: height / 15)
-        deleteBtn.setImage(deleteIcon, for: .normal)
-        deleteBtn.tintColor = tintColor
-        deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
-        pageScrollView.addSubview(deleteBtn)
+        if makeFlag {
+            print("make New Icon")
+        }else {
+            //削除ボタン
+            let deleteBtn = UIButton()
+            let deleteIcon = UIImage(named: "delete_100")?.withRenderingMode(.alwaysTemplate)
+            deleteBtn.frame = CGRect(x: width + (width / 5 * 4), y: height / 10 * 8, width: height / 15, height: height / 15)
+            deleteBtn.setImage(deleteIcon, for: .normal)
+            deleteBtn.tintColor = tintColor
+            deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
+            pageScrollView.addSubview(deleteBtn)
+        }
+
         
         //colorボタン
         let colorBtn = UIButton()
         colorBtn.frame = CGRect(x: width + (width / 5 * 1), y: height / 10 * 8, width: 50, height: 50)
-        colorBtn.backgroundColor = .black
+        //colorBtn.backgroundColor = .black
         colorBtn.addTarget(self, action: #selector(colorSet), for: .touchUpInside)
+        colorBtn.setImage(UIImage(named: "palette_100"), for: .normal)
         pageScrollView.addSubview(colorBtn)
         
         //imageボタン
@@ -147,15 +177,16 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
         pageScrollView.addSubview(secondView)
     }
-    
+    let iconScroll = UIScrollView()
+    //アイコン一覧表示
     @objc func tapImageBtn() {
         removeSubviews(parentView: secondView)
+        removeSubviews(parentView: iconScroll)
         
-        let iconScroll = UIScrollView()
         iconScroll.frame = CGRect(x: 0, y: 0, width: secondView.frame.width, height: secondView.frame.height)
         
         //1行に並ぶアイコンの数
-        let iconPerLine = Int(width) / 50
+        let iconPerLine = Int(width) / 40
         //行数
         let lineCount = iconNameList.count / iconPerLine
         
@@ -165,16 +196,34 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             
             let iconStr = UIImage(named: iconNameList[i])?.withRenderingMode(.alwaysTemplate)
             
-            let iconBtn = UIButton()
-            iconBtn.frame = CGRect(x: width / CGFloat(iconPerLine) * CGFloat(xPos), y: CGFloat(yPos) * 50 + 10, width: 30, height: 30)
+            let iconBtn = CustomUIButton()
+            iconBtn.iconCode = iconNameList[i]
+            iconBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+            iconBtn.frame = CGRect(x: width / CGFloat(iconPerLine) * CGFloat(xPos), y: CGFloat(yPos) * 50 + 10, width: 40, height: 40)
             //iconBtn.backgroundColor = .blue
             iconBtn.setImage(iconStr, for: .normal)
             iconBtn.tintColor = tintColor
+            iconBtn.addTarget(self, action: #selector(selectIcon), for: .touchUpInside)
             
             iconScroll.addSubview(iconBtn)
         }
         iconScroll.contentSize = CGSize(width: width, height: CGFloat(lineCount + 1) * 70)
         secondView.addSubview(iconScroll)
+    }
+    
+    @objc func selectIcon(_ sender: CustomUIButton) {
+        for v in iconScroll.subviews {
+            if let v = v as? CustomUIButton {
+                v.layer.borderWidth = 0.0
+            }
+        }
+        //let iconStr = sender.iconCode
+        sender.layer.borderWidth = 2.0
+        sender.layer.borderColor = tintColor.cgColor
+        
+        iconCode = sender.iconCode!
+        let decIcon = UIImage(named: iconCode)?.withRenderingMode(.alwaysTemplate)
+        decBtn1.setImage(decIcon, for: .normal)
     }
     
     //UIView上のパーツを全て削除
@@ -184,11 +233,9 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             sub.removeFromSuperview()
         }
     }
-
     
-    
+    //色選択ボタン表示
     @objc func colorSet() {
-        //let colorArray: [[String]] = [NightViewColor, gamlaColor, summerColor, rainbowColor, moonNightColor]
         removeSubviews(parentView: secondView)
         
         let btnWidth = secondView.frame.width / 9
@@ -213,10 +260,14 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         secondView.addSubview(colorScroll)
     }
     
+    
     @objc func tapColorButton(_ sender: CustomUIButton) {
-        print("change backColor")
         backColor = sender.colorCode!
         view.backgroundColor = UIColor(colorCode: backColor)
+        tintColor = DecitionImageColor(UIColor(colorCode: backColor))
+        
+        decBtn1.backgroundColor = tintColor
+        decBtn1.tintColor = UIColor(colorCode: backColor)
     }
 
     
@@ -224,13 +275,13 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         Alert(title: "Delete?", message: "")
     }
     
-    
+    //アラート表示
     func Alert(title: String, message: String){
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
             print("yes")
             self.dismiss(animated: true, completion: {
-                if let del = self.delegate {
+                if let del = self.removeIconDelegate {
                     del.removeIcon(removeID: self.btnID)
                 } else {
                     print("unwrap error")
@@ -261,22 +312,22 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
     }
     
+    let decBtn1 = CustomUIButton()
+    
     func setPartsFirst() {
         scrollView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        
+
         //textViewにDoneボタンを追加
         setToolbarTextView()
         
-        titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 6, height: height / 10)
-        titleField.font = UIFont(name: fontType, size: 50.0)
+        titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 9.5, height: height / 10)
+        titleField.font = UIFont(name: fontType, size: 30.0)
         titleField.textColor = tintColor
         titleField.text = titleText
         
         scrollView.addSubview(titleField)
         
         
-        //textView.frame.size = CGSize(width: view.frame.width / 2, height: 40)
-        //textView.center = CGPoint(x: view.center.x, y: view.frame.height / 10 * 8)
         textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 7)
         textView.backgroundColor = .clear
         textView.layer.cornerRadius = 10.0
@@ -291,6 +342,23 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         textView.dataDetectorTypes = .link
         
         scrollView.addSubview(textView)
+    }
+    
+    //完了ボタン押下時
+    @objc func doneIcon() {
+        var titleText: String = ""
+        var contentText: String = ""
+        
+        self.dismiss(animated: true, completion: {
+            if let del = self.makeIconDelegate {
+                titleText = self.titleField.text!
+                contentText = self.textView.text!
+                
+                del.startMakeButton(title: titleText, contentText: contentText, iconColor: self.backColor, iconName: self.iconCode)
+            } else {
+                print("unwrap error")
+            }
+        })
     }
     
     //戻るボタンを押下したら閉じる
@@ -362,6 +430,20 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
       UIView.animate(withDuration: duration!) {
         self.view.transform = CGAffineTransform.identity
       }
+    }
+    
+    //アイコンの色を白か黒か決める
+    func DecitionImageColor(_ color: UIColor) -> (UIColor) {
+        let components = color.cgColor.components!
+        let red = components[0] * 255
+        let green = components[1] * 255
+        let blue = components[2] * 255
+        
+        var color: UIColor = .black
+        if ((red * 0.299 + green * 0.587 + blue * 0.114) < 128) {
+            color = .white
+        }
+        return color
     }
     
 

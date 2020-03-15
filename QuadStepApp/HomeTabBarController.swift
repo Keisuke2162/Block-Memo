@@ -18,8 +18,11 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private lazy var firstViewController: HomeViewController = {
         
-        conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 1)
-        conHomeView.tabbarHeight = height
+        //conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 1)
+        let firstItem = UITabBarItem(title: "Home", image: UIImage(named: "home"), tag: 1)
+        firstItem.imageInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        conHomeView.tabBarItem = firstItem
+        //conHomeView.tabbarHeight = height
         return conHomeView
     }()
     
@@ -27,7 +30,10 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private lazy var thirdViewController: GeneralViewController = {
         
-        conGeneralView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostRecent, tag: 1)
+        //conGeneralView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostRecent, tag: 1)
+        let thirdItem = UITabBarItem(title: "Setting", image: UIImage(named: "gear"), tag: 1)
+        thirdItem.imageInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        conGeneralView.tabBarItem = thirdItem
 
         return conGeneralView
     }()

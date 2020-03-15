@@ -115,6 +115,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         setButton()
 
         // Do any additional setup after loading the view.
+        
+        /*
         memoSearch.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 10)
         //memoSearch.showsScopeBar = true
         memoSearch.layer.position = CGPoint(x: view.frame.width / 2, y: view.frame.height / 10)
@@ -122,6 +124,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         memoSearch.placeholder = "検索ワード"
         memoSearch.delegate = self
         view.addSubview(memoSearch)
+ */
     }
     
     //ボタンの新規作成
@@ -269,7 +272,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         //追加ボタン
         let setBtn = CustomUIButton()
-        setBtn.frame.size = CGSize(width: 75, height: 75)
+        setBtn.frame.size = CGSize(width: view.frame.width / 5, height: view.frame.width / 5)
         setBtn.center = CGPoint(x: view.center.x, y: view.center.y)
         setBtn.backgroundColor = .white
         setBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)

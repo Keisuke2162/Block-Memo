@@ -124,23 +124,14 @@ class GeneralViewController: UIViewController {
         fontTypeBtn.setImage(UIImage(named: "font_90"), for: .normal)
         
         generalScroll.addSubview(fontTypeBtn)
+        view.addSubview(generalScroll)
         
         //プレビューエリア
         testView.frame = CGRect(x: 0, y: 0, width: width, height: height / 10 * 3)
-        testView.backgroundColor = .black
+        testView.backgroundColor = .clear
         
         view.addSubview(testView)
-        view.addSubview(generalScroll)
-        
-        //プレビューボタン
-        middleBtn.frame.size = CGSize(width: iconSize, height: iconSize)
-        middleBtn.center = CGPoint(x: testView.center.x, y: testView.center.y)
-        middleBtn.backgroundColor = .orange
-        middleBtn.layer.cornerRadius = 10.0
-        btnArray.append(middleBtn)
-        testView.addSubview(middleBtn)
-        
-        makeGravity(sender: btnArray)
+
     }
     
     @objc func setColor() {
@@ -259,14 +250,39 @@ class GeneralViewController: UIViewController {
     @objc func decSize(_ sender: UISlider) {
         let size = CGFloat(sender.value)
         iconSize = size
-        middleBtn.center = CGPoint(x: testView.center.x, y: testView.center.y)
+        //middleBtn.center = CGPoint(x: testView.center.x, y: testView.center.y)
     }
     
+    let fontLabel = UILabel()
+    let fontSizeSlider = UISlider()
     //font選択ボタン
     @objc func setFontType() {
         fontBtnArray.removeAll()
         removeSubviews(parentView: generalView)
         let testMessage: String = "ABCDE"
+        
+        //フォントプレビュー
+        fontLabel.frame = CGRect(x: 0, y: 0, width: testView.frame.width / 2, height: testView.frame.height)
+        fontLabel.text = "F"
+        fontLabel.textAlignment = NSTextAlignment.center
+        fontLabel.font = UIFont(name: strFont, size: 30)
+        fontLabel.backgroundColor = .clear
+        
+        testView.addSubview(fontLabel)
+        
+        //フォントサイズ変更スライダー
+        fontSizeSlider.frame = CGRect(x: testView.frame.width / 2, y: 0, width: testView.frame.width / 3, height: testView.frame.height)
+        fontSizeSlider.layer.masksToBounds = false
+        fontSizeSlider.backgroundColor = .clear
+        //スライダーを動かした時の処理
+        fontSizeSlider.addTarget(self, action: #selector(moveFontSlider), for: .valueChanged)
+        //スライダーを動かし終わったときの処理
+        //fontSizeSlider.addTarget(self, action: #selector(decSize), for: .touchUpInside)
+        fontSizeSlider.minimumValue = Float(20)
+        fontSizeSlider.maximumValue = Float(50)
+        fontSizeSlider.value = Float(20)
+        
+        testView.addSubview(fontSizeSlider)
         
         fontScroll.frame = CGRect(x: 0, y: 0, width: generalView.frame.width, height: generalView.frame.height)
         fontScroll.contentSize = CGSize(width: generalView.frame.width / 3 * CGFloat(fontArray.count / 2), height: generalView.frame.height)
@@ -281,7 +297,7 @@ class GeneralViewController: UIViewController {
             //フォント選択ボタンの設定
             let fontBtn = UIButton()
             fontBtn.frame = CGRect(x:btnWidth, y: btnHeight, width: generalView.frame.width / 3, height: generalView.frame.height / 2)
-            fontBtn.backgroundColor = .white
+            fontBtn.backgroundColor = .clear
             fontBtn.setTitle(testMessage, for: .normal)
             fontBtn.titleLabel?.font = UIFont(name: fontArray[i], size: 25.0)
             fontBtn.setTitleColor(.black, for: .normal)
@@ -307,24 +323,11 @@ class GeneralViewController: UIViewController {
         sender.layer.borderWidth = 2.0
         sender.layer.borderColor = UIColor.black.cgColor
         strFont = fontArray[sender.tag]
+        fontLabel.font = UIFont(name: strFont, size: 30)
     }
     
-    //重力作成
-    func makeGravity(sender: [UIButton]) {
-        animator = UIDynamicAnimator(referenceView: self.view)
-        
-        gravity = UIGravityBehavior(items: sender)
-        
-        let collision = UICollisionBehavior(items: sender)
-        collision.translatesReferenceBoundsIntoBoundary = true
-        
-        //barrierは何の意味がある？
-        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y: 0, width: view.frame.width, height: testView.frame.height - 50)
-        ))
-        
-        animator.addBehavior(collision)
-        
-        animator.addBehavior(gravity)
+    @objc func moveFontSlider(_ sender: UISlider) {
+        fontLabel.font = UIFont(name: strFont, size: CGFloat(sender.value))
     }
     
     func removeSubviews(parentView: UIView) {

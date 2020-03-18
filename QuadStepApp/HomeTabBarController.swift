@@ -63,6 +63,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
                 
         let tabBarHeight = self.tabBar.frame.height
         conHomeView.tabbarHeight = tabBarHeight
+        conGeneralView.tabbarHeight = tabBarHeight
         let subBtnArray = conHomeView.btnArray
         conHomeView.makeGravity(sender: subBtnArray)
     }

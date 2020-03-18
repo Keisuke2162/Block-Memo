@@ -36,6 +36,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     var titleText: String = ""
     var contentText: String = ""
     var iconCode: String = "none_100"
+    var fontSize: CGFloat = 0.0
 
     
     var scrollView = UIScrollView()
@@ -107,6 +108,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
                       magenta, pink, brown, blackWhite, gold, silver]
         
         view.backgroundColor = UIColor(colorCode: backColor)
+        tintColor = DecitionImageColor(view.backgroundColor!)
         
         textView.delegate = self
         scrollView.delegate = self
@@ -332,7 +334,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         textView.backgroundColor = .clear
         textView.layer.cornerRadius = 10.0
         textView.textColor = tintColor
-        textView.font = UIFont(name: fontType, size: 20)
+        print("fontSIze = \(fontSize)")
+        textView.font = UIFont(name: fontType, size: fontSize)
         textView.text = contentText
         
         textView.linkTextAttributes = [

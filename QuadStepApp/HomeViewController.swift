@@ -63,6 +63,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     var iconSize: CGFloat = 75.0
     var fontType: String = ""
     var backColor: String = "ffffff"
+    var fontSize: CGFloat = 0.0
     
     //画面下部のタブの高さ
     var tabbarHeight: CGFloat = 0.0
@@ -94,6 +95,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         fontType = getData.0
         iconSize = getData.1
         backColor = getData.2
+        fontSize = getData.3
+        
         
         view.backgroundColor = UIColor(colorCode: backColor)
     }
@@ -108,6 +111,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         fontType = getData.0
         iconSize = getData.1
         backColor = getData.2
+        fontSize = getData.3
         
         view.backgroundColor = UIColor(colorCode: backColor)
         
@@ -237,6 +241,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.backColor = sender.color!
         vc.titleText = sender.title!
         vc.contentText = sender.text!
+        vc.fontSize = fontSize
         vc.fontType = fontType
         vc.removeIconDelegate = self
         vc.btnID = sender.id!
@@ -246,7 +251,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         present(vc, animated: true, completion: nil)
     }
     
-    @objc func gotoMakeVie(sender: CustomUIButton) {
+    @objc func gotoMakeView(sender: CustomUIButton) {
         let vc = MemoTextViewController()
         //let color = sender.backgroundColor
         let tint = sender.tintColor
@@ -258,6 +263,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.titleText = ""
         vc.contentText = ""
         vc.fontType = fontType
+        vc.fontSize = fontSize
         vc.makeFlag = true
         vc.modalPresentationStyle = .formSheet
         vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
@@ -272,13 +278,13 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         //追加ボタン
         let setBtn = CustomUIButton()
-        setBtn.frame.size = CGSize(width: view.frame.width / 5, height: view.frame.width / 5)
+        setBtn.frame.size = CGSize(width: iconSize, height: iconSize)
         setBtn.center = CGPoint(x: view.center.x, y: view.center.y)
         setBtn.backgroundColor = .white
         setBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         setBtn.setImage(UIImage(named: "plus_100"), for: .normal)
         setBtn.layer.cornerRadius = 10.0
-        setBtn.addTarget(self, action: #selector(gotoMakeVie), for: .touchUpInside)
+        setBtn.addTarget(self, action: #selector(gotoMakeView), for: .touchUpInside)
         btnArray.append(setBtn)
         
         view.addSubview(setBtn)

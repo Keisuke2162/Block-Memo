@@ -18,7 +18,7 @@ class GeneralDataManagement {
     //var iconSize: CGFloat = 0.0
     
     
-    func getData() -> (String, CGFloat, String){
+    func getData() -> (String, CGFloat, String, CGFloat){
         
         
         
@@ -28,23 +28,26 @@ class GeneralDataManagement {
         
         userDefault.register(defaults: ["FontSet": "AppleSDGothicNeo-Thin"])
         userDefault.register(defaults: ["IconSize" : 75.0])
-        userDefault.register(defaults: ["BackColor" : "000000"])
+        userDefault.register(defaults: ["BackColor" : "ffffff"])
+        userDefault.register(defaults: ["fontSize" : 25.0])
         
         let strFont = userDefault.object(forKey: "FontSet") as! String
         let iconSize = userDefault.object(forKey: "IconSize") as! CGFloat
         let backGround = userDefault.object(forKey: "BackColor") as! String
+        let fontSize = userDefault.object(forKey: "fontSize") as! CGFloat
         
         print("フォント→\(strFont),サイズ→\(iconSize),カラー→\(backGround)を読み込みました")
         
-        return (strFont, iconSize, backGround)
+        return (strFont, iconSize, backGround, fontSize)
     }
     
-    func putData(strFont: String, iconSize: CGFloat, backColor: String) {
+    func putData(strFont: String, iconSize: CGFloat, backColor: String, fontSize: CGFloat) {
         print("フォント→\(strFont),サイズ→\(iconSize),カラー→\(backColor)を保存します")
         
         userDefault.set(strFont, forKey: "FontSet")
         userDefault.set(iconSize, forKey: "IconSize")
         userDefault.set(backColor, forKey: "BackColor")
+        userDefault.set(fontSize, forKey: "fontSize")
     }
 }
 

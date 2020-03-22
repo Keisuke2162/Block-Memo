@@ -72,6 +72,9 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     let coreData = CoreDataManagement()
     var inputData: [HomeData] = []
     
+    var width: CGFloat = 0.0
+    var height: CGFloat = 0.0
+    
     //TabBarから受け取るデータ
     var addBtn: Bool = false
     var setTitle: String = ""
@@ -101,10 +104,17 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         view.backgroundColor = UIColor(colorCode: backColor)
     }
     
+    let subView = UIView()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setToolbarSearchBar()
+        
+        width = view.frame.width
+        height = view.frame.height
+        
         
         //userDefaultから設定とってくる
         let getData = dataClass.getData()
@@ -150,6 +160,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             makeBtn.title = setTitle
             makeBtn.text = setContentText
             makeBtn.color = setIconColor
+            makeBtn.iconCode = iconString
             
             //アイコン色設定
             makeBtn.backgroundColor = UIColor(colorCode: setIconColor)
@@ -163,7 +174,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             let iconColor = DecitionImageColor(UIColor(colorCode: setIconColor))
             makeBtn.tintColor = iconColor
             
-            makeBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
+            makeBtn.addTarget(self, action: #selector(previewShow), for: .touchUpInside)
+            makeBtn.addTarget(self, action: #selector(nextView), for: .touchDownRepeat)
             
             view.addSubview(makeBtn)
             btnArray.append(makeBtn)
@@ -231,8 +243,30 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         return color
     }
     
+    @objc func previewShow(sender: CustomUIButton) {
+        
+        let iconImage = UIImage(named: sender.iconCode!)?.withRenderingMode(.alwaysTemplate)
+        iconView.image = iconImage
+        
+        titleLabel.text = sender.title
+        textLabel.text = sender.text
+        subView.backgroundColor = UIColor(colorCode: sender.color!)
+        
+        iconView.tintColor = sender.tintColor
+        titleLabel.textColor = sender.tintColor
+        textLabel.textColor = sender.tintColor
+        
+        titleLabel.font = UIFont(name: fontType, size: 30)
+        textLabel.font = UIFont(name: fontType, size: 15)
+        
+        logoView.image = nil
+        
+        titleLabel.adjustsFontForContentSizeCategory = true
+    }
+    
     //表示画面への遷移
     @objc func nextView(sender: CustomUIButton) {
+        
         let vc = MemoTextViewController()
         //let color = sender.backgroundColor
         let tint = sender.tintColor
@@ -249,6 +283,13 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
         
         present(vc, animated: true, completion: nil)
+        
+        subView.backgroundColor = .black
+        titleLabel.text = ""
+        textLabel.text = ""
+        iconView.image = nil
+        let logoImg = UIImage(named: "apple-logo-144")?.withRenderingMode(.alwaysTemplate)
+        logoView.image = logoImg
     }
     
     @objc func gotoMakeView(sender: CustomUIButton) {
@@ -270,6 +311,11 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         present(vc, animated: true, completion: nil)
     }
+    
+    let textLabel = UILabel()
+    let titleLabel = UILabel()
+    let iconView = UIImageView()
+    let logoView = UIImageView()
 
     //ボタンの初期配置
     func setButton() {
@@ -298,6 +344,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             dataBtn.title = inputData[i].title
             dataBtn.text = inputData[i].contentText
             dataBtn.color = inputData[i].color!
+            dataBtn.iconCode = inputData[i].img!
             dataBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
             let iconImage = UIImage(named: inputData[i].img!)?.withRenderingMode(.alwaysTemplate)
             dataBtn.setImage(iconImage, for: .normal)
@@ -309,13 +356,61 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             let iconColor = DecitionImageColor(dataBtn.backgroundColor!)
             dataBtn.tintColor = iconColor
             
-            dataBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
+            //dataBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
+            dataBtn.addTarget(self, action: #selector(previewShow), for: .touchUpInside)
+            dataBtn.addTarget(self, action: #selector(nextView), for: .touchDownRepeat)
             
             view.addSubview(dataBtn)
             btnArray.append(dataBtn)
         }
         //必ずview.addSubviewが先
         //makeGravity(sender: btnArray)
+        
+        //************************プレビューエリア*****************************
+        
+        //プレビューエリア
+        subView.frame = CGRect(x: 0, y: 0, width: width, height: height / 10 * 2.5)
+        subView.backgroundColor = .black
+        
+        //アイコン
+
+        
+        iconView.frame = CGRect(x: 25, y: 0, width: width / 6, height: width / 6)
+        //iconView.frame.size = CGSize(width: width / 5, height: width / 5)
+        iconView.center.y = subView.frame.height / 2
+        //let iconImage = UIImage(named: "kodi")?.withRenderingMode(.alwaysTemplate)
+        //iconView.image = iconImage
+        iconView.tintColor = .white
+        
+        //タイトル
+        titleLabel.frame = CGRect(x: width / 6 * 2, y: 0, width: width / 6 * 4, height: height / 10 * 1.5)
+        //titleLabel.backgroundColor = .black
+        titleLabel.textColor = .white
+        //titleLabel.text = "Title"
+        titleLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.font = UIFont(name: fontType, size: fontSize)
+        
+        //テキスト
+        
+        textLabel.frame = CGRect(x: width / 6 * 2, y: height / 10 * 1.5, width: width / 6 * 4, height: height / 10)
+        //textLabel.backgroundColor = .gray
+        //textLabel.text = "text"
+        textLabel.adjustsFontForContentSizeCategory = true
+        textLabel.textColor = .white
+        textLabel.numberOfLines = 0
+        
+        view.addSubview(subView)
+        subView.addSubview(iconView)
+        subView.addSubview(titleLabel)
+        subView.addSubview(textLabel)
+        
+        //初期ロゴ配置
+        
+        logoView.frame.size = CGSize(width: subView.frame.height / 2, height: subView.frame.height / 2)
+        logoView.center = CGPoint(x: subView.frame.width / 2, y: subView.frame.height / 2)
+        let logoImg = UIImage(named: "apple-logo-144")?.withRenderingMode(.alwaysTemplate)
+        logoView.image = logoImg
+        subView.addSubview(logoView)
     }
     
     func makeGravity(sender: [CustomUIButton]) {

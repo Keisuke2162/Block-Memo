@@ -8,7 +8,7 @@
 
 import UIKit
 
-class GeneralViewController: UIViewController {
+class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegate {
     
     
     //User Defaultから取得　＆　UserDefaultに保存する値
@@ -107,7 +107,8 @@ class GeneralViewController: UIViewController {
         tintColor = DecitionImageColor(view.backgroundColor!)
         
         //背景色設定ボタン
-        backGroundBtn.frame = CGRect(x: 0, y: 0, width: 70, height: 70)
+        backGroundBtn.frame.size = CGSize(width: 70, height: 70)
+        backGroundBtn.center = CGPoint(x: width / 5 , y: 35)
         backGroundBtn.layer.cornerRadius = 10.0
         backGroundBtn.addTarget(self, action: #selector(setColor), for: .touchUpInside)
         backGroundBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
@@ -118,7 +119,9 @@ class GeneralViewController: UIViewController {
         generalScroll.addSubview(backGroundBtn)
         
         //アイコンサイズ設定ボタン
-        iconSizeBtn.frame = CGRect(x: 80, y: 0, width: 70, height: 70)
+        iconSizeBtn.frame.size = CGSize(width: 70, height: 70)
+        iconSizeBtn.center = CGPoint(x: width / 2 , y: 35)
+        //iconSizeBtn.frame = CGRect(x: 80, y: 0, width: 70, height: 70)
         iconSizeBtn.layer.cornerRadius = 10.0
         iconSizeBtn.addTarget(self, action: #selector(setBtnSize), for: .touchUpInside)
         iconSizeBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
@@ -129,7 +132,9 @@ class GeneralViewController: UIViewController {
         generalScroll.addSubview(iconSizeBtn)
         
         //フォント設定ボタン
-        fontTypeBtn.frame = CGRect(x: 160, y: 0, width: 70, height: 70)
+        fontTypeBtn.frame.size = CGSize(width: 70, height: 70)
+        fontTypeBtn.center = CGPoint(x: width / 5 * 4 , y: 35)
+        //fontTypeBtn.frame = CGRect(x: 160, y: 0, width: 70, height: 70)
         fontTypeBtn.layer.cornerRadius = 10.0
         fontTypeBtn.addTarget(self, action: #selector(setFontType), for: .touchUpInside)
         fontTypeBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
@@ -140,6 +145,7 @@ class GeneralViewController: UIViewController {
         generalScroll.addSubview(fontTypeBtn)
         
         //masterBlock設定ボタン
+        /*
         masterBlockBtn.frame = CGRect(x: 240, y: 0, width: 70, height: 70)
         masterBlockBtn.layer.cornerRadius = 10.0
         masterBlockBtn.addTarget(self, action: #selector(setMasterBlock), for: .touchUpInside)
@@ -149,6 +155,7 @@ class GeneralViewController: UIViewController {
         masterBlockBtn.tintColor =  tintColor
         
         generalScroll.addSubview(masterBlockBtn)
+ */
         
         
         view.addSubview(generalScroll)
@@ -163,17 +170,58 @@ class GeneralViewController: UIViewController {
     
     let masterBlockName = ["add","wordSearch","voice"]
     
+    let addBtn = UIButton()
+    let searchBtn = UIButton()
+    let viewBtn = UIButton()
+    var masterButtonArray: [UIButton] = []
+    
+    let addFlg = false
+    let searchFlg = false
+    let viewerFlg = false
+    
+    
+    
     @objc func setMasterBlock(){
         removeSubviews(parentView: generalView)
         
-        let addBtn = UIButton()
+        //add
         addBtn.frame.size = CGSize(width: width / 7, height: width / 7)
-        addBtn.center = CGPoint(x: width / 7, y: height / 10)
+        addBtn.center = CGPoint(x: width / 7, y: height / 10 * 2)
         let btnImage = UIImage(named: "plus_100")?.withRenderingMode(.alwaysTemplate)
+        addBtn.tintColor = .black
+        addBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        addBtn.layer.cornerRadius = 10.0
         addBtn.setImage(btnImage, for: .normal)
         addBtn.backgroundColor = .white
+        masterButtonArray.append(addBtn)
+        
+        //search
+        
+        searchBtn.frame.size = CGSize(width: width / 7, height: width / 7)
+        searchBtn.center = CGPoint(x: width / 7 * 3.5, y: height / 10 * 2)
+        let searchImage = UIImage(named: "search_100")?.withRenderingMode(.alwaysTemplate)
+        searchBtn.tintColor = .black
+        searchBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        searchBtn.layer.cornerRadius = 10.0
+        searchBtn.setImage(searchImage, for: .normal)
+        searchBtn.backgroundColor = .white
+        masterButtonArray.append(searchBtn)
+        
+        //viewer
+        
+        viewBtn.frame.size = CGSize(width: width / 7, height: width / 7)
+        viewBtn.center = CGPoint(x: width / 7 * 6, y: height / 10 * 2)
+        let viewerImage = UIImage(named: "view_100")?.withRenderingMode(.alwaysTemplate)
+        viewBtn.tintColor = .black
+        viewBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        viewBtn.layer.cornerRadius = 10.0
+        viewBtn.setImage(viewerImage, for: .normal)
+        viewBtn.backgroundColor = .white
+        masterButtonArray.append(viewBtn)
         
         generalView.addSubview(addBtn)
+        generalView.addSubview(searchBtn)
+        generalView.addSubview(viewBtn)
     }
     
     //*****************************************************************************
@@ -206,13 +254,21 @@ class GeneralViewController: UIViewController {
         print("change backColor")
         backColor = sender.colorCode!
         view.backgroundColor = UIColor(colorCode: backColor)
+        tintColor = DecitionImageColor(UIColor(colorCode: backColor))
+        backGroundBtn.tintColor = tintColor
+        iconSizeBtn.tintColor = tintColor
+        fontTypeBtn.tintColor = tintColor
     }
+    
+    let previewBtn = UIButton()
     
     //********************************************************************************
     @objc func setBtnSize() {
         removeSubviews(parentView: generalView)
         
-        btnSizeSlider.frame = CGRect(x: generalView.frame.width / 6, y: 0, width: generalView.frame.width / 3 * 2, height: generalView.frame.height)
+        //btnSizeSlider.frame = CGRect(x: generalView.frame.width / 6, y: 0, width: generalView.frame.width / 3 * 2, height: generalView.frame.height)
+        btnSizeSlider.frame.size = CGSize(width: width / 4 * 3, height: 50)
+        btnSizeSlider.center = CGPoint(x: width / 2, y: generalView.frame.height - 50)
         
         btnSizeSlider.backgroundColor = .clear
         btnSizeSlider.layer.masksToBounds = false
@@ -221,35 +277,46 @@ class GeneralViewController: UIViewController {
         //スライダーを動かし終わったときの処理
         btnSizeSlider.addTarget(self, action: #selector(decSize), for: .touchUpInside)
         
-        let minSize = width / 7
-        let maxSize = width / 4
+        //let minSize = width / 8
+        //let maxSize = width / 5
+        let minSize = 50
+        let maxSize = 100
         btnSizeSlider.minimumValue = Float(minSize)
         btnSizeSlider.maximumValue = Float(maxSize)
         btnSizeSlider.value = Float(iconSize)
         
-        sliderValue.frame = CGRect(x: generalView.frame.width / 2 - 60, y: 20, width: 120, height: 20)
-        sliderValue.text = String(btnSizeSlider.value)
+        sliderValue.frame.size = CGSize(width: 120, height: 20)
+        sliderValue.center = CGPoint(x: width / 2, y: generalView.frame.height - 200)
+        sliderValue.textAlignment = .center
+        sliderValue.text = String(Int(btnSizeSlider.value))
+        sliderValue.textColor = tintColor
         
         let sValue = UIButton()
-        sValue.frame = CGRect(x: generalView.frame.width / 6 * 1, y: 70, width: 20, height: 20)
+        sValue.frame = CGRect(x: generalView.frame.width / 6 * 1, y: generalView.frame.height - 150, width: 20, height: 20)
         sValue.layer.cornerRadius = 5.0
-        sValue.backgroundColor = .blue
+        sValue.backgroundColor = tintColor
         sValue.tag = 0
         sValue.addTarget(self, action: #selector(setSliderValue), for: .touchUpInside)
         
         let mValue = UIButton()
-        mValue.frame = CGRect(x: generalView.frame.width / 6 * 3 - 20, y: 70, width: 20, height: 20)
+        mValue.frame = CGRect(x: generalView.frame.width / 2, y: generalView.frame.height - 150, width: 20, height: 20)
         mValue.layer.cornerRadius = 5.0
-        mValue.backgroundColor = .blue
+        mValue.backgroundColor = tintColor
         mValue.tag = 1
         mValue.addTarget(self, action: #selector(setSliderValue), for: .touchUpInside)
         
         let lValue = UIButton()
-        lValue.frame = CGRect(x: generalView.frame.width / 6 * 5 - 20, y: 70, width: 20, height: 20)
+        lValue.frame = CGRect(x: generalView.frame.width / 6 * 5 - 20, y: generalView.frame.height - 150, width: 20, height: 20)
         lValue.layer.cornerRadius = 5.0
-        lValue.backgroundColor = .blue
+        lValue.backgroundColor = tintColor
         lValue.tag = 2
         lValue.addTarget(self, action: #selector(setSliderValue), for: .touchUpInside)
+        
+        
+        previewBtn.frame.size = CGSize(width: iconSize, height: iconSize)
+        previewBtn.center = CGPoint(x: width / 2, y: generalView.frame.height / 3)
+        previewBtn.backgroundColor = tintColor
+        previewBtn.layer.cornerRadius = 10.0
         
         generalView.addSubview(sliderValue)
         
@@ -257,26 +324,27 @@ class GeneralViewController: UIViewController {
         generalView.addSubview(sValue)
         generalView.addSubview(mValue)
         generalView.addSubview(lValue)
+        generalView.addSubview(previewBtn)
     }
     
     @objc func setSliderValue(_ sender: UIButton) {
         print("setValue")
         switch sender.tag {
         case 0:
-            btnSizeSlider.value = Float(width / 7)
-            middleBtn.frame.size = CGSize(width: width / 7, height: width / 7)
-            sliderValue.text = String(btnSizeSlider.value)
-            iconSize = width / 7
+            btnSizeSlider.value = Float(50)
+            middleBtn.frame.size = CGSize(width: 50, height: 50)
+            sliderValue.text = String(Int(btnSizeSlider.value))
+            iconSize = 50
         case 1:
-            btnSizeSlider.value = Float(width / 5)
-            middleBtn.frame.size = CGSize(width: width / 5, height: width / 5)
-            sliderValue.text = String(btnSizeSlider.value)
-            iconSize = width / 5
+            btnSizeSlider.value = Float(75)
+            middleBtn.frame.size = CGSize(width: 75, height: 75)
+            sliderValue.text = String(Int(btnSizeSlider.value))
+            iconSize = 75
         case 2:
-            btnSizeSlider.value = Float(width / 4)
-            middleBtn.frame.size = CGSize(width: width / 4, height: width / 4)
-            sliderValue.text = String(btnSizeSlider.value)
-            iconSize = width / 4
+            btnSizeSlider.value = Float(100)
+            middleBtn.frame.size = CGSize(width: 100, height: 100)
+            sliderValue.text = String(Int(btnSizeSlider.value))
+            iconSize = 100
         default:
             print("error")
         }
@@ -284,8 +352,10 @@ class GeneralViewController: UIViewController {
     
     @objc func moveSlider(_ sender: UISlider) {
         let size = CGFloat(sender.value)
-        middleBtn.frame.size = CGSize(width: size, height: size)
-        sliderValue.text = String(btnSizeSlider.value)
+        previewBtn.frame.size = CGSize(width: size, height: size)
+        previewBtn.center = CGPoint(x: width / 2, y: generalView.frame.height / 3)
+        //middleBtn.frame.size = CGSize(width: size, height: size)
+        sliderValue.text = String(Int(btnSizeSlider.value))
     }
     
     @objc func decSize(_ sender: UISlider) {
@@ -297,12 +367,15 @@ class GeneralViewController: UIViewController {
     
     let fontLabel = UILabel()
     let fontSizeSlider = UISlider()
+    let previewLabel = UILabel()
+    
     //font選択ボタン
     @objc func setFontType() {
         fontBtnArray.removeAll()
         removeSubviews(parentView: generalView)
-        let testMessage: String = "ABCDE"
+        //let testMessage: String = "ABCDE"
         
+        /*
         //フォントプレビュー
         fontLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width / 2, height: height / 10 * 3)
         fontLabel.text = "F"
@@ -311,9 +384,23 @@ class GeneralViewController: UIViewController {
         fontLabel.backgroundColor = .clear
         
         generalView.addSubview(fontLabel)
+        */
+        
+        
+        previewLabel.text = "ABCDEFGHIJKLMN\nOPQRSTUVWXYZ\n1234567890\nabcdefghijklmnopqrstuvwxyz"
+        previewLabel.textColor = tintColor
+        previewLabel.frame.size = CGSize(width: width / 4 * 3, height: height / 3)
+        previewLabel.numberOfLines = 0
+        previewLabel.textAlignment = NSTextAlignment.center
+        previewLabel.center = CGPoint(x: width / 2, y: 150)
+        previewLabel.font = UIFont(name: strFont, size: fontSize)
+        
+        generalView.addSubview(previewLabel)
         
         //フォントサイズ変更スライダー
-        fontSizeSlider.frame = CGRect(x: view.frame.width / 2, y: 0, width: view.frame.width / 3, height: height / 10 * 3)
+        //fontSizeSlider.frame = CGRect(x: view.frame.width / 2, y: 0, width: view.frame.width / 3, height: height / 10 * 3)
+        fontSizeSlider.frame.size = CGSize(width: width / 4 * 3, height: 50)
+        fontSizeSlider.center = CGPoint(x: width / 2, y: generalView.frame.height - 50)
         fontSizeSlider.layer.masksToBounds = false
         fontSizeSlider.backgroundColor = .clear
         //スライダーを動かした時の処理
@@ -321,11 +408,20 @@ class GeneralViewController: UIViewController {
         //スライダーを動かし終わったときの処理
         fontSizeSlider.addTarget(self, action: #selector(decFontSize), for: .touchUpInside)
         fontSizeSlider.minimumValue = Float(10)
-        fontSizeSlider.maximumValue = Float(70)
+        fontSizeSlider.maximumValue = Float(20)
         fontSizeSlider.value = Float(fontSize)
         
         generalView.addSubview(fontSizeSlider)
         
+        let fontChooseButton = UIButton()
+        fontChooseButton.frame.size = CGSize(width: 50, height: 50)
+        fontChooseButton.center = CGPoint(x: width / 2, y: generalView.frame.height / 4 * 3)
+        fontChooseButton.backgroundColor = .white
+        fontChooseButton.addTarget(self, action: #selector(selectFont), for: .touchUpInside)
+        
+        generalView.addSubview(fontChooseButton)
+        
+        /*
         fontScroll.frame = CGRect(x: 0, y: height / 10 * 3, width: generalView.frame.width, height: height / 10 * 5)
         //fontScroll.contentSize = CGSize(width: generalView.frame.width / 3 * CGFloat(fontArray.count / 2), height: generalView.frame.height)
         fontScroll.contentSize = CGSize(width: width, height: height / 10 * CGFloat(fontArray.count))
@@ -351,7 +447,41 @@ class GeneralViewController: UIViewController {
             fontBtnArray.append(fontBtn)
             fontScroll.addSubview(fontBtn)
         }
+        */
         generalView.addSubview(fontScroll)
+    }
+    
+    @objc func selectFont() {
+                // フォントピッカーの表示設定
+        let fontPickerConfig = UIFontPickerViewController.Configuration()
+        
+        // 複数のフォントフェイスを表示
+        fontPickerConfig.includeFaces = false
+        
+        // 各フォント名にそのフォントを適応する (true だとシステムフォントで表示されるっぽい)
+        fontPickerConfig.displayUsingSystemFont = false
+        
+        // 日本語フォントのみ表示
+        fontPickerConfig.filteredLanguagesPredicate = UIFontPickerViewController.Configuration.filterPredicate(forFilteredLanguages: ["en"])
+        
+        // フォントピッカーの設定
+        let fontPicker = UIFontPickerViewController(configuration: fontPickerConfig)
+        fontPicker.delegate = self
+        
+        self.present(fontPicker, animated: true, completion: nil)
+    }
+
+    // UIFontPickerViewControllerDelegate - 選択後
+    func fontPickerViewControllerDidPickFont(_ fontPicker: UIFontPickerViewController) {
+        if let fontName = fontPicker.selectedFontDescriptor?.postscriptName {
+            print("FontName: \(fontName)")
+            previewLabel.font = UIFont(name: fontName, size: fontSize)
+            strFont = fontName
+        }
+    }
+
+    // UIFontPickerViewControllerDelegate - キャンセル
+    func fontPickerViewControllerDidCancel(_ viewController: UIFontPickerViewController) {
     }
     
     @objc func chooseFont(_ sender: UIButton) {
@@ -367,6 +497,7 @@ class GeneralViewController: UIViewController {
     
     @objc func moveFontSlider(_ sender: UISlider) {
         fontLabel.font = UIFont(name: strFont, size: CGFloat(sender.value))
+        previewLabel.font = UIFont(name: strFont, size: CGFloat(sender.value))
     }
     
     @objc func decFontSize(_ sender: UISlider) {

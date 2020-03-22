@@ -62,6 +62,15 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     "icons8-gemini-100", "icons8-tire-swing-100","icons8-idea-bank-100", "icons8-to-do-100","icons8-inspection-100", "icons8-twitter-100",
     "icons8-instagram-100", "icons8-virgo-100","icons8-internet-100"]
     
+    let iconPopular: [String] = ["icons8-bookmark-100", "icons8-edit-100", "icons8-search-100", "icons8-document-100", "icons8-opened-folder-100",      "icons8-support-100", "icons8-facebook-old-100","icons8-instagram-100", "icons8-twitter-100", "icons8-clock-100", "icons8-lock-100", "icons8-news-100", "icons8-speech-bubble-100", "icons8-music-100", "icons8-cancer-100"]
+    let iconAstrogy: [String] = ["icons8-leo-100", "icons8-libra-100", "icons8-aquarius-100", "icons8-aries-100", "icons8-pisces-100", "icons8-scorpio-100", "icons8-virgo-100", "icons8-capricorn-100", "icons8-sagittarius-100", "icons8-taurus-100", "icons8-gemini-100"]
+    let iconBusiness: [String] = ["icons8-agreement-100", "icons8-answers-100", "icons8-bonds-100", "icons8-bad-idea-100", "icons8-idea-bank-100", "icons8-internet-100","icons8-inspection-100","icons8-questionnaire-100", "icons8-to-do-100", "icons8-doughnut-chart-100", "icons8-terms-and-conditions-100"]
+    let iconCinema: [String] = ["icons8-kicking-100", "icons8-attack-100", "icons8-comet-100", "icons8-galaxy-100", "icons8-planet-100","icons8-shooting-stars-100","icons8-punching-100"]
+    let iconCity: [String] = ["icons8-airport-100", "icons8-ferris-wheel-100", "icons8-city-100", "icons8-cafe-100", "icons8-meal-100","icons8-confetti-100", "icons8-roller-coaster-100","icons8-tire-swing-100","icons8-reserve-100",
+        "icons8-cinema-100", "icons8-restaurant-100"]
+    
+    var iconListArray: [[String]] = []
+    
     
     let red: [String] = ["d7003a","e95464","b7282d","e94709","c82b55","e83f5f","932e44","ea5548","e9474d"]
     let orange: [String] = ["f08300","ed6d3d","ee7948","f6ad48","f7b977","efa718","f39800","fbd8b5","df6c31"]
@@ -106,6 +115,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
         colorArray = [red, orange, yellow, yellowGreen, green, blueGreen, aquaSky, blue, indigo, violet,
                       magenta, pink, brown, blackWhite, gold, silver]
+        
+        iconListArray = [iconPopular, iconAstrogy, iconBusiness, iconCinema, iconCity]
         
         view.backgroundColor = UIColor(colorCode: backColor)
         tintColor = DecitionImageColor(view.backgroundColor!)
@@ -189,9 +200,49 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
         //1行に並ぶアイコンの数
         let iconPerLine = Int(width) / 40
-        //行数
-        let lineCount = iconNameList.count / iconPerLine
+        var lineCount = 0
         
+        for i in 0 ..< iconListArray.count {
+            
+            /*
+            let labelHeight = CGFloat((lineCount + 1) * 30)
+            
+            let iconListLabel = UILabel()
+            iconListLabel.frame = CGRect(x: 0, y: CGFloat(lineCount) * 50 + labelHeight - 30, width: width, height: 30)
+            iconListLabel.backgroundColor = tintColor
+            iconListLabel.text = "iconListTitle"
+            iconListLabel.textColor = .white
+ 
+            iconScroll.addSubview(iconListLabel)
+            */
+            
+            for j in 0 ..< iconListArray[i].count {
+                
+                let xPos = j % iconPerLine
+                let yPos = j / iconPerLine + lineCount
+                
+                
+                let iconStr = UIImage(named: iconListArray[i][j])?.withRenderingMode(.alwaysTemplate)
+                
+                let iconBtn = CustomUIButton()
+                iconBtn.iconCode = iconListArray[i][j]
+                iconBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+                iconBtn.frame = CGRect(x: width / CGFloat(iconPerLine) * CGFloat(xPos), y: CGFloat(yPos) * 50, width: 40, height: 40)
+                iconBtn.setImage(iconStr, for: .normal)
+                iconBtn.tintColor = tintColor
+                iconBtn.addTarget(self, action: #selector(selectIcon), for: .touchUpInside)
+                
+                iconScroll.addSubview(iconBtn)
+            }
+            lineCount = lineCount + (iconListArray[i].count / iconPerLine) + 1
+        }
+        iconScroll.contentSize = CGSize(width: width, height: CGFloat(lineCount + 1) * 100)
+        secondView.addSubview(iconScroll)
+        
+        //行数
+        //let lineCount = iconNameList.count / iconPerLine
+        
+        /*
         for i in 0 ..< iconNameList.count {
             let xPos = i % iconPerLine
             let yPos = i / iconPerLine
@@ -209,8 +260,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             
             iconScroll.addSubview(iconBtn)
         }
-        iconScroll.contentSize = CGSize(width: width, height: CGFloat(lineCount + 1) * 70)
-        secondView.addSubview(iconScroll)
+        */
+
     }
     
     @objc func selectIcon(_ sender: CustomUIButton) {
@@ -323,7 +374,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         setToolbarTextView()
         
         titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 9.5, height: height / 10)
-        titleField.font = UIFont(name: fontType, size: 30.0)
+        titleField.font = UIFont(name: fontType, size: fontSize + 5)
         titleField.textColor = tintColor
         titleField.text = titleText
         

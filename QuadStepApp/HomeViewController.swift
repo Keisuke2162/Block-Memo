@@ -350,10 +350,11 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             dataBtn.setImage(iconImage, for: .normal)
             dataBtn.backgroundColor = UIColor(colorCode: inputData[i].color!)
             
+
             let random = CGFloat.random(in: 0 ..< 5)
             dataBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: iconSize, height: iconSize)
             dataBtn.layer.cornerRadius = 10
-            let iconColor = DecitionImageColor(dataBtn.backgroundColor!)
+            let iconColor = DecitionImageColor(UIColor(colorCode: inputData[i].color!))
             dataBtn.tintColor = iconColor
             
             //dataBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
@@ -363,6 +364,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             view.addSubview(dataBtn)
             btnArray.append(dataBtn)
         }
+        
         //必ずview.addSubviewが先
         //makeGravity(sender: btnArray)
         

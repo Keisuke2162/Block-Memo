@@ -11,7 +11,7 @@ import UIKit
 //ホーム画面からボタン削除する用
 protocol RemoveButtonActionDelegate {
     func removeIcon(removeID: String)
-    func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String)
+    func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String, updateImage: String)
 }
 
 protocol MakeButtonActionDelegate {
@@ -35,7 +35,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     
     var titleText: String = ""
     var contentText: String = ""
-    var iconCode: String = "none_100"
+    var iconCode: String = ""
     var fontSize: CGFloat = 0.0
 
     
@@ -63,32 +63,24 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     "icons8-instagram-100", "icons8-virgo-100","icons8-internet-100"]
     
     let iconPopular: [String] = ["icons8-bookmark-100", "icons8-edit-100", "icons8-search-100", "icons8-document-100", "icons8-opened-folder-100",      "icons8-support-100", "icons8-facebook-old-100","icons8-instagram-100", "icons8-twitter-100", "icons8-clock-100", "icons8-lock-100", "icons8-news-100", "icons8-speech-bubble-100", "icons8-music-100", "icons8-cancer-100"]
-    let iconAstrogy: [String] = ["icons8-leo-100", "icons8-libra-100", "icons8-aquarius-100", "icons8-aries-100", "icons8-pisces-100", "icons8-scorpio-100", "icons8-virgo-100", "icons8-capricorn-100", "icons8-sagittarius-100", "icons8-taurus-100", "icons8-gemini-100"]
+    //let iconAstrogy: [String] = ["icons8-leo-100", "icons8-libra-100", "icons8-aquarius-100", "icons8-aries-100", "icons8-pisces-100", "icons8-scorpio-100", "icons8-virgo-100", "icons8-capricorn-100", "icons8-sagittarius-100", "icons8-taurus-100", "icons8-gemini-100"]
     let iconBusiness: [String] = ["icons8-agreement-100", "icons8-answers-100", "icons8-bonds-100", "icons8-bad-idea-100", "icons8-idea-bank-100", "icons8-internet-100","icons8-inspection-100","icons8-questionnaire-100", "icons8-to-do-100", "icons8-doughnut-chart-100", "icons8-terms-and-conditions-100"]
     let iconCinema: [String] = ["icons8-kicking-100", "icons8-attack-100", "icons8-comet-100", "icons8-galaxy-100", "icons8-planet-100","icons8-shooting-stars-100","icons8-punching-100"]
     let iconCity: [String] = ["icons8-airport-100", "icons8-ferris-wheel-100", "icons8-city-100", "icons8-cafe-100", "icons8-meal-100","icons8-confetti-100", "icons8-roller-coaster-100","icons8-tire-swing-100","icons8-reserve-100",
         "icons8-cinema-100", "icons8-restaurant-100"]
     
-    var iconListArray: [[String]] = []
+    let iconAnimal: [String] = ["icons8-bird-100","icons8-border-collie-100","icons8-bream-100","icons8-camel-100","icons8-chicken-100","icons8-dolphin-100","icons8-dove-100","icons8-duck-100","icons8-elephant-100","icons8-flying-duck-100","icons8-full-body-crow-100","icons8-giraffe-full-body-100","icons8-gorilla-100","icons8-hedgehog-100","icons8-horse-100","icons8-kangaroo-100","icons8-koala-100","icons8-manatee-100","icons8-octopus-100","icons8-orca-100","icons8-owl-100","icons8-penguin-100","icons8-pet-commands-stay-100","icons8-pig-100","icons8-seal-100","icons8-squirrel-100","icons8-stingray-100","icons8-whale-100","icons8-woodpecker-100"]
+    let iconCulture: [String] = ["icons8-angel-with-sword-100","icons8-ankh-100","icons8-anubis-100","icons8-balance-symbol-100","icons8-basilica-100","icons8-berlin-tv-tower-100","icons8-bull-100","icons8-cross-100","icons8-da-vinci-100","icons8-dali-100","icons8-double-decker-bus-100","icons8-easel-100","icons8-edvard-munch-100","icons8-german-hat-100","icons8-golden-fever-100","icons8-greek-helmet-100","icons8-katana-100","icons8-kawaii-bread-100","icons8-kawaii-broccoli-100","icons8-kawaii-coffee-100","icons8-kawaii-croissant-100","icons8-kawaii-cupcake-100","icons8-kawaii-dinosaur-100","icons8-kawaii-egg-100","icons8-kawaii-french-fries-100","icons8-kawaii-ice-cream-100","icons8-kawaii-milk-100","icons8-kawaii-noodle-100","icons8-kawaii-soda-100","icons8-kimono-100","icons8-lion-head-100","icons8-louvre-pyramid-100","icons8-moon-star-100","icons8-origami-100","icons8-pagoda-100","icons8-peace-pigeon-100","icons8-pentagram-devil-100","icons8-pyramids-100","icons8-red-fort-100","icons8-rodeo-100","icons8-sagrada-familia-100","icons8-salmon-sushi-100","icons8-sikh-100","icons8-taj-mahal-100","icons8-third-eye-symbol-100","icons8-thor-hammer-100","icons8-tiananmen-100","icons8-tomahawk-100","icons8-tower-of-pisa-100","icons8-tribal-symbols-100","icons8-triumphal-arch-100","icons8-trojan-horse-100","icons8-viking-helmet-100","icons8-viking-ship-100","icons8-yin-yang-100"]
+    let iconDIY: [String] = ["icons8-chainsaw-100","icons8-drill-100","icons8-garden-shears-100","icons8-hammer-100","icons8-paint-bucket-100","icons8-screwdriver-100","icons8-sickle-100","icons8-spade-100","icons8-wheelbarrow-100","icons8-yard-work-100"]
+    let iconDrink: [String] = ["icons8-beer-100","icons8-bottle-cap-100","icons8-cafe-100","icons8-champagne-bottle-100","icons8-cocktail-100","icons8-coconut-cocktail-100","icons8-coffee-pot-100","icons8-coffee-to-go-100","icons8-cola-100","icons8-cup-with-straw-100","icons8-soda-100","icons8-sport-bottle-100","icons8-tea-100","icons8-vodka-100","icons8-wine-bottle-100","icons8-wine-glass-100","icons8-wooden-beer-keg-100"]
+    let iconFood: [String] = ["icons8-banana-100","icons8-carrot-100","icons8-cherry-100","icons8-egg-stand-100","icons8-fish-and-vegetables-100","icons8-healthy-eating-100","icons8-lime-100","icons8-noodles-100","icons8-orange-100","icons8-pear-100","icons8-salami-pizza-100","icons8-spam-can-100","icons8-steak-very-hot-100","icons8-thanksgiving-100","icons8-tomato-100","icons8-watermelon-100"]
+    let iconGaming: [String] = ["icons8-ace-of-hearts-100","icons8-ace-of-spades-100","icons8-archer-100","icons8-clubs-100","icons8-defense-100","icons8-diamonds-100","icons8-dice-100","icons8-explosive-100","icons8-heart-outline-100","icons8-joker-100","icons8-king-of-diamonds-100","icons8-knight-100","icons8-mana-100","icons8-minecraft-sword-100","icons8-pacman-100","icons8-queen-100","icons8-queen-of-diamonds-100","icons8-rook-100","icons8-shield-100","icons8-slot-machine-100","icons8-spades-100","icons8-submachine-gun-100","icons8-tetris-100"]
+    let iconMaps: [String] = ["icons8-address-100","icons8-around-the-globe-100","icons8-asia-100","icons8-compass-south-100","icons8-globe-earth-100","icons8-gps-signal-100","icons8-location-100","icons8-map-marker-100","icons8-marker-100","icons8-marker-storm-100","icons8-marker-sun-100","icons8-signpost-100","icons8-world-map-100"]
+    let iconMusic: [String] = ["icons8-bass-drum-100","icons8-bugle-100","icons8-circled-play-100","icons8-cornet-100","icons8-dj-100","icons8-drum-set-100","icons8-french-horn-100","icons8-guitar-100","icons8-international-music-100","icons8-lullaby-100","icons8-metal-music-100","icons8-micro-100","icons8-microphone-100","icons8-musical-100","icons8-musical-notes-100","icons8-oud-100","icons8-powwow-drum-100","icons8-punk-100","icons8-r'n'b-100","icons8-rock-music-100","icons8-saxophone-100","icons8-tex-mex-100","icons8-tuba-100"]
+    let iconSports: [String] = ["icons8-archers-arrow-100","icons8-badminton-100","icons8-baseball-100","icons8-basketball-100","icons8-beach-100","icons8-bowling-pins-100","icons8-forest-100","icons8-horseback-riding-100","icons8-island-on-water-100","icons8-olympic-torch-100","icons8-ping-pong-100","icons8-rugby-100","icons8-tennis-ball-100","icons8-tennis-racquet-100","icons8-trotting-horse-100"]
     
-    /*
-    let red: [String] = ["d7003a","e95464","b7282d","e94709","c82b55","e83f5f","932e44","ea5548","e9474d"]
-    let orange: [String] = ["f08300","ed6d3d","ee7948","f6ad48","f7b977","efa718","f39800","fbd8b5","df6c31"]
-    let yellow: [String] = ["ffd900","fcc800","f5e56b","d2b74e","f8b500","fff33f","fff2b8","ffdc00","fff262"]
-    let yellowGreen: [String] = ["c8d921","c4c46a","afd147","d7cf3a","9d973b","c5de93","9dc04c","a7d28d","d9e367"]
-    let green: [String] = ["007c45","4f8a5d","005842","67be8d","009854","00aa6e","98ce97","3ab483","258c6d"]
-    let blueGreen: [String] = ["68b7a1","7ebeab","005243","7faba9","259f94","008969","005c4c","00a496","009aa3"]
-    let aquaSky: [String] = ["bce2e8","a0d8ef","a2d7dd","89c3eb","83ccd2","64bcc7","00afcc","a0d8ea","6c9bd2"]
-    let blue: [String] = ["239dda","2980af","1d50a2","007d8e","0068b7","008db7","00a0e9","3a8daa","26499d"]
-    let indigo: [String] = ["0f5779","213a70","18448e","55576c","082752","1f2e55","006788","154577","001d42"]
-    let violet: [String] = ["4e67b0","5654a2","706caa","bbbcde","51318f","4052a2","714f9d","c5b3d3","8e8bc2"]
-    let magenta: [String] = ["895687","cc7db1","e95295","460d43","e55a9b","d1bada","d9aacd","e4007f","eb6e9f"]
-    let pink: [String] = ["f09199","e7acb9","fef4f4","e94e66","f29c9f","f4ada3","fdeadf","da8d93","f5b090"]
-    let brown: [String] = ["bf7834","814336","762e05","6f4d3e","965036","6f4e27","916f24","8e5e4a","612c16"]
-    let blackWhite: [String] = ["2f2725","27120a","4b2d16","24130d","4e4449","fbfaf3","f8f5e3","fffffc","fbfdff"]
-    let gold: [String] = ["e48e00","fabf13","f7dc8d","f8b856","fdd000","a36b21","d98032","c4972f","fdd75d"]
-    let silver: [String] = ["949495","767676","7b8174","7a7c7d","afafb0","a99e93","ced1d3","c9c9c4","615f62"]
-    */
+    
+    var iconListArray: [[String]] = []
     
     let red: [String] = ["ea5548", "e95464", "e9474d", "e94709", "e83f5f", "d7003a", "c82b55", "b7282d", "932e44"]
     let orange: [String] = ["fbd8b5", "f7b977", "f6ad48", "f39800", "f08300", "efa718", "ee7948", "ed6d3d", "df6c31"]
@@ -111,17 +103,17 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //キーボードに合わせてScrollViewずらす
-        //configureObserver()
     }
     
+    //ホーム画面に戻る時の処理
     override func viewWillDisappear(_ animated: Bool) {
         titleText = titleField.text!
         contentText = textView.text
-        print("update color-> \(backColor)")
+        
+        print("update icon-> \(iconCode)")
         
         if let del  = self.removeIconDelegate {
-            del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor)
+            del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor, updateImage: iconCode)
         } else {
             print("unwrap error")
         }
@@ -131,12 +123,16 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        //色配列をまとめ
         colorArray = [red, orange, yellow, yellowGreen, green, blueGreen, aquaSky, blue, indigo, violet,
                       magenta, pink, brown, blackWhite, gold, silver]
         
-        iconListArray = [iconPopular, iconAstrogy, iconBusiness, iconCinema, iconCity]
+        //アイコン配列をまとめ
+        iconListArray = [iconPopular, iconBusiness, iconCinema, iconCity, iconAnimal, iconCulture, iconDIY, iconDrink, iconFood, iconGaming, iconMaps, iconMusic, iconSports]
         
+        //背景色設定(Home情報が必要)
         view.backgroundColor = UIColor(colorCode: backColor)
+        //tintcolor設定
         tintColor = DecitionImageColor(view.backgroundColor!)
         
         textView.delegate = self
@@ -151,6 +147,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         setPartsFirst()
         //2ページ目のセッティング
         setPartsSecond()
+        
+        MakeIconList()
         
         pageScrollView.addSubview(scrollView)
         view.addSubview(pageScrollView)
@@ -170,8 +168,27 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             decBtn1.backgroundColor = .black
             view.addSubview(decBtn1)
         }
+        
+        //キーボードの出現をかくにん
+        NotificationCenter.default.addObserver(self, selector: #selector(ShowedKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ClosedKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
+    
+    @objc func ShowedKeyboard() {
+        print("Opened Keyboard")
+        textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 3.5)
+    }
+    
+    @objc func ClosedKeyboard() {
+        print("Closed Keyboard")
+        textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 7)
+    }
+    
+    
     var secondView = UIView()
+    let imageBtn = UIButton()
+    let deleteBtn = UIButton()
+    let colorBtn = UIButton()
     
     //2ページ目の設定
     func setPartsSecond() {
@@ -183,7 +200,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             print("make New Icon")
         }else {
             //削除ボタン
-            let deleteBtn = UIButton()
+            
             let deleteIcon = UIImage(named: "delete_100")?.withRenderingMode(.alwaysTemplate)
             deleteBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
             deleteBtn.frame.size = CGSize(width: 70, height: 70)
@@ -194,56 +211,37 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
             pageScrollView.addSubview(deleteBtn)
         }
-
-        
         //colorボタン
-        let colorBtn = UIButton()
         let colorIcon = UIImage(named: "palette_100")?.withRenderingMode(.alwaysTemplate)
         colorBtn.frame.size = CGSize(width: 70, height: 70)
         colorBtn.center = CGPoint(x: width + width / 5, y: height / 10 * 8.5)
-        //colorBtn.frame = CGRect(x: width + (width / 5 * 1), y: height / 10 * 8, width: 70, height: 70)
-        //colorBtn.backgroundColor = .black
         colorBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         colorBtn.addTarget(self, action: #selector(colorSet), for: .touchUpInside)
         colorBtn.setImage(colorIcon, for: .normal)
+        colorBtn.tintColor = tintColor
         pageScrollView.addSubview(colorBtn)
         
         //imageボタン
-        let imageBtn = UIButton()
-        //imageBtn.frame = CGRect(x: width + (width / 5 * 2), y: height / 10 * 8, width: height / 15, height: height / 15)
+        let imageIcon = UIImage(named: "image_100")?.withRenderingMode(.alwaysTemplate)
         imageBtn.frame.size = CGSize(width: 70, height: 70)
         imageBtn.center = CGPoint(x: width + width / 2, y: height / 10 * 8.5)
-        imageBtn.backgroundColor = .red
+        imageBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         imageBtn.addTarget(self, action: #selector(tapImageBtn), for: .touchUpInside)
+        imageBtn.setImage(imageIcon, for: .normal)
+        imageBtn.tintColor = tintColor
         pageScrollView.addSubview(imageBtn)
         
         pageScrollView.addSubview(secondView)
     }
     let iconScroll = UIScrollView()
-    //アイコン一覧表示
-    @objc func tapImageBtn() {
-        removeSubviews(parentView: secondView)
-        removeSubviews(parentView: iconScroll)
-        
-        iconScroll.frame = CGRect(x: 0, y: 0, width: secondView.frame.width, height: secondView.frame.height)
-        
+    
+    func MakeIconList() {
+        iconScroll.frame = CGRect(x: 0, y: secondView.frame.height * 0.1, width: secondView.frame.width, height: secondView.frame.height * 0.9)
         //1行に並ぶアイコンの数
-        let iconPerLine = Int(width) / 40
+        let iconPerLine = Int(width) / 50
         var lineCount = 0
         
         for i in 0 ..< iconListArray.count {
-            
-            /*
-            let labelHeight = CGFloat((lineCount + 1) * 30)
-            
-            let iconListLabel = UILabel()
-            iconListLabel.frame = CGRect(x: 0, y: CGFloat(lineCount) * 50 + labelHeight - 30, width: width, height: 30)
-            iconListLabel.backgroundColor = tintColor
-            iconListLabel.text = "iconListTitle"
-            iconListLabel.textColor = .white
- 
-            iconScroll.addSubview(iconListLabel)
-            */
             
             for j in 0 ..< iconListArray[i].count {
                 
@@ -256,7 +254,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
                 let iconBtn = CustomUIButton()
                 iconBtn.iconCode = iconListArray[i][j]
                 iconBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-                iconBtn.frame = CGRect(x: width / CGFloat(iconPerLine) * CGFloat(xPos), y: CGFloat(yPos) * 50, width: 40, height: 40)
+                iconBtn.frame = CGRect(x: width / CGFloat(iconPerLine) * CGFloat(xPos), y: CGFloat(yPos) * 50, width: 50, height: 50)
                 iconBtn.setImage(iconStr, for: .normal)
                 iconBtn.tintColor = tintColor
                 iconBtn.addTarget(self, action: #selector(selectIcon), for: .touchUpInside)
@@ -266,10 +264,16 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             lineCount = lineCount + (iconListArray[i].count / iconPerLine) + 1
         }
         iconScroll.contentSize = CGSize(width: width, height: CGFloat(lineCount + 1) * 100)
+    }
+    //アイコン一覧表示
+    @objc func tapImageBtn() {
+        removeSubviews(parentView: secondView)
+        //removeSubviews(parentView: iconScroll)
         secondView.addSubview(iconScroll)
 
     }
     
+    //アイコンを選んだ時の処理
     @objc func selectIcon(_ sender: CustomUIButton) {
         for v in iconScroll.subviews {
             if let v = v as? CustomUIButton {
@@ -319,22 +323,28 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         secondView.addSubview(colorScroll)
     }
     
-    
+    //色を選択した時の処理
     @objc func tapColorButton(_ sender: CustomUIButton) {
         backColor = sender.colorCode!
         view.backgroundColor = UIColor(colorCode: backColor)
         tintColor = DecitionImageColor(UIColor(colorCode: backColor))
         
+        deleteBtn.tintColor = tintColor
+        colorBtn.tintColor = tintColor
+        imageBtn.tintColor = tintColor
+        textView.textColor = tintColor
+        titleField.textColor = tintColor
+        
         decBtn1.backgroundColor = tintColor
         decBtn1.tintColor = UIColor(colorCode: backColor)
     }
 
-    
+    //デリートボタンを選択した時の処理
     @objc func tapDeleteBtn() {
         Alert(title: "Delete?", message: "")
     }
     
-    //アラート表示
+    //削除確認アラート表示関数
     func Alert(title: String, message: String){
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) in
@@ -448,48 +458,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     @objc func commitButtonTapped() {
         textView.resignFirstResponder()
         self.view.endEditing(true)
-    }
-    
-    // Notificationを設定
-    func configureObserver() {
-          
-      let notification = NotificationCenter.default
-
-      notification.addObserver(
-        self,
-        selector: #selector(self.keyboardWillShow(notification:)),
-        name: UIResponder.keyboardWillShowNotification,
-        object: nil
-      )
-          
-      notification.addObserver(
-        self,
-        selector: #selector(self.keyboardWillHide(notification:)),
-        name: UIResponder.keyboardWillHideNotification,
-        object: nil
-      )
-    }
-      
-    // Notificationを削除
-    func removeObserver() {
-      NotificationCenter.default.removeObserver(self)
-    }
-      
-    // キーボードが現れたときにviewをずらす
-    @objc func keyboardWillShow(notification: Notification?) {
-      let rect = (notification?.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
-      let duration: TimeInterval? = notification?.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double
-      UIView.animate(withDuration: duration!) {
-        self.view.transform = CGAffineTransform(translationX: 0, y: -(rect?.size.height)!)
-      }
-    }
-      
-    // キーボードが消えたときにviewを戻す
-    @objc func keyboardWillHide(notification: Notification?) {
-      let duration: TimeInterval? = notification?.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? Double
-      UIView.animate(withDuration: duration!) {
-        self.view.transform = CGAffineTransform.identity
-      }
     }
     
     //アイコンの色を白か黒か決める

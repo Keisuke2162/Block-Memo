@@ -9,22 +9,24 @@
 import UIKit
 
 class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButtonActionDelegate, UISearchBarDelegate {
-    
-    
-    
     //既存アイコンの内容を更新　→ CoreDataのデータを更新
-    func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String) {
+    func updateIcon(updateId: String, updateTitle: String, updateText: String, updateColor: String, updateImage: String) {
         //view上のsubViewの中からボタンかつ設定IDでが一致したものをターゲット
+        let iconImage = UIImage(named: updateImage)?.withRenderingMode(.alwaysTemplate)
+        
         for v in view.subviews {
             if let v = v as? CustomUIButton, v.id == updateId {
                 v.title = updateTitle
                 v.text = updateText
                 v.color = updateColor
+                v.iconCode = updateImage
+                v.setImage(nil, for: .normal)
+                v.setImage(iconImage, for: .normal)
                 v.backgroundColor = UIColor(colorCode: updateColor)
                 v.tintColor = DecitionImageColor(UIColor(colorCode: updateColor))
             }
         }
-        coreData.DataUpdate(updateId: updateId, updateTitle: updateTitle, updateText: updateText, updateColor: updateColor)
+        coreData.DataUpdate(updateId: updateId, updateTitle: updateTitle, updateText: updateText, updateColor: updateColor, updateIconCode: updateImage)
     }
     
     //アイコンの削除
@@ -65,6 +67,12 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     var backColor: String = "ffffff"
     var fontSize: CGFloat = 0.0
     
+    //プレビュー表示用()
+    private var pageScrollView = UIScrollView()
+    private var pageControll = UIPageControl()
+    private var pageNum: Int!
+    let previewBtn = CustomUIButton()
+    
     //画面下部のタブの高さ
     var tabbarHeight: CGFloat = 0.0
     
@@ -100,12 +108,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         backColor = getData.2
         fontSize = getData.3
         
-        
         view.backgroundColor = UIColor(colorCode: backColor)
     }
-    
-    let subView = UIView()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,7 +119,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         width = view.frame.width
         height = view.frame.height
         
-        
         //userDefaultから設定とってくる
         let getData = dataClass.getData()
         fontType = getData.0
@@ -123,22 +126,19 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         backColor = getData.2
         fontSize = getData.3
         
+        
+        let queue = DispatchQueue.global(qos: .background)
+        
+        queue.async {
+            
+        }
+        
         view.backgroundColor = UIColor(colorCode: backColor)
         
         //ボタンの初期配置を設定
         setButton()
 
         // Do any additional setup after loading the view.
-        
-        /*
-        memoSearch.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height / 10)
-        //memoSearch.showsScopeBar = true
-        memoSearch.layer.position = CGPoint(x: view.frame.width / 2, y: view.frame.height / 10)
-        memoSearch.backgroundColor = .white
-        memoSearch.placeholder = "検索ワード"
-        memoSearch.delegate = self
-        view.addSubview(memoSearch)
- */
     }
     
     //ボタンの新規作成
@@ -166,7 +166,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             makeBtn.backgroundColor = UIColor(colorCode: setIconColor)
             
             //アイコン画像設定
-            makeBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+            makeBtn.imageEdgeInsets = UIEdgeInsets(top: iconSize / 3.5, left: iconSize / 3.5, bottom: iconSize / 3.5, right: iconSize / 3.5)
             let iconImage = UIImage(named: iconString)?.withRenderingMode(.alwaysTemplate)
             makeBtn.setImage(iconImage, for: .normal)
             
@@ -174,8 +174,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             let iconColor = DecitionImageColor(UIColor(colorCode: setIconColor))
             makeBtn.tintColor = iconColor
             
-            makeBtn.addTarget(self, action: #selector(previewShow), for: .touchUpInside)
-            makeBtn.addTarget(self, action: #selector(nextView), for: .touchDownRepeat)
+            //makeBtn.addTarget(self, action: #selector(previewShow), for: .touchUpInside)
+            makeBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
             
             view.addSubview(makeBtn)
             btnArray.append(makeBtn)
@@ -185,32 +185,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             addBtn = false
             //CoreDataに新規追加
             coreData.DataAdd(id: uuid, title: setTitle, img: iconString, color: setIconColor, content: setContentText)
-        }
-        //検索バーを再描画(アイコンボタンを検索バーの裏を通すため)
-        view.addSubview(memoSearch)
-    }
-    
-    //検索バーで入力してキーボードのSearchを押したら処理
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        //まずキーボードを閉じる
-        searchBar.resignFirstResponder()
-        self.view.endEditing(true)
-        
-        //各メモ内のテキストに検索ワードが入ってたらフレームを縁取り
-        let searchStr = searchBar.text!
-        
-        print(searchStr)
-        for v in view.subviews {
-            if let v = v as? CustomUIButton {
-                v.layer.borderWidth = 0.0
-                if let str = v.text {
-                    if str.caseInsensitiveCompare(searchStr) == .orderedSame {
-                        print("Hit!")
-                        v.layer.borderColor = UIColor.black.cgColor
-                        v.layer.borderWidth = 3.0
-                    }
-                }
-            }
         }
     }
     
@@ -243,27 +217,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         return color
     }
     
-    @objc func previewShow(sender: CustomUIButton) {
-        
-        let iconImage = UIImage(named: sender.iconCode!)?.withRenderingMode(.alwaysTemplate)
-        iconView.image = iconImage
-        
-        titleLabel.text = sender.title
-        textLabel.text = sender.text
-        subView.backgroundColor = UIColor(colorCode: sender.color!)
-        
-        iconView.tintColor = sender.tintColor
-        titleLabel.textColor = sender.tintColor
-        textLabel.textColor = sender.tintColor
-        
-        titleLabel.font = UIFont(name: fontType, size: 30)
-        textLabel.font = UIFont(name: fontType, size: 15)
-        
-        logoView.image = nil
-        
-        titleLabel.adjustsFontForContentSizeCategory = true
-    }
-    
     //表示画面への遷移
     @objc func nextView(sender: CustomUIButton) {
         
@@ -279,19 +232,14 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.fontType = fontType
         vc.removeIconDelegate = self
         vc.btnID = sender.id!
+        vc.iconCode = sender.iconCode!
         vc.modalPresentationStyle = .formSheet
         vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
         
         present(vc, animated: true, completion: nil)
-        
-        subView.backgroundColor = .black
-        titleLabel.text = ""
-        textLabel.text = ""
-        iconView.image = nil
-        let logoImg = UIImage(named: "apple-logo-144")?.withRenderingMode(.alwaysTemplate)
-        logoView.image = logoImg
     }
     
+    //新規作成画面への遷移処理
     @objc func gotoMakeView(sender: CustomUIButton) {
         let vc = MemoTextViewController()
         //let color = sender.backgroundColor
@@ -311,11 +259,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         present(vc, animated: true, completion: nil)
     }
-    
-    let textLabel = UILabel()
-    let titleLabel = UILabel()
-    let iconView = UIImageView()
-    let logoView = UIImageView()
+
 
     //ボタンの初期配置
     func setButton() {
@@ -335,8 +279,16 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         view.addSubview(setBtn)
         
+        //プレビューエリア
+        previewBtn.frame.size = CGSize(width: width * 0.9, height: height * 0.1)
+        previewBtn.center = CGPoint(x: width / 2, y: height * 0.7)
+        previewBtn.layer.cornerRadius = 10.0
+        previewBtn.backgroundColor = .white
+        
+        
         //CoreDataから読み込み
         inputData = coreData.DataGet()
+
         
         for i in 0 ..< inputData.count {
             let dataBtn = CustomUIButton()
@@ -345,7 +297,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             dataBtn.text = inputData[i].contentText
             dataBtn.color = inputData[i].color!
             dataBtn.iconCode = inputData[i].img!
-            dataBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+            dataBtn.imageEdgeInsets = UIEdgeInsets(top: iconSize / 3.5, left: iconSize / 3.5, bottom: iconSize / 3.5, right: iconSize / 3.5)
             let iconImage = UIImage(named: inputData[i].img!)?.withRenderingMode(.alwaysTemplate)
             dataBtn.setImage(iconImage, for: .normal)
             dataBtn.backgroundColor = UIColor(colorCode: inputData[i].color!)
@@ -357,67 +309,56 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             let iconColor = DecitionImageColor(UIColor(colorCode: inputData[i].color!))
             dataBtn.tintColor = iconColor
             
-            //dataBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
-            dataBtn.addTarget(self, action: #selector(previewShow), for: .touchUpInside)
-            dataBtn.addTarget(self, action: #selector(nextView), for: .touchDownRepeat)
+            dataBtn.addTarget(self, action: #selector(nextView), for: .touchUpInside)
             
             view.addSubview(dataBtn)
             btnArray.append(dataBtn)
+            
+            let subArea = UIView()
+            subArea.frame = CGRect(x: previewBtn.frame.width * CGFloat(i + 1), y: 0, width: previewBtn.frame.width, height: previewBtn.frame.height)
+            subArea.backgroundColor = UIColor(colorCode: inputData[i].color!)
+            
+            let subImage = UIImageView()
+            subImage.frame.size = CGSize(width: subArea.frame.height * 0.5, height: subArea.frame.height * 0.5)
+            subImage.center = CGPoint(x: subArea.frame.height * 0.5, y: subArea.frame.height / 2)
+            subImage.image = iconImage
+            subImage.tintColor = iconColor
+            
+            let titleLabel = UILabel()
+            titleLabel.frame = CGRect(x: subArea.frame.height, y: 0, width: subArea.frame.width - (subArea.frame.height), height: subArea.frame.height)
+            titleLabel.text = inputData[i].title
+            titleLabel.font = UIFont(name: fontType, size: fontSize)
+            titleLabel.textColor = iconColor
+            
+            subArea.addSubview(titleLabel)
+            subArea.addSubview(subImage)
+            pageScrollView.addSubview(subArea)
         }
         
-        //必ずview.addSubviewが先
-        //makeGravity(sender: btnArray)
+        view.addSubview(previewBtn)
+        btnArray.append(previewBtn)
         
-        //************************プレビューエリア*****************************
+        //プレビューのページ設定
+        pageScrollView.frame = CGRect(x: 0, y: 0, width: previewBtn.frame.width, height: previewBtn.frame.height)
+        pageScrollView.contentSize = CGSize(width: previewBtn.frame.width * CGFloat(btnArray.count - 1), height: previewBtn.frame.height)
+        pageScrollView.delegate = self
+        pageScrollView.isPagingEnabled = true
+        pageScrollView.showsHorizontalScrollIndicator = false
+        pageScrollView.layer.cornerRadius = 10.0
         
-        //プレビューエリア
-        subView.frame = CGRect(x: 0, y: 0, width: width, height: height / 10 * 2.5)
-        subView.backgroundColor = .black
+        pageControll.frame = CGRect(x: 0, y: pageScrollView.frame.height - 10, width: pageScrollView.frame.width, height: 5)
+        pageControll.numberOfPages = btnArray.count - 1
+        pageControll.pageIndicatorTintColor = view.backgroundColor
+        pageControll.currentPageIndicatorTintColor = .black
         
-        //アイコン
+        previewBtn.addSubview(pageScrollView)
+        previewBtn.addSubview(pageControll)
 
         
-        iconView.frame = CGRect(x: 25, y: 0, width: width / 6, height: width / 6)
-        //iconView.frame.size = CGSize(width: width / 5, height: width / 5)
-        iconView.center.y = subView.frame.height / 2
-        //let iconImage = UIImage(named: "kodi")?.withRenderingMode(.alwaysTemplate)
-        //iconView.image = iconImage
-        iconView.tintColor = .white
-        
-        //タイトル
-        titleLabel.frame = CGRect(x: width / 6 * 2, y: 0, width: width / 6 * 4, height: height / 10 * 1.5)
-        //titleLabel.backgroundColor = .black
-        titleLabel.textColor = .white
-        //titleLabel.text = "Title"
-        titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.font = UIFont(name: fontType, size: fontSize)
-        
-        //テキスト
-        
-        textLabel.frame = CGRect(x: width / 6 * 2, y: height / 10 * 1.5, width: width / 6 * 4, height: height / 10)
-        //textLabel.backgroundColor = .gray
-        //textLabel.text = "text"
-        textLabel.adjustsFontForContentSizeCategory = true
-        textLabel.textColor = .white
-        textLabel.numberOfLines = 0
-        
-        view.addSubview(subView)
-        subView.addSubview(iconView)
-        subView.addSubview(titleLabel)
-        subView.addSubview(textLabel)
-        
-        //初期ロゴ配置
-        
-        logoView.frame.size = CGSize(width: subView.frame.height / 2, height: subView.frame.height / 2)
-        logoView.center = CGPoint(x: subView.frame.width / 2, y: subView.frame.height / 2)
-        let logoImg = UIImage(named: "apple-logo-144")?.withRenderingMode(.alwaysTemplate)
-        logoView.image = logoImg
-        subView.addSubview(logoView)
     }
     
     func makeGravity(sender: [CustomUIButton]) {
         animator = UIDynamicAnimator(referenceView: self.view)
-        
         gravity = UIGravityBehavior(items: sender)
         
         let collision = UICollisionBehavior(items: sender)
@@ -432,9 +373,6 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    
-
     /*
     // MARK: - Navigation
 
@@ -444,5 +382,12 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         // Pass the selected object to the new view controller.
     }
     */
-
 }
+
+
+extension HomeViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        pageControll.currentPage = Int(pageScrollView.contentOffset.x / pageScrollView.frame.width)
+    }
+}
+ 

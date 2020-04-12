@@ -18,7 +18,6 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private lazy var firstViewController: HomeViewController = {
         
-        //conHomeView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostViewed, tag: 1)
         let firstItem = UITabBarItem(title: "Home", image: UIImage(named: "home"), tag: 1)
         firstItem.imageInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         conHomeView.tabBarItem = firstItem
@@ -30,7 +29,6 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     private lazy var thirdViewController: GeneralViewController = {
         
-        //conGeneralView.tabBarItem = UITabBarItem(tabBarSystemItem: .mostRecent, tag: 1)
         let thirdItem = UITabBarItem(title: "Setting", image: UIImage(named: "gear"), tag: 1)
         thirdItem.imageInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         conGeneralView.tabBarItem = thirdItem
@@ -47,6 +45,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
         
         setViewControllers(viewControllers, animated: false)
         
+        //設定データを取り出す
         let dataClass = GeneralDataManagement()
         let getData = dataClass.getData()
         conHomeView.fontType = getData.0
@@ -54,6 +53,7 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
         conHomeView.backColor = getData.2
         
         // Do any additional setup after loading the view.
+
     }
     
     override func viewWillAppear(_ animated: Bool) {

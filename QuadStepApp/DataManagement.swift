@@ -102,7 +102,7 @@ class CoreDataManagement {
     }
     
     //指定データ更新
-    func DataUpdate(updateId: String, updateTitle: String, updateText: String, updateColor: String){
+    func DataUpdate(updateId: String, updateTitle: String, updateText: String, updateColor: String, updateIconCode: String){
         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
         let fetchRequest: NSFetchRequest<HomeData> = HomeData.fetchRequest()
         
@@ -115,6 +115,7 @@ class CoreDataManagement {
                     //result[num].img = saveData.img
                     result[num].color = updateColor
                     result[num].contentText = updateText
+                    result[num].img = updateIconCode
                     
                     break
                 }

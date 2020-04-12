@@ -65,25 +65,6 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
     let btnSizeSlider = UISlider()
     let sliderValue = UILabel() //スライダーの値表示用ラベル
     
-    /*
-    let red: [String] = ["d7003a","e95464","b7282d","e94709","c82b55","e83f5f","932e44","ea5548","e9474d"]
-    let orange: [String] = ["f08300","ed6d3d","ee7948","f6ad48","f7b977","efa718","f39800","fbd8b5","df6c31"]
-    let yellow: [String] = ["ffd900","fcc800","f5e56b","d2b74e","f8b500","fff33f","fff2b8","ffdc00","fff262"]
-    let yellowGreen: [String] = ["c8d921","c4c46a","afd147","d7cf3a","9d973b","c5de93","9dc04c","a7d28d","d9e367"]
-    let green: [String] = ["007c45","4f8a5d","005842","67be8d","009854","00aa6e","98ce97","3ab483","258c6d"]
-    let blueGreen: [String] = ["68b7a1","7ebeab","005243","7faba9","259f94","008969","005c4c","00a496","009aa3"]
-    let aquaSky: [String] = ["bce2e8","a0d8ef","a2d7dd","89c3eb","83ccd2","64bcc7","00afcc","a0d8ea","6c9bd2"]
-    let blue: [String] = ["239dda","2980af","1d50a2","007d8e","0068b7","008db7","00a0e9","3a8daa","26499d"]
-    let indigo: [String] = ["0f5779","213a70","18448e","55576c","082752","1f2e55","006788","154577","001d42"]
-    let violet: [String] = ["4e67b0","5654a2","706caa","bbbcde","51318f","4052a2","714f9d","c5b3d3","8e8bc2"]
-    let magenta: [String] = ["895687","cc7db1","e95295","460d43","e55a9b","d1bada","d9aacd","e4007f","eb6e9f"]
-    let pink: [String] = ["f09199","e7acb9","fef4f4","e94e66","f29c9f","f4ada3","fdeadf","da8d93","f5b090"]
-    let brown: [String] = ["bf7834","814336","762e05","6f4d3e","965036","6f4e27","916f24","8e5e4a","612c16"]
-    let blackWhite: [String] = ["2f2725","27120a","4b2d16","24130d","4e4449","fbfaf3","f8f5e3","fffffc","fbfdff"]
-    let gold: [String] = ["e48e00","fabf13","f7dc8d","f8b856","fdd000","a36b21","d98032","c4972f","fdd75d"]
-    let silver: [String] = ["949495","767676","7b8174","7a7c7d","afafb0","a99e93","ced1d3","c9c9c4","615f62"]
-    */
-    
     let red: [String] = ["ea5548", "e95464", "e9474d", "e94709", "e83f5f", "d7003a", "c82b55", "b7282d", "932e44"]
     let orange: [String] = ["fbd8b5", "f7b977", "f6ad48", "f39800", "f08300", "efa718", "ee7948", "ed6d3d", "df6c31"]
     let yellow: [String] = ["fff33f", "fff2b8", "fff262", "ffdc00", "ffd900", "fcc800", "f8b500", "f5e56b", "d2b74e"]
@@ -261,6 +242,8 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
     }
     
     let previewBtn = UIButton()
+    var size: CGFloat = 0.0
+    
     
     //********************************************************************************
     @objc func setBtnSize() {
@@ -317,7 +300,7 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
         previewBtn.center = CGPoint(x: width / 2, y: generalView.frame.height / 3)
         previewBtn.backgroundColor = tintColor
         let image = UIImage(named: "kodi")?.withRenderingMode(.alwaysTemplate)
-        previewBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        previewBtn.imageEdgeInsets = UIEdgeInsets(top: iconSize / 3.5, left: iconSize / 3.5, bottom: iconSize / 3.5, right: iconSize / 3.5)
         previewBtn.tintColor = UIColor(colorCode: backColor)
         previewBtn.setImage(image, for: .normal)
         previewBtn.layer.cornerRadius = 10.0
@@ -336,28 +319,31 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
         switch sender.tag {
         case 0:
             btnSizeSlider.value = Float(50)
-            middleBtn.frame.size = CGSize(width: 50, height: 50)
-            sliderValue.text = String(Int(btnSizeSlider.value))
             iconSize = 50
         case 1:
             btnSizeSlider.value = Float(75)
-            middleBtn.frame.size = CGSize(width: 75, height: 75)
-            sliderValue.text = String(Int(btnSizeSlider.value))
+            previewBtn.frame.size = CGSize(width: 75, height: 75)
             iconSize = 75
         case 2:
             btnSizeSlider.value = Float(100)
-            middleBtn.frame.size = CGSize(width: 100, height: 100)
-            sliderValue.text = String(Int(btnSizeSlider.value))
+            previewBtn.frame.size = CGSize(width: 100, height: 100)
             iconSize = 100
         default:
             print("error")
         }
+        size = CGFloat(btnSizeSlider.value)
+        sliderValue.text = String(Int(btnSizeSlider.value))
+        previewBtn.imageEdgeInsets = UIEdgeInsets(top: size / 3.5, left: size / 3.5, bottom: size / 3.5, right: size / 3.5)
+        previewBtn.frame.size = CGSize(width: size, height: size)
+        previewBtn.center = CGPoint(x: width / 2, y: generalView.frame.height / 3)
     }
     
     @objc func moveSlider(_ sender: UISlider) {
-        let size = CGFloat(sender.value)
+        size = CGFloat(sender.value)
+        previewBtn.imageEdgeInsets = UIEdgeInsets(top: size / 3.5, left: size / 3.5, bottom: size / 3.5, right: size / 3.5)
         previewBtn.frame.size = CGSize(width: size, height: size)
         previewBtn.center = CGPoint(x: width / 2, y: generalView.frame.height / 3)
+        
         //middleBtn.frame.size = CGSize(width: size, height: size)
         sliderValue.text = String(Int(btnSizeSlider.value))
     }
@@ -365,7 +351,6 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
     @objc func decSize(_ sender: UISlider) {
         let size = CGFloat(sender.value)
         iconSize = size
-        //middleBtn.center = CGPoint(x: testView.center.x, y: testView.center.y)
     }
     //**************************************************************************************
     
@@ -377,19 +362,6 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
     @objc func setFontType() {
         fontBtnArray.removeAll()
         removeSubviews(parentView: generalView)
-        //let testMessage: String = "ABCDE"
-        
-        /*
-        //フォントプレビュー
-        fontLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width / 2, height: height / 10 * 3)
-        fontLabel.text = "F"
-        fontLabel.textAlignment = NSTextAlignment.center
-        fontLabel.font = UIFont(name: strFont, size: fontSize)
-        fontLabel.backgroundColor = .clear
-        
-        generalView.addSubview(fontLabel)
-        */
-        
         
         previewLabel.text = "ABCDEFGHIJKLMN\nOPQRSTUVWXYZ\n1234567890\nabcdefghijklmnopqrstuvwxyz"
         previewLabel.textColor = tintColor
@@ -402,7 +374,6 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
         generalView.addSubview(previewLabel)
         
         //フォントサイズ変更スライダー
-        //fontSizeSlider.frame = CGRect(x: view.frame.width / 2, y: 0, width: view.frame.width / 3, height: height / 10 * 3)
         fontSizeSlider.frame.size = CGSize(width: width / 4 * 3, height: 50)
         fontSizeSlider.center = CGPoint(x: width / 2, y: generalView.frame.height - 50)
         fontSizeSlider.layer.masksToBounds = false
@@ -428,33 +399,6 @@ class GeneralViewController: UIViewController, UIFontPickerViewControllerDelegat
         
         generalView.addSubview(fontChooseButton)
         
-        /*
-        fontScroll.frame = CGRect(x: 0, y: height / 10 * 3, width: generalView.frame.width, height: height / 10 * 5)
-        //fontScroll.contentSize = CGSize(width: generalView.frame.width / 3 * CGFloat(fontArray.count / 2), height: generalView.frame.height)
-        fontScroll.contentSize = CGSize(width: width, height: height / 10 * CGFloat(fontArray.count))
-        
-        for i in 0 ..< fontArray.count {
-            
-            //フォント選択ボタンの設定
-            let fontBtn = UIButton()
-            //fontBtn.frame = CGRect(x:btnWidth, y: btnHeight, width: generalView.frame.width / 3, height: generalView.frame.height / 2)
-            fontBtn.frame = CGRect(x: 0, y: height / 10 * CGFloat(i), width: width, height: height / 10)
-            fontBtn.backgroundColor = .clear
-            fontBtn.setTitle(testMessage, for: .normal)
-            fontBtn.titleLabel?.font = UIFont(name: fontArray[i], size: 25.0)
-            fontBtn.setTitleColor(.black, for: .normal)
-            fontBtn.tag = i
-            fontBtn.addTarget(self, action: #selector(chooseFont), for: .touchUpInside)
-            
-            if strFont == fontArray[i] {
-                fontBtn.layer.borderWidth = 2.0
-                fontBtn.layer.borderColor = UIColor.black.cgColor
-            }
-            
-            fontBtnArray.append(fontBtn)
-            fontScroll.addSubview(fontBtn)
-        }
-        */
         generalView.addSubview(fontScroll)
     }
     

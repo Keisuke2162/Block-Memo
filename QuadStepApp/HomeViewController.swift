@@ -100,6 +100,11 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     var animator: UIDynamicAnimator!
     var gravity: UIGravityBehavior!
     
+    //メモ閲覧・メモ作成画面
+    let vc = MemoTextViewController()
+    
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         //userDefaultから設定とってくる（設定画面から返ってきた時に通る）
         let getData = dataClass.getData()
@@ -109,6 +114,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         fontSize = getData.3
         
         view.backgroundColor = UIColor(colorCode: backColor)
+        
     }
     
     override func viewDidLoad() {
@@ -125,20 +131,19 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         iconSize = getData.1
         backColor = getData.2
         fontSize = getData.3
-        
-        
-        let queue = DispatchQueue.global(qos: .background)
-        
-        queue.async {
-            
-        }
-        
+
         view.backgroundColor = UIColor(colorCode: backColor)
         
         //ボタンの初期配置を設定
         setButton()
 
         // Do any additional setup after loading the view.
+        
+        //***********************test***************************
+        let countLabel = UILabel()
+        countLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        countLabel.text = String(inputData.count)
+        view.addSubview(countLabel)
     }
     
     //ボタンの新規作成
@@ -217,10 +222,12 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         return color
     }
     
+    
+    
     //表示画面への遷移
     @objc func nextView(sender: CustomUIButton) {
         
-        let vc = MemoTextViewController()
+        //let vc = MemoTextViewController()
         //let color = sender.backgroundColor
         let tint = sender.tintColor
         
@@ -241,7 +248,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     
     //新規作成画面への遷移処理
     @objc func gotoMakeView(sender: CustomUIButton) {
-        let vc = MemoTextViewController()
+        //let vc = MemoTextViewController()
         //let color = sender.backgroundColor
         let tint = sender.tintColor
         
@@ -253,6 +260,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.contentText = ""
         vc.fontType = fontType
         vc.fontSize = fontSize
+        vc.iconCode = ""
         vc.makeFlag = true
         vc.modalPresentationStyle = .formSheet
         vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
@@ -302,9 +310,10 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
             dataBtn.setImage(iconImage, for: .normal)
             dataBtn.backgroundColor = UIColor(colorCode: inputData[i].color!)
             
-
-            let random = CGFloat.random(in: 0 ..< 5)
-            dataBtn.frame = CGRect(x: view.frame.width / 6 * random, y: 0, width: iconSize, height: iconSize)
+            let sizeValue = width / iconSize
+            let random = CGFloat.random(in: 0 ..< sizeValue)
+            dataBtn.frame = CGRect(x: view.frame.width / (sizeValue + 1.0) * random, y: -(view.frame.height / sizeValue * random), width: iconSize, height: iconSize)
+            
             dataBtn.layer.cornerRadius = 10
             let iconColor = DecitionImageColor(UIColor(colorCode: inputData[i].color!))
             dataBtn.tintColor = iconColor
@@ -362,8 +371,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         gravity = UIGravityBehavior(items: sender)
         
         let collision = UICollisionBehavior(items: sender)
-        collision.translatesReferenceBoundsIntoBoundary = true
-        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y:0, width: view.frame.width, height: view.frame.height - tabbarHeight)
+        collision.translatesReferenceBoundsIntoBoundary = false
+        collision.addBoundary(withIdentifier: "barrier" as NSCopying, for: UIBezierPath(rect: CGRect(x: 0, y: 0 - view.frame.height, width: view.frame.width, height: view.frame.height - tabbarHeight + view.frame.height)
         ))
         animator.addBehavior(collision)
         animator.addBehavior(gravity)

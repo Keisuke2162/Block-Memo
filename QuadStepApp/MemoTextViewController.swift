@@ -51,16 +51,17 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     private var pageControll = UIPageControl()
     private var pageNum: Int!
     
-    //アイコン名
-    let iconNameList: [String] = ["icons8-agreement-100", "icons8-kicking-100", "icons8-airport-100", "icons8-leo-100", "icons8-answers-100", "icons8-libra-100",
-    "icons8-aquarius-100", "icons8-lock-100","icons8-aries-100", "icons8-meal-100","icons8-attack-100", "icons8-music-100","icons8-bad-idea-100", "icons8-news-100",
-    "icons8-bonds-100", "icons8-opened-folder-100","icons8-bookmark-100", "icons8-pisces-100","icons8-cafe-100", "icons8-planet-100","icons8-cancer-100", "icons8-punching-100",
-    "icons8-capricorn-100", "icons8-questionnaire-100","icons8-cinema-100", "icons8-reserve-100","icons8-city-100", "icons8-restaurant-100",
-    "icons8-clock-100", "icons8-roller-coaster-100","icons8-comet-100", "icons8-sagittarius-100","icons8-confetti-100", "icons8-scorpio-100",
-    "icons8-document-100", "icons8-search-100","icons8-doughnut-chart-100", "icons8-shooting-stars-100","icons8-edit-100", "icons8-speech-bubble-100",
-    "icons8-facebook-old-100", "icons8-support-100","icons8-ferris-wheel-100", "icons8-taurus-100","icons8-galaxy-100", "icons8-terms-and-conditions-100",
-    "icons8-gemini-100", "icons8-tire-swing-100","icons8-idea-bank-100", "icons8-to-do-100","icons8-inspection-100", "icons8-twitter-100",
-    "icons8-instagram-100", "icons8-virgo-100","icons8-internet-100"]
+    //新規作成ボタン
+    let decBtn1 = CustomUIButton()
+    
+    //2ページ目のパーツ
+    var secondView = UIView()
+    let imageBtn = CustomUIButton()
+    let deleteBtn = CustomUIButton()
+    let colorBtn = CustomUIButton()
+    
+    //アイコン一覧を表示するView
+    let iconScroll = UIScrollView()
     
     let iconPopular: [String] = ["icons8-bookmark-100", "icons8-edit-100", "icons8-search-100", "icons8-document-100", "icons8-opened-folder-100",      "icons8-support-100", "icons8-facebook-old-100","icons8-instagram-100", "icons8-twitter-100", "icons8-clock-100", "icons8-lock-100", "icons8-news-100", "icons8-speech-bubble-100", "icons8-music-100", "icons8-cancer-100"]
     //let iconAstrogy: [String] = ["icons8-leo-100", "icons8-libra-100", "icons8-aquarius-100", "icons8-aries-100", "icons8-pisces-100", "icons8-scorpio-100", "icons8-virgo-100", "icons8-capricorn-100", "icons8-sagittarius-100", "icons8-taurus-100", "icons8-gemini-100"]
@@ -78,8 +79,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     let iconMaps: [String] = ["icons8-address-100","icons8-around-the-globe-100","icons8-asia-100","icons8-compass-south-100","icons8-globe-earth-100","icons8-gps-signal-100","icons8-location-100","icons8-map-marker-100","icons8-marker-100","icons8-marker-storm-100","icons8-marker-sun-100","icons8-signpost-100","icons8-world-map-100"]
     let iconMusic: [String] = ["icons8-bass-drum-100","icons8-bugle-100","icons8-circled-play-100","icons8-cornet-100","icons8-dj-100","icons8-drum-set-100","icons8-french-horn-100","icons8-guitar-100","icons8-international-music-100","icons8-lullaby-100","icons8-metal-music-100","icons8-micro-100","icons8-microphone-100","icons8-musical-100","icons8-musical-notes-100","icons8-oud-100","icons8-powwow-drum-100","icons8-punk-100","icons8-r'n'b-100","icons8-rock-music-100","icons8-saxophone-100","icons8-tex-mex-100","icons8-tuba-100"]
     let iconSports: [String] = ["icons8-archers-arrow-100","icons8-badminton-100","icons8-baseball-100","icons8-basketball-100","icons8-beach-100","icons8-bowling-pins-100","icons8-forest-100","icons8-horseback-riding-100","icons8-island-on-water-100","icons8-olympic-torch-100","icons8-ping-pong-100","icons8-rugby-100","icons8-tennis-ball-100","icons8-tennis-racquet-100","icons8-trotting-horse-100"]
-    
-    
+
     var iconListArray: [[String]] = []
     
     let red: [String] = ["ea5548", "e95464", "e9474d", "e94709", "e83f5f", "d7003a", "c82b55", "b7282d", "932e44"]
@@ -100,9 +100,91 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     let silver: [String] = ["ced1d3", "c9c9c4", "afafb0", "a99e93", "949495", "7b8174", "7a7c7d", "767676", "615f62"]
     var colorArray: [[String]] = []
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        
+        print("MemoTextViewController - viewDidLoad")
+        
+        //色配列をまとめ
+        colorArray = [red, orange, yellow, yellowGreen, green, blueGreen, aquaSky, blue, indigo, violet,
+                      magenta, pink, brown, blackWhite, gold, silver]
+        
+        //アイコン配列をまとめ
+        iconListArray = [iconPopular, iconBusiness, iconCinema, iconCity, iconAnimal, iconCulture, iconDIY, iconDrink, iconFood, iconGaming, iconMaps, iconMusic, iconSports]
+        
+        textView.delegate = self
+        scrollView.delegate = self
+        
+        height = view.frame.height
+        width = view.frame.width
+        
+        //ページ形式になるようセッティング
+        pageSetting()
+        //1ページ目のパーツ配置
+        setPartsFirst()
+        //2ページ目のパーツ配置
+        setPartsSecond()
+        
+        //アイコンリスト読み込み
+        let queue = DispatchQueue.global(qos: .background)
+        
+        queue.async {
+            print("非同期処理開始")
+            self.MakeIconList()
+            print("非同期処理終了")
+        }
+        
+        pageScrollView.addSubview(scrollView)
+        view.addSubview(pageScrollView)
+        view.addSubview(pageControll)
+        
+        //キーボードの開閉で処理
+        NotificationCenter.default.addObserver(self, selector: #selector(ShowedKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(ClosedKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        print("MemoTextViewController - viewWillAppear")
+        //背景色設定
+        view.backgroundColor = UIColor(colorCode: backColor)
+        //tintcolor設定
+        tintColor = DecitionImageColor(view.backgroundColor!)
+        
+        //tintColorの設定
+        TintcolorUpdate()
+        
+        //データ配置処理
+        DataPaste()
+        
+        //
+        iconFrameLabel.layer.borderColor = UIColor.clear.cgColor
+        
+        //確定ボタン
+        let decIcon = UIImage(named: "OK_100")?.withRenderingMode(.alwaysTemplate)
+        decBtn1.title = "definite"
+        decBtn1.frame = CGRect(x: width - 80, y: height - 120, width: 120, height: 120)
+        decBtn1.imageEdgeInsets = UIEdgeInsets(top: 30, left: 30, bottom: 60, right: 60)
+        decBtn1.layer.cornerRadius = 60
+        decBtn1.setImage(decIcon, for: .normal)
+        decBtn1.tintColor = .white
+        decBtn1.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
+        decBtn1.backgroundColor = .black
+        view.addSubview(decBtn1)
+        
+        //新規作成の場合は確定ボタン,閲覧の場合は削除ボタンを配置
+        if makeFlag {
+            deleteBtn.isHidden = true
+            decBtn1.isHidden = false
+            iconCode = ""
+        } else {
+            decBtn1.isHidden = true
+            deleteBtn.isHidden = false
+        }
+        
+        pageScrollView.contentOffset = CGPoint(x: 0, y: 0)
     }
     
     //ホーム画面に戻る時の処理
@@ -112,105 +194,90 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
         print("update icon-> \(iconCode)")
         
-        if let del  = self.removeIconDelegate {
-            del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor, updateImage: iconCode)
-        } else {
-            print("unwrap error")
-        }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        
-        //色配列をまとめ
-        colorArray = [red, orange, yellow, yellowGreen, green, blueGreen, aquaSky, blue, indigo, violet,
-                      magenta, pink, brown, blackWhite, gold, silver]
-        
-        //アイコン配列をまとめ
-        iconListArray = [iconPopular, iconBusiness, iconCinema, iconCity, iconAnimal, iconCulture, iconDIY, iconDrink, iconFood, iconGaming, iconMaps, iconMusic, iconSports]
-        
-        //背景色設定(Home情報が必要)
-        view.backgroundColor = UIColor(colorCode: backColor)
-        //tintcolor設定
-        tintColor = DecitionImageColor(view.backgroundColor!)
-        
-        textView.delegate = self
-        scrollView.delegate = self
-        
-        height = view.frame.height
-        width = view.frame.width
-        
-        //おページ形式になるようセッティング
-        pageSetting()
-        //1ページ目のセッティング
-        setPartsFirst()
-        //2ページ目のセッティング
-        setPartsSecond()
-        
-        MakeIconList()
-        
-        pageScrollView.addSubview(scrollView)
-        view.addSubview(pageScrollView)
-        view.addSubview(pageControll)
-        
-        
-        //新規作成の場合は確定ボタンを表示
         if makeFlag {
-            //確定ボタン
-            let decIcon = UIImage(named: "OK_100")?.withRenderingMode(.alwaysTemplate)
-            decBtn1.frame = CGRect(x: width - 80, y: height - 120, width: 120, height: 120)
-            decBtn1.imageEdgeInsets = UIEdgeInsets(top: 30, left: 30, bottom: 60, right: 60)
-            decBtn1.layer.cornerRadius = 60
-            decBtn1.setImage(decIcon, for: .normal)
-            decBtn1.tintColor = .white
-            decBtn1.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
-            decBtn1.backgroundColor = .black
-            view.addSubview(decBtn1)
+
+            makeFlag = false
+        } else {
+            if let del  = self.removeIconDelegate {
+                del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor, updateImage: iconCode)
+            } else {
+                print("unwrap error")
+            }
+        }
+    }
+    
+    func TintcolorUpdate() {
+        
+        deleteBtn.tintColor = tintColor
+        colorBtn.tintColor = tintColor
+        imageBtn.tintColor = tintColor
+        textView.textColor = tintColor
+        titleField.textColor = tintColor
+        
+        iconFrameLabel.layer.borderColor = tintColor.cgColor
+        
+        decBtn1.backgroundColor = tintColor
+        
+        for v in iconScroll.subviews {
+            if let v = v as? CustomUIButton {
+                v.tintColor = tintColor
+            }
         }
         
-        //キーボードの出現をかくにん
-        NotificationCenter.default.addObserver(self, selector: #selector(ShowedKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ClosedKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        /*
+        for i in 0 ..< iconScroll.subviews.count {
+            iconScroll.subviews[i].tintColor = tintColor
+        }
+ */
     }
     
-    @objc func ShowedKeyboard() {
-        print("Opened Keyboard")
-        textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 3.5)
+    func DataPaste() {
+        titleField.font = UIFont(name: fontType, size: fontSize + 5)
+        titleField.textColor = tintColor
+        titleField.text = titleText
+        
+        textView.textColor = tintColor
+        textView.font = UIFont(name: fontType, size: fontSize)
+        textView.text = contentText
     }
     
-    @objc func ClosedKeyboard() {
-        print("Closed Keyboard")
+    func setPartsFirst() {
+        scrollView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+
+        //textViewにDoneボタンを追加
+        setToolbarTextView()
+        
+        titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 9.5, height: height / 10)
+        scrollView.addSubview(titleField)
+        
+        
         textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 7)
+        textView.backgroundColor = .clear
+        textView.layer.cornerRadius = 10.0
+        
+        textView.linkTextAttributes = [
+            NSAttributedString.Key.foregroundColor: UIColor.blue
+        ]
+        textView.isSelectable = true
+        textView.dataDetectorTypes = .link
+        
+        scrollView.addSubview(textView)
+    
+        //削除ボタン
+        let deleteIcon = UIImage(named: "delete_100")?.withRenderingMode(.alwaysTemplate)
+        deleteBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        deleteBtn.frame.size = CGSize(width: 70, height: 70)
+        deleteBtn.center = CGPoint(x: width + width / 5 * 4, y: height / 10 * 8.5)
+        deleteBtn.setImage(deleteIcon, for: .normal)
+        deleteBtn.tintColor = tintColor
+        deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
+        pageScrollView.addSubview(deleteBtn)
     }
-    
-    
-    var secondView = UIView()
-    let imageBtn = UIButton()
-    let deleteBtn = UIButton()
-    let colorBtn = UIButton()
     
     //2ページ目の設定
     func setPartsSecond() {
         
         secondView.frame = CGRect(x: width, y: 0, width: width, height: height / 10 * 8)
-        secondView.backgroundColor = .clear
-        
-        if makeFlag {
-            print("make New Icon")
-        }else {
-            //削除ボタン
-            
-            let deleteIcon = UIImage(named: "delete_100")?.withRenderingMode(.alwaysTemplate)
-            deleteBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-            deleteBtn.frame.size = CGSize(width: 70, height: 70)
-            deleteBtn.center = CGPoint(x: width + width / 5 * 4, y: height / 10 * 8.5)
-            //deleteBtn.frame = CGRect(x: width + (width / 5 * 4), y: height / 10 * 8, width: 70, height: 70)
-            deleteBtn.setImage(deleteIcon, for: .normal)
-            deleteBtn.tintColor = tintColor
-            deleteBtn.addTarget(self, action: #selector(tapDeleteBtn), for: .touchUpInside)
-            pageScrollView.addSubview(deleteBtn)
-        }
         //colorボタン
         let colorIcon = UIImage(named: "palette_100")?.withRenderingMode(.alwaysTemplate)
         colorBtn.frame.size = CGSize(width: 70, height: 70)
@@ -232,25 +299,31 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         pageScrollView.addSubview(imageBtn)
         
         pageScrollView.addSubview(secondView)
+        
+
     }
-    let iconScroll = UIScrollView()
+    //アイコン一覧表示
+    @objc func tapImageBtn() {
+        removeSubviews(parentView: secondView)
+
+        secondView.addSubview(iconScroll)
+    }
     
     func MakeIconList() {
+        //アイコン一覧画面設定
         iconScroll.frame = CGRect(x: 0, y: secondView.frame.height * 0.1, width: secondView.frame.width, height: secondView.frame.height * 0.9)
+        
         //1行に並ぶアイコンの数
         let iconPerLine = Int(width) / 50
         var lineCount = 0
         
         for i in 0 ..< iconListArray.count {
-            
             for j in 0 ..< iconListArray[i].count {
                 
                 let xPos = j % iconPerLine
                 let yPos = j / iconPerLine + lineCount
                 
-                
                 let iconStr = UIImage(named: iconListArray[i][j])?.withRenderingMode(.alwaysTemplate)
-                
                 let iconBtn = CustomUIButton()
                 iconBtn.iconCode = iconListArray[i][j]
                 iconBtn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -265,24 +338,17 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         }
         iconScroll.contentSize = CGSize(width: width, height: CGFloat(lineCount + 1) * 100)
     }
-    //アイコン一覧表示
-    @objc func tapImageBtn() {
-        removeSubviews(parentView: secondView)
-        //removeSubviews(parentView: iconScroll)
-        secondView.addSubview(iconScroll)
-
-    }
+    
+    let iconFrameLabel = UILabel()
     
     //アイコンを選んだ時の処理
     @objc func selectIcon(_ sender: CustomUIButton) {
-        for v in iconScroll.subviews {
-            if let v = v as? CustomUIButton {
-                v.layer.borderWidth = 0.0
-            }
-        }
-        //let iconStr = sender.iconCode
-        sender.layer.borderWidth = 2.0
-        sender.layer.borderColor = tintColor.cgColor
+        
+        iconFrameLabel.frame.size = CGSize(width: 50, height: 50)
+        iconFrameLabel.center = sender.center
+        iconFrameLabel.layer.borderWidth = 1.0
+        iconFrameLabel.layer.borderColor = tintColor.cgColor
+        iconScroll.addSubview(iconFrameLabel)
         
         iconCode = sender.iconCode!
         let decIcon = UIImage(named: iconCode)?.withRenderingMode(.alwaysTemplate)
@@ -329,13 +395,9 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         view.backgroundColor = UIColor(colorCode: backColor)
         tintColor = DecitionImageColor(UIColor(colorCode: backColor))
         
-        deleteBtn.tintColor = tintColor
-        colorBtn.tintColor = tintColor
-        imageBtn.tintColor = tintColor
-        textView.textColor = tintColor
-        titleField.textColor = tintColor
-        
-        decBtn1.backgroundColor = tintColor
+        //tintColorの設定
+        TintcolorUpdate()
+
         decBtn1.tintColor = UIColor(colorCode: backColor)
     }
 
@@ -366,6 +428,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         present(alertController, animated: true, completion: nil)
     }
     
+    //
     func pageSetting() {
         pageScrollView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         pageScrollView.contentSize = CGSize(width: width * 2, height: height)
@@ -379,39 +442,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         pageControll.pageIndicatorTintColor = .lightGray
         pageControll.currentPageIndicatorTintColor = .black
         
-    }
-    
-    let decBtn1 = CustomUIButton()
-    
-    func setPartsFirst() {
-        scrollView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-
-        //textViewにDoneボタンを追加
-        setToolbarTextView()
-        
-        titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 9.5, height: height / 10)
-        titleField.font = UIFont(name: fontType, size: fontSize + 5)
-        titleField.textColor = tintColor
-        titleField.text = titleText
-        
-        scrollView.addSubview(titleField)
-        
-        
-        textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 7)
-        textView.backgroundColor = .clear
-        textView.layer.cornerRadius = 10.0
-        textView.textColor = tintColor
-        print("fontSIze = \(fontSize)")
-        textView.font = UIFont(name: fontType, size: fontSize)
-        textView.text = contentText
-        
-        textView.linkTextAttributes = [
-            NSAttributedString.Key.foregroundColor: UIColor.blue
-        ]
-        textView.isSelectable = true
-        textView.dataDetectorTypes = .link
-        
-        scrollView.addSubview(textView)
     }
     
     //完了ボタン押下時
@@ -429,11 +459,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
                 print("unwrap error")
             }
         })
-    }
-    
-    //戻るボタンを押下したら閉じる
-    @objc func tappedReturn() {
-        dismiss(animated: true, completion: nil)
     }
     
     func setToolbarTextView() {
@@ -472,6 +497,16 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             color = .white
         }
         return color
+    }
+    //キーボード出現時
+    @objc func ShowedKeyboard() {
+        print("Opened Keyboard")
+        textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 3.5)
+    }
+    //キーボード消滅時
+    @objc func ClosedKeyboard() {
+        print("Closed Keyboard")
+        textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 7)
     }
     
 

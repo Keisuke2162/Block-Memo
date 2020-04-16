@@ -53,6 +53,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     
     //新規作成ボタン
     let decBtn1 = CustomUIButton()
+    //キャンセルボタン
+    let cancelBtn = CustomUIButton()
     
     //2ページ目のパーツ
     var secondView = UIView()
@@ -168,14 +170,24 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         //確定ボタン
         let decIcon = UIImage(named: "OK_100")?.withRenderingMode(.alwaysTemplate)
         decBtn1.title = "definite"
-        decBtn1.frame = CGRect(x: width - 80, y: height - 120, width: 120, height: 120)
+        decBtn1.frame = CGRect(x: width - 80, y: height - 80, width: 120, height: 120)
         decBtn1.imageEdgeInsets = UIEdgeInsets(top: 30, left: 30, bottom: 60, right: 60)
-        decBtn1.layer.cornerRadius = 60
+        decBtn1.layer.cornerRadius = 40
         decBtn1.setImage(decIcon, for: .normal)
         decBtn1.tintColor = .white
-        decBtn1.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
         decBtn1.backgroundColor = .black
+        decBtn1.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
         view.addSubview(decBtn1)
+        
+        let cancelImage = UIImage(named: "icons8-cancel-100")?.withRenderingMode(.alwaysTemplate)
+        cancelBtn.frame = CGRect(x: -40, y: height - 80, width: 120, height: 120)
+        cancelBtn.imageEdgeInsets = UIEdgeInsets(top: 30, left: 60, bottom: 60, right: 30)
+        cancelBtn.layer.cornerRadius = 40
+        cancelBtn.setImage(cancelImage, for: .normal)
+        cancelBtn.tintColor = .white
+        cancelBtn.backgroundColor = .black
+        cancelBtn.addTarget(self, action: #selector(TapCancel), for: .touchUpInside)
+        view.addSubview(cancelBtn)
         
         //新規作成の場合は確定ボタン,閲覧の場合は削除ボタンを配置
         if makeFlag {
@@ -183,35 +195,17 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             decBtn1.isHidden = false
             iconCode = ""
         } else {
-            decBtn1.isHidden = true
+            //decBtn1.isHidden = true
             deleteBtn.isHidden = false
         }
         
         pageScrollView.contentOffset = CGPoint(x: 0, y: 0)
     }
     
-    //ホーム画面に戻る時の処理
-    override func viewDidDisappear(_ animated: Bool) {
-        titleText = titleField.text!
-        contentText = textView.text
-        
-        print("update icon-> \(iconCode)")
-        
-        if makeFlag {
-            print("retnrnView")
-        } else {
-            if let del  = self.removeIconDelegate {
-                del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor, updateImage: iconCode)
-            } else {
-                print("unwrap error")
-            }
-        }
+    @objc func TapCancel() {
+        print("cancel")
+        dismiss(animated: true, completion: nil)
     }
-    /*
-    override func viewdiddis(_ animated: Bool) {
-
-    }
-    */
     
     func TintcolorUpdate() {
         
@@ -224,18 +218,13 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         iconFrameLabel.layer.borderColor = tintColor.cgColor
         
         decBtn1.backgroundColor = tintColor
+        cancelBtn.backgroundColor = tintColor
         
         for v in iconScroll.subviews {
             if let v = v as? CustomUIButton {
                 v.tintColor = tintColor
             }
         }
-        
-        /*
-        for i in 0 ..< iconScroll.subviews.count {
-            iconScroll.subviews[i].tintColor = tintColor
-        }
- */
     }
     
     func DataPaste() {
@@ -408,6 +397,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         TintcolorUpdate()
 
         decBtn1.tintColor = UIColor(colorCode: backColor)
+        cancelBtn.tintColor = UIColor(colorCode: backColor)
     }
 
     //デリートボタンを選択した時の処理
@@ -458,16 +448,33 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         var titleText: String = ""
         var contentText: String = ""
         
-        self.dismiss(animated: true, completion: {
-            if let del = self.makeIconDelegate {
-                titleText = self.titleField.text!
-                contentText = self.textView.text!
-                
-                del.startMakeButton(title: titleText, contentText: contentText, iconColor: self.backColor, iconName: self.iconCode)
-            } else {
-                print("unwrap error")
-            }
-        })
+        titleText = titleField.text!
+        contentText = textView.text
+        
+        print("update icon-> \(iconCode)")
+        
+        if makeFlag {
+            self.dismiss(animated: true, completion: {
+                if let del = self.makeIconDelegate {
+                    titleText = self.titleField.text!
+                    contentText = self.textView.text!
+                    
+                    del.startMakeButton(title: titleText, contentText: contentText, iconColor: self.backColor, iconName: self.iconCode)
+                } else {
+                    print("unwrap error")
+                }
+            })
+        } else {
+            self.dismiss(animated: true, completion: {
+                if let del  = self.removeIconDelegate {
+                    del.updateIcon(updateId: self.btnID, updateTitle: titleText, updateText: contentText, updateColor: self.backColor, updateImage: self.iconCode)
+                } else {
+                    print("unwrap error")
+                }
+            })
+
+        }
+
     }
     
     func setToolbarTextView() {

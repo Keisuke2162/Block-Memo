@@ -236,7 +236,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.btnID = sender.id!
         vc.makeFlag = false
         vc.iconCode = sender.iconCode!
-        vc.modalPresentationStyle = .formSheet
+        vc.modalPresentationStyle = .fullScreen
         vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
         
         present(vc, animated: true, completion: nil)
@@ -258,7 +258,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.fontSize = fontSize
         vc.iconCode = ""
         vc.makeFlag = true
-        vc.modalPresentationStyle = .formSheet
+        vc.modalPresentationStyle = .fullScreen
         vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
         
         present(vc, animated: true, completion: nil)

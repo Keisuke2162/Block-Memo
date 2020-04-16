@@ -197,6 +197,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         if makeFlag {
             deleteBtn.isHidden = true
             decBtn1.isHidden = false
+            textView.becomeFirstResponder()
             iconCode = ""
         } else {
             //decBtn1.isHidden = true
@@ -219,10 +220,13 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         textView.textColor = tintColor
         titleField.textColor = tintColor
         
+        
         iconFrameLabel.layer.borderColor = tintColor.cgColor
         
         decBtn1.layer.borderColor = tintColor.cgColor
         cancelBtn.layer.borderColor = tintColor.cgColor
+        textView.tintColor = tintColor
+        titleField.tintColor = tintColor
         
         for v in iconScroll.subviews {
             if let v = v as? CustomUIButton {
@@ -248,12 +252,15 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         setToolbarTextView()
         
         titleField.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 0.5, width: width / 10 * 9.5, height: height / 10)
+        titleField.placeholder = "Title"
+        
         scrollView.addSubview(titleField)
         
         
         textView.frame = CGRect(x: width / 10 * 0.5, y: height / 10 * 1.5, width: width / 10 * 9.5, height: height / 10 * 7)
         textView.backgroundColor = .clear
         textView.layer.cornerRadius = 10.0
+        
         
         textView.linkTextAttributes = [
             NSAttributedString.Key.foregroundColor: UIColor.blue
@@ -539,6 +546,11 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
 
 
 }

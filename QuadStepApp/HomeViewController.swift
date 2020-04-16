@@ -62,7 +62,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     
     //設定データ読み込み用の変数
     let dataClass = GeneralDataManagement()
-    var iconSize: CGFloat = 75.0
+    var iconSize: CGFloat = 55.0
     var fontType: String = ""
     var backColor: String = "ffffff"
     var fontSize: CGFloat = 0.0
@@ -103,6 +103,9 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
     //メモ閲覧・メモ作成画面
     let vc = MemoTextViewController()
     
+    //チュートリアル文章
+    let tutorial: String = "Text\n \n \n× → CANCEL\n✔︎ → OK \n \nNext page \n  → Color, Image, Delete button"
+    
     
     
     override func viewDidAppear(_ animated: Bool) {
@@ -136,6 +139,16 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         
         //ボタンの初期配置を設定
         setButton()
+        
+        //初回起動ならチュートリアル？用のメモを落としておいてあげる
+        let firstBool = dataClass.CheckFirstView()
+        
+        if firstBool {
+            startMakeButton(title: "Title", contentText: tutorial, iconColor: "001d42", iconName: "icons8-document-100")
+            dataClass.FalseFirstView()
+        } else {
+            print("初回起動ではありません")
+        }
 
         // Do any additional setup after loading the view.d
         

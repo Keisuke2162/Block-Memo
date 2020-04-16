@@ -16,20 +16,31 @@ class GeneralDataManagement {
     //User Defaultから取得　＆　UserDefaultに保存する値
     //var strFont: String = ""
     //var iconSize: CGFloat = 0.0
+    let firstViewValue = UserDefaults.standard
+    
+    func CheckFirstView() -> (Bool){
+        firstViewValue.register(defaults: ["firstView": true])
+        let checkValue = firstViewValue.object(forKey: "firstView") as! Bool
+        print("firstView -> \(checkValue)")
+        
+        return checkValue
+    }
+    
+    func FalseFirstView() {
+        firstViewValue.set(false, forKey: "firstView")
+    }
     
     
     func getData() -> (String, CGFloat, String, CGFloat){
-        
-        
         
         //var strFont: String = ""
         //var iconSize: CGFloat = 0.0
         //var backGround: UIColor
         
-        userDefault.register(defaults: ["FontSet": "AppleSDGothicNeo-Thin"])
-        userDefault.register(defaults: ["IconSize" : 75.0])
+        userDefault.register(defaults: ["FontSet": "Apple SD Gothic Neo"])
+        userDefault.register(defaults: ["IconSize" : 55.0])
         userDefault.register(defaults: ["BackColor" : "67a5da"])
-        userDefault.register(defaults: ["fontSize" : 25.0])
+        userDefault.register(defaults: ["fontSize" : 20.0])
         
         let strFont = userDefault.object(forKey: "FontSet") as! String
         let iconSize = userDefault.object(forKey: "IconSize") as! CGFloat

@@ -173,9 +173,11 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         decBtn1.frame = CGRect(x: width - 80, y: height - 80, width: 120, height: 120)
         decBtn1.imageEdgeInsets = UIEdgeInsets(top: 30, left: 30, bottom: 60, right: 60)
         decBtn1.layer.cornerRadius = 40
+        decBtn1.layer.borderWidth = 1.0
+        decBtn1.layer.borderColor = DecitionImageColor(UIColor(colorCode: backColor)).cgColor
         decBtn1.setImage(decIcon, for: .normal)
-        decBtn1.tintColor = .white
-        decBtn1.backgroundColor = .black
+        decBtn1.tintColor = DecitionImageColor(UIColor(colorCode: backColor))
+        decBtn1.backgroundColor = .clear
         decBtn1.addTarget(self, action: #selector(doneIcon), for: .touchUpInside)
         view.addSubview(decBtn1)
         
@@ -183,9 +185,11 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         cancelBtn.frame = CGRect(x: -40, y: height - 80, width: 120, height: 120)
         cancelBtn.imageEdgeInsets = UIEdgeInsets(top: 30, left: 60, bottom: 60, right: 30)
         cancelBtn.layer.cornerRadius = 40
+        cancelBtn.layer.borderWidth = 1.0
+        cancelBtn.layer.borderColor = DecitionImageColor(UIColor(colorCode: backColor)).cgColor
         cancelBtn.setImage(cancelImage, for: .normal)
-        cancelBtn.tintColor = .white
-        cancelBtn.backgroundColor = .black
+        cancelBtn.tintColor = DecitionImageColor(UIColor(colorCode: backColor))
+        cancelBtn.backgroundColor = .clear
         cancelBtn.addTarget(self, action: #selector(TapCancel), for: .touchUpInside)
         view.addSubview(cancelBtn)
         
@@ -217,8 +221,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         
         iconFrameLabel.layer.borderColor = tintColor.cgColor
         
-        decBtn1.backgroundColor = tintColor
-        cancelBtn.backgroundColor = tintColor
+        decBtn1.layer.borderColor = tintColor.cgColor
+        cancelBtn.layer.borderColor = tintColor.cgColor
         
         for v in iconScroll.subviews {
             if let v = v as? CustomUIButton {
@@ -396,8 +400,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         //tintColorの設定
         TintcolorUpdate()
 
-        decBtn1.tintColor = UIColor(colorCode: backColor)
-        cancelBtn.tintColor = UIColor(colorCode: backColor)
+        decBtn1.tintColor = tintColor
+        cancelBtn.tintColor = tintColor
     }
 
     //デリートボタンを選択した時の処理

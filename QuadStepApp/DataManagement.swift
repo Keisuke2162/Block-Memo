@@ -28,7 +28,7 @@ class GeneralDataManagement {
         
         userDefault.register(defaults: ["FontSet": "AppleSDGothicNeo-Thin"])
         userDefault.register(defaults: ["IconSize" : 75.0])
-        userDefault.register(defaults: ["BackColor" : "ffffff"])
+        userDefault.register(defaults: ["BackColor" : "67a5da"])
         userDefault.register(defaults: ["fontSize" : 25.0])
         
         let strFont = userDefault.object(forKey: "FontSet") as! String

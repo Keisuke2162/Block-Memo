@@ -127,13 +127,14 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         setPartsSecond()
         
         //アイコンリスト読み込み
-        let queue = DispatchQueue.global(qos: .background)
+        let queue = DispatchQueue.global(qos: .default)
         
         queue.async {
             print("非同期処理開始")
-            self.MakeIconList()
+            //self.MakeIconList()
             print("非同期処理終了")
         }
+        
         
         pageScrollView.addSubview(scrollView)
         view.addSubview(pageScrollView)
@@ -142,6 +143,8 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         //キーボードの開閉で処理
         NotificationCenter.default.addObserver(self, selector: #selector(ShowedKeyboard), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ClosedKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        MakeIconList()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -188,15 +191,14 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
     }
     
     //ホーム画面に戻る時の処理
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         titleText = titleField.text!
         contentText = textView.text
         
         print("update icon-> \(iconCode)")
         
         if makeFlag {
-
-            makeFlag = false
+            print("retnrnView")
         } else {
             if let del  = self.removeIconDelegate {
                 del.updateIcon(updateId: btnID, updateTitle: titleText, updateText: contentText, updateColor: backColor, updateImage: iconCode)
@@ -205,6 +207,11 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
             }
         }
     }
+    /*
+    override func viewdiddis(_ animated: Bool) {
+
+    }
+    */
     
     func TintcolorUpdate() {
         
@@ -316,9 +323,11 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         //1行に並ぶアイコンの数
         let iconPerLine = Int(width) / 50
         var lineCount = 0
-        
+        var iconCount = 0
         for i in 0 ..< iconListArray.count {
             for j in 0 ..< iconListArray[i].count {
+                print("アイコン作成 \(iconCount)")
+                iconCount += 1
                 
                 let xPos = j % iconPerLine
                 let yPos = j / iconPerLine + lineCount
@@ -371,7 +380,7 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         let btnHeight = secondView.frame.height / 10
         
         let colorScroll = UIScrollView()
-        colorScroll.frame = CGRect(x: 0, y: 0, width: secondView.frame.width, height: secondView.frame.height)
+        colorScroll.frame = CGRect(x: 0, y: secondView.frame.height * 0.1, width: secondView.frame.width, height: secondView.frame.height * 0.9)
         
         for i in 0 ..< colorArray.count {
             for j in 0 ..< 9 {

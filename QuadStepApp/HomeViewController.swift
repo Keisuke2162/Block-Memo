@@ -137,13 +137,8 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         //ボタンの初期配置を設定
         setButton()
 
-        // Do any additional setup after loading the view.
+        // Do any additional setup after loading the view.d
         
-        //***********************test***************************
-        let countLabel = UILabel()
-        countLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-        countLabel.text = String(inputData.count)
-        view.addSubview(countLabel)
     }
     
     //ボタンの新規作成
@@ -239,6 +234,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         vc.fontType = fontType
         vc.removeIconDelegate = self
         vc.btnID = sender.id!
+        vc.makeFlag = false
         vc.iconCode = sender.iconCode!
         vc.modalPresentationStyle = .formSheet
         vc.preferredContentSize = CGSize(width: view.frame.width, height: view.frame.height)
@@ -279,7 +275,7 @@ class HomeViewController: UIViewController, MakeButtonActionDelegate, RemoveButt
         setBtn.frame.size = CGSize(width: iconSize, height: iconSize)
         setBtn.center = CGPoint(x: view.center.x, y: view.center.y)
         setBtn.backgroundColor = .white
-        setBtn.imageEdgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        setBtn.imageEdgeInsets = UIEdgeInsets(top: iconSize / 3.5, left: iconSize / 3.5, bottom: iconSize / 3.5, right: iconSize / 3.5)
         setBtn.setImage(UIImage(named: "plus_100"), for: .normal)
         setBtn.layer.cornerRadius = 10.0
         setBtn.addTarget(self, action: #selector(gotoMakeView), for: .touchUpInside)

@@ -30,8 +30,8 @@
             filePath = "QuadStepApp/MemoTextViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "392"
-            endingLineNumber = "392"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
             landmarkName = "colorSet()"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "QuadStepApp/GeneralViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
+            startingLineNumber = "320"
+            endingLineNumber = "320"
             landmarkName = "moveSlider(_:)"
             landmarkType = "7">
          </BreakpointContent>

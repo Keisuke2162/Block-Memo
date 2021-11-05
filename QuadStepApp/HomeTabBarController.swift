@@ -21,7 +21,6 @@ class HomeTabBarController: UITabBarController, UITabBarControllerDelegate {
         let firstItem = UITabBarItem(title: "Home", image: UIImage(named: "home"), tag: 1)
         firstItem.imageInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         conHomeView.tabBarItem = firstItem
-        //conHomeView.tabbarHeight = height
         return conHomeView
     }()
     

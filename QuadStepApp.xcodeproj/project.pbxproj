@@ -57,6 +57,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E71AA6642A1699D80012998C /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				E71AA6652A1699EB0012998C /* ViewController */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		E71AA6652A1699EB0012998C /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E780261C23DDDE1A0071DC92 /* MenuModalViewController.swift */,
+				E72A91A623E9CD8900A6AB31 /* MemoTextViewController.swift */,
+				E780261823DA003C0071DC92 /* HomeViewController.swift */,
+				E780261A23DA00540071DC92 /* GeneralViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		E78CF86A23D8A8A7008A0A3C = {
 			isa = PBXGroup;
 			children = (
@@ -76,14 +95,11 @@
 		E78CF87523D8A8A7008A0A3C /* QuadStepApp */ = {
 			isa = PBXGroup;
 			children = (
-				E780261C23DDDE1A0071DC92 /* MenuModalViewController.swift */,
+				E71AA6642A1699D80012998C /* Source */,
 				E78CF87623D8A8A7008A0A3C /* AppDelegate.swift */,
 				E78CF87823D8A8A7008A0A3C /* SceneDelegate.swift */,
-				E72A91A623E9CD8900A6AB31 /* MemoTextViewController.swift */,
 				E78C70CB273542FA00AD6E50 /* IconData.swift */,
 				E78C70CE273546EF00AD6E50 /* ColorData.swift */,
-				E780261823DA003C0071DC92 /* HomeViewController.swift */,
-				E780261A23DA00540071DC92 /* GeneralViewController.swift */,
 				E780261623D9FF960071DC92 /* HomeTabBarController.swift */,
 				E709168223FEE86700F8C712 /* DataManagement.swift */,
 				E78CF88223D8A8A7008A0A3C /* Assets.xcassets */,

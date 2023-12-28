@@ -88,13 +88,6 @@ class MemoTextViewController: UIViewController, UITextViewDelegate {
         //アイコンリスト読み込み
         let queue = DispatchQueue.global(qos: .default)
         
-        queue.async {
-            print("非同期処理開始")
-            //self.MakeIconList()
-            print("非同期処理終了")
-        }
-        
-        
         pageScrollView.addSubview(scrollView)
         view.addSubview(pageScrollView)
         view.addSubview(pageControll)

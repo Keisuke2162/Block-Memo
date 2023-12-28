@@ -1,0 +1,7 @@
+xcassets:
+  inputs:
+     - QuadStepApp/Resources/Assets.xcassets
+     - QuadStepApp/Resources/Colors.xcassets
+  outputs:
+    templateName: swift5
+    output: QuadStepApp/Generated/Assets.swift

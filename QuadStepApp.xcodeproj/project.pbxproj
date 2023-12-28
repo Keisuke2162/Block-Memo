@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		674B17312B3DD3AB00653804 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 674B17302B3DD3AB00653804 /* Colors.xcassets */; };
+		67502E8F2B3DDF1200618E08 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67502E8E2B3DDF1200618E08 /* Assets.swift */; };
 		E709168323FEE86700F8C712 /* DataManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = E709168223FEE86700F8C712 /* DataManagement.swift */; };
 		E72A91A123E1EDE000A6AB31 /* ColorCodeCast.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */; };
 		E72A91A523E7422D00A6AB31 /* CustomClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E72A91A423E7422D00A6AB31 /* CustomClass.swift */; };
@@ -25,6 +27,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		674B17302B3DD3AB00653804 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		67502E8E2B3DDF1200618E08 /* Assets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assets.swift; sourceTree = "<group>"; };
 		E709168223FEE86700F8C712 /* DataManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagement.swift; sourceTree = "<group>"; };
 		E72A91A023E1EDE000A6AB31 /* ColorCodeCast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCodeCast.swift; sourceTree = "<group>"; };
 		E72A91A423E7422D00A6AB31 /* CustomClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomClass.swift; sourceTree = "<group>"; };
@@ -55,6 +59,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		674B17332B3DD45800653804 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E78CF88223D8A8A7008A0A3C /* Assets.xcassets */,
+				674B17302B3DD3AB00653804 /* Colors.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		67502E892B3DD72000618E08 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				67502E8E2B3DDF1200618E08 /* Assets.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
 		E78CF86A23D8A8A7008A0A3C = {
 			isa = PBXGroup;
 			children = (
@@ -74,6 +95,8 @@
 		E78CF87523D8A8A7008A0A3C /* QuadStepApp */ = {
 			isa = PBXGroup;
 			children = (
+				67502E892B3DD72000618E08 /* Generated */,
+				674B17332B3DD45800653804 /* Resources */,
 				E78CF87623D8A8A7008A0A3C /* AppDelegate.swift */,
 				E78CF87823D8A8A7008A0A3C /* SceneDelegate.swift */,
 				E72A91A623E9CD8900A6AB31 /* MemoTextViewController.swift */,
@@ -83,7 +106,6 @@
 				E780261A23DA00540071DC92 /* GeneralViewController.swift */,
 				E780261623D9FF960071DC92 /* HomeTabBarController.swift */,
 				E709168223FEE86700F8C712 /* DataManagement.swift */,
-				E78CF88223D8A8A7008A0A3C /* Assets.xcassets */,
 				E78CF87C23D8A8A7008A0A3C /* Main.storyboard */,
 				E78CF88423D8A8A7008A0A3C /* LaunchScreen.storyboard */,
 				E78CF88723D8A8A7008A0A3C /* Info.plist */,
@@ -138,6 +160,9 @@
 				Base,
 			);
 			mainGroup = E78CF86A23D8A8A7008A0A3C;
+			packageReferences = (
+				674B17322B3DD3FC00653804 /* XCRemoteSwiftPackageReference "SwiftGenPlugin" */,
+			);
 			productRefGroup = E78CF87423D8A8A7008A0A3C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -153,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E78CF88623D8A8A7008A0A3C /* LaunchScreen.storyboard in Resources */,
+				674B17312B3DD3AB00653804 /* Colors.xcassets in Resources */,
 				E78CF88323D8A8A7008A0A3C /* Assets.xcassets in Resources */,
 				E78CF87E23D8A8A7008A0A3C /* Main.storyboard in Resources */,
 			);
@@ -173,6 +199,7 @@
 				E780261B23DA00540071DC92 /* GeneralViewController.swift in Sources */,
 				E78CF87723D8A8A7008A0A3C /* AppDelegate.swift in Sources */,
 				E78CF87923D8A8A7008A0A3C /* SceneDelegate.swift in Sources */,
+				67502E8F2B3DDF1200618E08 /* Assets.swift in Sources */,
 				E780261723D9FF960071DC92 /* HomeTabBarController.swift in Sources */,
 				E72A91A523E7422D00A6AB31 /* CustomClass.swift in Sources */,
 				E780261923DA003C0071DC92 /* HomeViewController.swift in Sources */,
@@ -380,6 +407,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		674B17322B3DD3FC00653804 /* XCRemoteSwiftPackageReference "SwiftGenPlugin" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftGen/SwiftGenPlugin";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.6.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCVersionGroup section */
 		E78CF87F23D8A8A7008A0A3C /* QuadStepApp.xcdatamodeld */ = {
